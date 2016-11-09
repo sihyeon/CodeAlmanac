@@ -1,0 +1,52 @@
+package com.example.teamalmanac.codealmanac;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.text.TextUtils;
+import android.util.Log;
+
+/**
+ * Created by Choi Jaeung on 2016-11-09.
+ */
+
+public class SQLiteHelper extends SQLiteOpenHelper {
+
+    // If you change the database schema, you must increment the database version.
+    private static final int DATABASE_VERSION = 1;
+
+    public SQLiteHelper(Context context) {
+        super(context, SQLContract.DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        init(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        init(db);
+    }
+
+    private void init(SQLiteDatabase db){
+        //삭제
+        db.execSQL("DROP TABLE IF EXISTS " + SQLContract.UserEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SQLContract.ToDoEntry.TABLE_NAME);
+        //생성
+        db.execSQL(
+                "CREATE TABLE " + SQLContract.UserEntry.TABLE_NAME + " ( " +
+                        SQLContract.UserEntry._ID + " INTEGER PRIMARY KEY, " +
+                        SQLContract.UserEntry.COLUMN_NAME_NAME + " text " + " ) "
+        );
+        db.execSQL("CREATE TABLE " + SQLContract.ToDoEntry.TABLE_NAME + " ( " +
+                SQLContract.ToDoEntry._ID + " INTEGER PRIMARY KEY, " +
+                SQLContract.ToDoEntry.COLUMN_NAME_TODO + " text , " +
+                SQLContract.ToDoEntry.COLUMN_NAME_DATE + " date " + " ) "
+        );
+    }
+}

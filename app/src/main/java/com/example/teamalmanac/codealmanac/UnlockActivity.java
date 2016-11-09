@@ -1,4 +1,4 @@
-package com.example.choijaeung.codealmanac;
+package com.example.teamalmanac.codealmanac;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
