@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void clickOn(View v){
         startService(new Intent(this, UnlockScreenService.class));
+        Toast.makeText(MainActivity.this, "Service ON", Toast.LENGTH_SHORT).show();
     }
-    public void clickOff(View v){
+    public void clickOff(View v) {
         stopService(new Intent(this, UnlockScreenService.class));
+        Toast.makeText(MainActivity.this, "Service OFF", Toast.LENGTH_SHORT).show();
     }
 }
