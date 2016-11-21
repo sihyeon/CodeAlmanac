@@ -18,7 +18,7 @@ public class DataManager {
     public DataManager(Context context){
         SQLiteHelper helper = new SQLiteHelper(context);
         mDB = helper.getWritableDatabase();
-//        helper.onCreate(mDB);
+        helper.onCreate(mDB);
         if(mDB == null) {
             helper.onCreate(mDB);
         }
@@ -47,6 +47,25 @@ public class DataManager {
 
     public String getUserName() {
         Cursor cursor = mDB.query(SQLContract.UserEntry.TABLE_NAME, null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getString(1);
+        } else {
+            return null;
+        }
+    }
+
+    public void setMainFocus(String name){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, name);
+        if(getUserName() != null){
+            mDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues, null, null);
+        } else {
+            mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
+        }
+    }
+
+    public String getMainFocus() {
+        Cursor cursor = mDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             return cursor.getString(1);
         } else {

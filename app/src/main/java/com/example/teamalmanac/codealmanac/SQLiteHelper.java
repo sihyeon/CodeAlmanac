@@ -37,16 +37,25 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         //삭제
         db.execSQL("DROP TABLE IF EXISTS " + SQLContract.UserEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SQLContract.ToDoEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SQLContract.MainFocusEntry.TABLE_NAME);
+
         //생성
         db.execSQL(
                 "CREATE TABLE " + SQLContract.UserEntry.TABLE_NAME + " ( " +
                         SQLContract.UserEntry._ID + " INTEGER PRIMARY KEY, " +
                         SQLContract.UserEntry.COLUMN_NAME_NAME + " text " + " ) "
         );
+
         db.execSQL("CREATE TABLE " + SQLContract.ToDoEntry.TABLE_NAME + " ( " +
                 SQLContract.ToDoEntry._ID + " INTEGER PRIMARY KEY, " +
                 SQLContract.ToDoEntry.COLUMN_NAME_TODO + " text , " +
                 SQLContract.ToDoEntry.COLUMN_NAME_DATE + " date " + " ) "
+        );
+
+        db.execSQL(
+                "CREATE TABLE " + SQLContract.MainFocusEntry.TABLE_NAME + " ( " +
+                        SQLContract.MainFocusEntry._ID + " INTEGER PRIMARY KEY, " +
+                        SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS + " text " + " ) "
         );
     }
 }
