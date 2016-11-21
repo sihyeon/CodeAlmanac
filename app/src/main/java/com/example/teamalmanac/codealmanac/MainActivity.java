@@ -1,8 +1,10 @@
 package com.example.teamalmanac.codealmanac;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 
@@ -20,8 +22,10 @@ public class MainActivity extends AppCompatActivity {
         dm.setUserName("hahahaha");
         tv.setText(dm.getUserName());
     }
-
-    public static Context getContext(){
-        return mContext;
+    public void clickOn(View v){
+        startService(new Intent(this, UnlockScreenService.class));
+    }
+    public void clickOff(View v){
+        stopService(new Intent(this, UnlockScreenService.class));
     }
 }

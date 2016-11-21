@@ -29,6 +29,7 @@ public class UnlockActivity extends AppCompatActivity {
 
         mSlideLayout.setOnTouchListener(mSlideTouchListener);
     }
+
     private View.OnTouchListener mSlideTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {

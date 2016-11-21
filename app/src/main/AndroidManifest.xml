@@ -8,13 +8,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.teamalmanac.codealmanac.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.teamalmanac.codealmanac.UnlockActivity"></activity>
+        <activity android:name=".UnlockActivity" />
+
+        <receiver
+            android:name=".UnlockScreenReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".UnlockScreenService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
