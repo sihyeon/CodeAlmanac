@@ -115,7 +115,9 @@ public class LeftActivity extends AppCompatActivity {
                 Toast.makeText(LeftActivity.this, "Type your name..", Toast.LENGTH_SHORT).show();
             }
 
-            //TODO add Mainfocus to table
+            dataManager.setMainFocus(mainfocus.getText().toString());
+
+            //TODO view mainfocus
 
         }
     }

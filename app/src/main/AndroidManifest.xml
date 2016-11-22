@@ -22,7 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LeftActivity"></activity>
+        <activity android:name=".LeftActivity">
+
+        </activity>
+
+        <receiver
+            android:name=".UnlockScreenReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".UnlockScreenService"
+            android:enabled="true"
+            android:exported="true">
+
+        </service>
     </application>
 
 </manifest>

@@ -19,4 +19,24 @@
         android:layout_marginStart="77dp"
         android:layout_marginTop="38dp"
         android:id="@+id/testView" />
+
+    <Button
+        android:text="ON"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="60dp"
+        android:id="@+id/test_on"
+        android:onClick="clickOn" />
+
+    <Button
+        android:text="OFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/test_on"
+        android:layout_toEndOf="@+id/test_on"
+        android:layout_marginStart="43dp"
+        android:id="@+id/test_off"
+        android:onClick="clickOff" />
 </RelativeLayout>

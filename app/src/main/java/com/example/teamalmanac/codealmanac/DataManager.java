@@ -68,6 +68,26 @@ public class DataManager {
     public String getTodos() {
         Cursor cursor = mDB.query(SQLContract.ToDoEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
+            //TODO fix it
+            return cursor.getString(1);
+        } else {
+            return null;
+        }
+    }
+
+    public void setMainFocus(String name){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, name);
+        if(getUserName() != null){
+            mDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues, null, null);
+        } else {
+            mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
+        }
+    }
+
+    public String getMainFocus() {
+        Cursor cursor = mDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
             return cursor.getString(1);
         } else {
             return null;
