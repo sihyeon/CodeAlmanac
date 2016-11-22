@@ -12,6 +12,7 @@ public final class SQLContract {
     //사용자 이름 테이블
     public static abstract class UserEntry implements BaseColumns{
         public static final String TABLE_NAME = "user_table";
+        public static final String UUID = "uuid";
         public static final String COLUMN_NAME_NAME = "name";
     }
     // 할일 테이블

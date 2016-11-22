@@ -16,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = (TextView)findViewById(R.id.testView);
 
         DataManager dm = new DataManager(getApplicationContext());
-        dm.setUserName("ChoiJaung");
-        dm.setUserName("hahahaha");
+//        dm.setUserName("ChoiJaung?");
+//        dm.setUserName("hahahaha");
         tv.setText(dm.getUserName());
     }
 

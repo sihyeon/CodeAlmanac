@@ -53,4 +53,24 @@ public class DataManager {
             return null;
         }
     }
+
+    public void setTodo(String todo, String date) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_TODO, todo);
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, date);
+        if(getTodos() != null){
+            mDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues, null, null);
+        } else {
+            mDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
+        }
+    }
+
+    public String getTodos() {
+        Cursor cursor = mDB.query(SQLContract.ToDoEntry.TABLE_NAME, null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getString(1);
+        } else {
+            return null;
+        }
+    }
 }

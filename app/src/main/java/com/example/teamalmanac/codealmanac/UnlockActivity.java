@@ -1,5 +1,6 @@
 package com.example.teamalmanac.codealmanac;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class UnlockActivity extends AppCompatActivity {
                         mSlideLayout = (RelativeLayout) findViewById(R.id.slideLayout);
                         mSlideIcon.setX(mSlideLayout.getWidth() / 2 - mSlideIcon.getWidth() / 2);
                         Toast.makeText(UnlockActivity.this, "왼쪽으로 슬라이드", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(UnlockActivity.this, LeftActivity.class));
                         mIsSlideIconTouch = false;
                     }
                 } else if (mSlideIcon.getX() >= mSlideLayout.getWidth() - mSlideIcon.getWidth()) {
