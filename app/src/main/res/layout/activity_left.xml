@@ -24,11 +24,12 @@
         android:text="What is your main focus for today?"
         android:layout_gravity="center|top"
         android:textSize="20dp"
-        android:id="@+id/up_mainfocus_text"/>
+        android:id="@+id/whatIsYourMainfocus"/>
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/mainfocus_layout">
 
         <EditText
             android:layout_width="0dp"
@@ -45,6 +46,13 @@
             android:onClick="onMainfocusClick"/>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Be your self"
+        android:visibility="invisible"
+        android:id="@+id/mainfocus_text"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

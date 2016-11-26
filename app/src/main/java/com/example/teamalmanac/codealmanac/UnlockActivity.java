@@ -2,10 +2,8 @@ package com.example.teamalmanac.codealmanac;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -48,7 +46,7 @@ public class UnlockActivity extends AppCompatActivity {
 //        Log.d("테스트", mMainLayout.getPaddingLeft()+"");
 
         mDB = new DataManager(getApplicationContext());
-        mDB.setUserName("Jaung Choi");
+//        mDB.setUserName("Jaung Choi");
 
         mSlideLayout.setOnTouchListener(mSlideTouchListener);
 
@@ -72,7 +70,7 @@ public class UnlockActivity extends AppCompatActivity {
         String userName = mDB.getUserName();
         String mainFocus = mDB.getMainFocus();
         String fullText = "";
-        TextView mainFocusText = (TextView)findViewById(R.id.main_focus);
+        TextView mainFocusText = (TextView)findViewById(R.id.mainfocus_text);
         if(userName != null){
             fullText += "Good evening, " + userName + "\n\n";
         } else {

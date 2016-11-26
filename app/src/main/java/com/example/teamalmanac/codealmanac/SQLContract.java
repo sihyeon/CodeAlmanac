@@ -26,6 +26,7 @@ public final class SQLContract {
 
     public static abstract class MainFocusEntry implements  BaseColumns{
         public static final String TABLE_NAME = "main_focus_table";
+        public static final String COLUMN_NAME_DATE = "main_focus_time";
         public static final String COLUMN_NAME_MAIN_FOCUS = "main_focus";
     }
 }

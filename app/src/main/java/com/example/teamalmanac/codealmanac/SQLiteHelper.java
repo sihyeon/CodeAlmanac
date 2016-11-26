@@ -1,14 +1,8 @@
 package com.example.teamalmanac.codealmanac;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Created by Choi Jaeung on 2016-11-09.
@@ -55,7 +49,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE " + SQLContract.MainFocusEntry.TABLE_NAME + " ( " +
                         SQLContract.MainFocusEntry._ID + " INTEGER PRIMARY KEY, " +
-                        SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS + " text " + " ) "
+                        SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS + " text ," +
+                        SQLContract.MainFocusEntry.COLUMN_NAME_DATE + " text " + " ) "
         );
     }
 }

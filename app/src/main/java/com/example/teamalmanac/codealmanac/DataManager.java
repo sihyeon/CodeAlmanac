@@ -1,12 +1,14 @@
 package com.example.teamalmanac.codealmanac;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQuery;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Choi Jaeung on 2016-11-09.
@@ -58,39 +60,52 @@ public class DataManager {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_TODO, todo);
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, date);
-        if(getTodos() != null){
-            mDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues, null, null);
-        } else {
+//        if(getTodos() != null){
+//            mDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues, null, null);
+//        } else {
             mDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
-        }
+//        }
     }
 
-    public String getTodos() {
+    public ArrayList<String> getTodos() {
         Cursor cursor = mDB.query(SQLContract.ToDoEntry.TABLE_NAME, null, null, null, null, null, null);
+        ArrayList<String> list = new ArrayList<>();
         if (cursor.moveToFirst()) {
-            //TODO fix it
-            return cursor.getString(1);
-        } else {
-            return null;
+            do {
+                list.add(cursor.getString(1));
+                Log.i("!------------------", "getTodos: " + cursor.getString(1) +", "+cursor.getString(2) +", ");
+            } while(cursor.moveToNext());
         }
+            return list;
     }
 
-    public void setMainFocus(String name){
+    public void setMainFocus(String name, String date){
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, name);
-        if(getUserName() != null){
-            mDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues, null, null);
-        } else {
+        contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, date);
+//        if(getUserName() != null){
+//            mDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues, null, null);
+//        } else {
             mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
-        }
+//        }
     }
 
     public String getMainFocus() {
         Cursor cursor = mDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToLast()){
             return cursor.getString(1);
         } else {
             return null;
         }
+    }
+
+    public Map<String, String> getMainFocusAndDate() {
+        Cursor cursor = mDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
+        Map<String, String> mainAndDate = new HashMap<>();
+        if (cursor.moveToLast()){
+            mainAndDate.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, cursor.getString(1));
+            mainAndDate.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, cursor.getString(2));
+        }
+        return mainAndDate;
     }
 }
