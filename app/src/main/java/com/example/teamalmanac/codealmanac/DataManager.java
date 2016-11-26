@@ -20,7 +20,6 @@ public class DataManager {
     public DataManager(Context context){
         SQLiteHelper helper = new SQLiteHelper(context);
         mDB = helper.getWritableDatabase();
-//        helper.onCreate(mDB);
         if(mDB == null) {
             helper.onCreate(mDB);
         }

@@ -43,7 +43,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + SQLContract.ToDoEntry.TABLE_NAME + " ( " +
                 SQLContract.ToDoEntry._ID + " INTEGER PRIMARY KEY, " +
                 SQLContract.ToDoEntry.COLUMN_NAME_TODO + " text , " +
-                SQLContract.ToDoEntry.COLUMN_NAME_DATE + " date " + " ) "
+                SQLContract.ToDoEntry.COLUMN_NAME_DATE + " text " + " ) "
         );
 
         db.execSQL(

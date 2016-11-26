@@ -13,20 +13,24 @@ public final class SQLContract {
     //사용자 이름 테이블
     public static abstract class UserEntry implements BaseColumns{
         public static final String TABLE_NAME = "user_table";
-        public static final String UUID = "uuid";
-        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_UUID = "user_uuid";
+        public static final String COLUMN_NAME_NAME = "user_name";
     }
 
     // 할일 테이블
     public static abstract class ToDoEntry implements BaseColumns{
         public static final String TABLE_NAME = "todo_table";
-        public static final String COLUMN_NAME_TODO = "todo";
-        public static final String COLUMN_NAME_DATE = "date";
+        public static final String COLUMN_NAME_TODO = "todo_text";
+        public static final String COLUMN_NAME_DATE = "todo_date";
+
+        public static final String COLUMN_NAME_CHECK = "todo_check";
     }
 
     public static abstract class MainFocusEntry implements  BaseColumns{
         public static final String TABLE_NAME = "main_focus_table";
-        public static final String COLUMN_NAME_DATE = "main_focus_time";
-        public static final String COLUMN_NAME_MAIN_FOCUS = "main_focus";
+        public static final String COLUMN_NAME_DATE = "main_focus_date";
+        public static final String COLUMN_NAME_MAIN_FOCUS = "main_focus_text";
+
+        public static final String COLUMN_NAME_CHECK = "main_focus_check";
     }
 }
