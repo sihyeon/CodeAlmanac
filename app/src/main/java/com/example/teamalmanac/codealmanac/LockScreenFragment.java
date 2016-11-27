@@ -39,16 +39,20 @@ public class LockScreenFragment extends Fragment {
 
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digitalclock);
-        Typeface typeface = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"digital-7.ttf");
+        Typeface typeface = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"FRABK.TTF");
         digitalClock.setTypeface(typeface);
 
         //datetime
         TextView dt = (TextView)rootView.findViewById(R.id.datetime);
-        String format = new String("MM 월 dd일 EEEE");
+        String format = new String("MM . dd EEEE");
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.KOREA);
         dt.setText(sdf.format(new Date()));
-        Typeface type = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"Spoqa_Han_Sans_Regular.ttf");
+        Typeface type = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"NanumSquareB.ttf");
         dt.setTypeface(type);
+
+        TextView mainfocus_text= (TextView) rootView.findViewById(R.id.mainfocus_text);
+        Typeface typetext = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"NanumSquareB.ttf");
+        mainfocus_text.setTypeface(typetext);
 
         setMainFocus(rootView);
 

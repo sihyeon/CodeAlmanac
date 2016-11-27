@@ -16,30 +16,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:format12Hour="h:mm"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textSize="80sp"
             android:layout_marginTop="30dp"
-            android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true" />
 
         <TextView
+            android:id="@+id/datetime"
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textSize="18sp"
-            android:id="@+id/datetime"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="11dp"
             android:layout_below="@+id/digitalclock"
             android:layout_centerHorizontal="true" />
 
         <TextView
+            android:id="@+id/mainfocus_text"
+            android:gravity="center_vertical"
             android:text="hello hi hello"
+            android:textSize="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/mainfocus_text"
-            android:layout_centerVertical="true"
-            android:layout_alignStart="@+id/digitalclock" />
+            android:layout_marginTop="65dp"
+            android:layout_below="@+id/datetime"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 
