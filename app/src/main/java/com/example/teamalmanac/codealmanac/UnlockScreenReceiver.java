@@ -15,11 +15,12 @@ public class UnlockScreenReceiver extends BroadcastReceiver {
 
         //스크린의 온 오프 이벤트. 작동확인
         if(intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
-            Intent i = new Intent(context, UnlockActivity.class);
+            Log.d("LockTest", "SCREEN OFF");
+            Intent i = new Intent(context, TabActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
        } else if(intent.getAction().equals(Intent.ACTION_SCREEN_ON)){
-           Log.d("LockTest", "on event");
+           Log.d("LockTest", "SCREEN ON");
        }
     }
 }

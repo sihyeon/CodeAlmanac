@@ -16,10 +16,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
-        TextView tv = (TextView)findViewById(R.id.testView);
-
-        DataManager dm = new DataManager(getApplicationContext());
-        tv.setText(dm.getUserName());
     }
     public void clickOn(View v){
         startService(new Intent(this, UnlockScreenService.class));

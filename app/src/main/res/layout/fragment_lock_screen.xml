@@ -1,0 +1,46 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.teamalmanac.codealmanac.LockScreenFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextClock
+            android:id="@+id/digitalclock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format12Hour="h:mm"
+            android:gravity="center"
+            android:textSize="80sp"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:id="@+id/datetime"
+            android:layout_marginTop="0dp"
+            android:layout_below="@+id/digitalclock"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="hello hi hello"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mainfocus_text"
+            android:layout_centerVertical="true"
+            android:layout_alignStart="@+id/digitalclock" />
+
+    </RelativeLayout>
+
+</FrameLayout>

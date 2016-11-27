@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -15,26 +16,24 @@ import java.util.Map;
  */
 
 public class DataManager {
-  //  private static SQLiteHelper mSQLiteHelper;
+    //싱글톤
+    private static DataManager singletonInstance = null;
+    public static DataManager getSingletonInstance(){
+        if(singletonInstance == null) singletonInstance = new DataManager(TabActivity.getMainContext());
+        return singletonInstance;
+    }
+
     private SQLiteDatabase mDB;
-    public DataManager(Context context){
+
+    private DataManager(Context context){
         SQLiteHelper helper = new SQLiteHelper(context);
         mDB = helper.getWritableDatabase();
         if(mDB == null) {
             helper.onCreate(mDB);
         }
+        // 디비를 재생성해야하면 이 코드의 주석을 해제하시오
 //        mSQLiteHelper = new SQLiteHelper(context);
     }
-//    private DataManager(){
-//        mSQLiteHelper = new SQLiteHelper(MainActivity.getContext());
-//    }
-//    private static class Singleton{
-//        private static final DataManager instance = new DataManager();
-//    }
-//
-//    public static DataManager getInstance(){
-//        return Singleton.instance;
-//    }
 
     public void setUserName(String name){
         ContentValues contentValues = new ContentValues();
@@ -59,11 +58,8 @@ public class DataManager {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_TODO, todo);
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, date);
-//        if(getTodos() != null){
-//            mDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues, null, null);
-//        } else {
-            mDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
-//        }
+
+        mDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
     }
 
     public ArrayList<String> getTodos() {
@@ -82,11 +78,8 @@ public class DataManager {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, name);
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, date);
-//        if(getUserName() != null){
-//            mDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues, null, null);
-//        } else {
-            mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
-//        }
+
+        mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
     }
 
     public String getMainFocus() {

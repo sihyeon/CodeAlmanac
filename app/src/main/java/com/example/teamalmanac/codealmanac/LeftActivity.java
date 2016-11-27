@@ -85,7 +85,8 @@ public class LeftActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_left);
-        dataManager = new DataManager(LeftActivity.this);
+        //싱글톤으로 변경했음.
+        dataManager = DataManager.getSingletonInstance();
         hi = (TextView) findViewById(R.id.hi);
         mainfocus_edit = (EditText) findViewById(R.id.mainfocus_edittext);
         todo_edit = (EditText) findViewById(R.id.todo_edittext);
