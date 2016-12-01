@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textColor="#FFF"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="62dp"
         android:format12Hour="h:mm"
         android:gravity="center_vertical"
-        android:textSize="90dp" />
+        android:textSize="90sp" />
 
     <TextView
         android:id="@+id/datetime"
@@ -24,10 +24,9 @@
         android:layout_below="@+id/digital_clock"
         android:textColor="#FFF"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
-        android:text="DateTime"
-        android:textSize="23dp" />
+        android:textSize="23sp" />
 
     <TextView
         android:id="@+id/text_greeting"
@@ -39,7 +38,7 @@
         android:gravity="center_vertical"
         android:textColor="#FFF"
         android:text="GreetingMessage"
-        android:textSize="52dp" />
+        android:textSize="52sp" />
 
     <TextView
         android:id="@+id/text_today"
@@ -47,19 +46,55 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_greeting"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="64dp"
         android:textColor="#FFF"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:text="TODAY" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="mainfocus"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textColor="#FFF"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/text_mainfocus"
         android:layout_below="@+id/text_today"
         android:layout_centerHorizontal="true" />
+
+    <!--Footer button layout-->
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_mainfocus"
+        app:srcCompat="@drawable/btn_main_wtd"
+        android:id="@+id/leftdrawicon"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="86dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:text="화면을 밀어 이동하세요"
+        android:gravity="center"
+        android:textColor="#FFF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_marginTop="100dp"
+        android:layout_below="@+id/text_mainfocus" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_mainfocus"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="47dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="86dp"
+        app:srcCompat="@drawable/btn_main_unlock"
+        android:id="@+id/lockscreenicon" />
+
 </RelativeLayout>

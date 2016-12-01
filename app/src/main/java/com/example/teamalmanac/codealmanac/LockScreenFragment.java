@@ -48,6 +48,7 @@ public class LockScreenFragment extends Fragment {
         //배경 이미지
         RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.layout);
         relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.main,TabActivity.getMainContext().getTheme()));
+
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digital_clock);
         Typeface typeface = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(), "LSSM.TTF");
@@ -60,6 +61,11 @@ public class LockScreenFragment extends Fragment {
         dt.setText(sdf.format(new Date()));
         Typeface type = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(), "LSSM.TTF");
         dt.setTypeface(type);
+
+        //화면 이동 메세지 폰트
+        TextView mv = (TextView)rootView.findViewById(R.id.textView);
+        Typeface mvtype = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"NanumSquareR.ttf");
+        mv.setTypeface(mvtype);
 
         //인사말 밑 mainfocus
         setMainText(rootView);

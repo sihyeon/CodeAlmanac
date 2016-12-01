@@ -43,6 +43,9 @@ public class TabActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //상태바 없앰
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_tab);
         mMainContext = getApplicationContext();
         DataManager.getSingletonInstance(); //액티비티에서 싱글톤 미리생성
