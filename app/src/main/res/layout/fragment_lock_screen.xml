@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_lock_fragment"
     tools:context="com.example.teamalmanac.codealmanac.LockScreenFragment">
 
 
@@ -54,5 +55,29 @@
             android:id="@+id/text_mainfocus"
             android:layout_below="@+id/text_today"
             android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_temp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_weather_icon"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/text_temp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_location"
+        android:text="location"
+        android:layout_below="@+id/text_weather_icon"
+        android:layout_alignStart="@+id/text_weather_icon" />
 
 </RelativeLayout>

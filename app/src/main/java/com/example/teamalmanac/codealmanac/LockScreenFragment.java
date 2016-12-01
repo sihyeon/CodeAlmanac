@@ -32,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,7 @@ import java.util.Locale;
 public class LockScreenFragment extends Fragment {
     private DataManager mDB = null;
     private Calendar mCalendar;
+    private View mRootView;
 
     public LockScreenFragment() {
         // Required empty public constructor
@@ -64,18 +66,18 @@ public class LockScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_lock_screen, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_lock_screen, container, false);
 
-        RelativeLayout relativeLayout = (RelativeLayout)rootView.findViewById(R.id.layout_lock_fragment);
-        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.test, getContext().getTheme()));
+        RelativeLayout relativeLayout = (RelativeLayout)mRootView.findViewById(R.id.layout_lock_fragment);
+        relativeLayout.setBackground(mRootView.getResources().getDrawable(R.drawable.test, getContext().getTheme()));
 
         //Digital Clock FONT asset
-        TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digital_clock);
+        TextClock digitalClock = (TextClock) mRootView.findViewById(R.id.digital_clock);
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FRABK.TTF");
         digitalClock.setTypeface(typeface);
 
         //datetime
-        TextView dt = (TextView) rootView.findViewById(R.id.datetime);
+        TextView dt = (TextView) mRootView.findViewById(R.id.datetime);
         String format = "MM . dd EEEE";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.KOREA);
         dt.setText(sdf.format(new Date()));
@@ -84,14 +86,14 @@ public class LockScreenFragment extends Fragment {
         //여기있던 메인포커스 타입설정문 setMainText 함수로 옮김
 
         //인사말 밑 mainfocus
-        setMainText(rootView);
-        setGeoLocation(rootView);
+        setMainText();
+        setGeoLocation();
 
-        return rootView;
+        return mRootView;
     }
 
     //GPS 정보 가져오기
-    private void setGeoLocation(View rootView){
+    private void setGeoLocation(){
         double lat, lon;
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -109,7 +111,7 @@ public class LockScreenFragment extends Fragment {
             try {
                 List<Address> addr = geocoder.getFromLocation(lat, lon, 2);
                 String location = addr.get(0).getLocality() + " " + addr.get(0).getSubLocality();
-                ((TextView)rootView.findViewById(R.id.text_location)).setText(location);
+                ((TextView)mRootView.findViewById(R.id.text_location)).setText(location);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -148,11 +150,13 @@ public class LockScreenFragment extends Fragment {
     //날씨 아이콘 선택
     private void setWeatherIcon(String weather){
         int presentHour = mCalendar.get(Calendar.HOUR_OF_DAY);
-        String weatherIconStringId = "";
+        String weatherIconStringId = "wi-";
         if (5 <= presentHour && presentHour <= 17){
             //아침 & 낮
+            weatherIconStringId += "day-";
         } else {
             //저녁
+            weatherIconStringId += "night-";
         }
         switch (weather){
             case "clear sky":
@@ -174,8 +178,12 @@ public class LockScreenFragment extends Fragment {
             case "mist":
                 break;
         }
+        //날씨 아이콘 선택
         int resId = getResources().getIdentifier(weatherIconStringId, "string", getContext().getPackageName());
-        getContext().getString(R.string.wi_cloud);
+
+        TextView weatherIconText = (TextView)mRootView.findViewById(R.id.text_weather_icon);
+        weatherIconText.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "weathericons-regular-webfont.ttf"));
+        weatherIconText.setText(getContext().getString(resId));
     }
 
     //인사말 설정
@@ -190,13 +198,13 @@ public class LockScreenFragment extends Fragment {
     }
 
     //메인 포커스 세팅 (메인포커스 없을 때, 사용자 이름 없을 때의 논의 필요)
-    private void setMainText(View rootView){
+    private void setMainText(){
         String userName = mDB.getUserName();
         String mainFocus = mDB.getMainFocus();
         String greetingMessage = "";
         String mainfocusMessage = "";
-        TextView greetingText = (TextView)rootView.findViewById(R.id.text_greeting);
-        TextView mainfocusText = (TextView)rootView.findViewById(R.id.text_mainfocus);
+        TextView greetingText = (TextView)mRootView.findViewById(R.id.text_greeting);
+        TextView mainfocusText = (TextView)mRootView.findViewById(R.id.text_mainfocus);
         if(userName != null){
             greetingMessage += setGreetingMessage() + ", " + userName;
         } else {
