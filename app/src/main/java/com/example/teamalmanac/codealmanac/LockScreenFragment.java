@@ -1,5 +1,6 @@
 package com.example.teamalmanac.codealmanac;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import java.util.Locale;
 
 public class LockScreenFragment extends Fragment {
     private DataManager mDB = null;
+    private TextView mainFocusText;
 
     public LockScreenFragment() {
         // Required empty public constructor
@@ -68,13 +70,14 @@ public class LockScreenFragment extends Fragment {
         if(userName != null){
             fullText += "Good evening, " + userName + "\n\n";
         } else {
-            fullText += "Name is noting\n\n";
+            fullText += "Name is nothing\n\n";
         }
         if(mainFocus != null){
             fullText += "Today : " + mainFocus;
         } else {
-            fullText += "MainFocus is noting";
+            fullText += "MainFocus is nothing";
         }
         mainFocusText.setText(fullText);
     }
+
 }

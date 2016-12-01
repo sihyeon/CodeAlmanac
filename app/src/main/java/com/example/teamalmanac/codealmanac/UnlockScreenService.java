@@ -1,5 +1,6 @@
 package com.example.teamalmanac.codealmanac;
 
+import android.app.KeyguardManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,6 +26,11 @@ public class UnlockScreenService extends Service {
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
+
+        KeyguardManager.KeyguardLock key;
+        KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
+        key = km.newKeyguardLock("IN");
+        key.disableKeyguard();
     }
 
     @Override

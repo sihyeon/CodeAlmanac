@@ -1,6 +1,8 @@
 package com.example.teamalmanac.codealmanac;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -9,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class TabActivity extends AppCompatActivity {
     //마지막 페이지에서 스와이핑하는걸 검출하기 위한 변수
@@ -27,6 +34,8 @@ public class TabActivity extends AppCompatActivity {
     private static Context mMainContext;
     //Fragment 수
     private static final int FRAGMENT_TOTAL_NUMBER = 2;
+    //Position sensor
+    private SensorManager sensorManager;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -110,6 +119,18 @@ public class TabActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+            case KeyEvent.KEYCODE_HOME:
+            case KeyEvent.KEYCODE_ESCAPE:
+                return false;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -161,6 +182,9 @@ public class TabActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             if(position == 1){
                 return LockScreenFragment.newInstance();
+            }
+            if(position == 0) {
+                return LeftFragment.newInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
