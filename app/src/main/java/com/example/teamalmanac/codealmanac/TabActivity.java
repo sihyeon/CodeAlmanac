@@ -1,6 +1,8 @@
 package com.example.teamalmanac.codealmanac;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -25,6 +27,7 @@ public class TabActivity extends AppCompatActivity {
     private int mCounterPageScroll;
     //context를 담기 위한 변수
     private static Context mMainContext;
+    private static Activity mTabActivity;
     //Fragment 수
     private static final int FRAGMENT_TOTAL_NUMBER = 2;
 
@@ -49,14 +52,13 @@ public class TabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab);
         mMainContext = getApplicationContext();
         DataManager.getSingletonInstance(); //액티비티에서 싱글톤 미리생성
-
         /*  FLAG_SHOW_WHEN_LOCKED = 잠금화면 위로 액티비티 실행
             FLAG_DISMISS_KEYGUARD = 키 가드 해제 */
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mTabActivity = this;
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -67,6 +69,16 @@ public class TabActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(mListener);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        Intent intent = getIntent();
+//        boolean exitActivity = intent.getExtras().getBoolean("exit", false);
+//        if(exitActivity){
+//            finish();
+//        }
+    }
+    public static Activity getTabActivity(){ return mTabActivity; }
     public static Context getMainContext(){
         return mMainContext;
     }
@@ -88,28 +100,7 @@ public class TabActivity extends AppCompatActivity {
         public void onPageScrollStateChanged(int state) {}
     };
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tab, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    //메뉴 제거했음.
     /**
      * A placeholder fragment containing a simple view.
      */

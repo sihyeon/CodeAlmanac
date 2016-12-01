@@ -58,9 +58,10 @@ public class LeftActivity extends AppCompatActivity {
 
     private String setHelloMessage(){
         int hour = c.get(Calendar.HOUR_OF_DAY);
-        if(4 <= hour && hour <= 10) {
+        if(4 <= hour && hour <= 11) {
             return "Good Morning";
-        } else if(11 <= hour && hour <= 15) {
+            //Afternoon은 12시 evening은 오후 6시부터라고함.
+        } else if(12 <= hour && hour <= 18) {
             return "Good Afternoon";
         } else {
             return "Good Evening";

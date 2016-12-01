@@ -1,48 +1,58 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.teamalmanac.codealmanac.LockScreenFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
+    <TextClock
+        android:id="@+id/digital_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:format12Hour="h:mm"
+        android:gravity="center_vertical"
+        android:textSize="80sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/digital_clock"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:gravity="center_vertical"
+        android:text="DateTime"
+        android:textSize="18sp" />
 
-        <TextClock
-            android:id="@+id/digitalclock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:format12Hour="h:mm"
-            android:gravity="center_vertical"
-            android:textSize="80sp"
-            android:layout_marginTop="30dp"
+    <TextView
+        android:id="@+id/text_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/datetime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="65dp"
+        android:gravity="center_vertical"
+        android:text="GreetingMessage"
+        android:textSize="25dp" />
+
+    <TextView
+        android:id="@+id/text_today"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_greeting"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:text="TODAY" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mainfocus"
+            android:layout_marginTop="21dp"
+            android:id="@+id/text_mainfocus"
+            android:layout_below="@+id/text_today"
             android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:id="@+id/datetime"
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textSize="18sp"
-            android:layout_marginTop="11dp"
-            android:layout_below="@+id/digitalclock"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/mainfocus_text"
-            android:gravity="center_vertical"
-            android:text="hello hi hello"
-            android:textSize="25dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="65dp"
-            android:layout_below="@+id/datetime"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
-
-</FrameLayout>
+</RelativeLayout>
