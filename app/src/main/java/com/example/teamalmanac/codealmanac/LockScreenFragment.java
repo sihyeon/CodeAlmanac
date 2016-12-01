@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -15,11 +16,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.example.teamalmanac.codealmanac.R.drawable.bg_1;
 
 public class LockScreenFragment extends Fragment {
     private DataManager mDB = null;
     private Calendar mCalendar;
+
 
     public LockScreenFragment() {
         // Required empty public constructor
@@ -35,14 +36,18 @@ public class LockScreenFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mDB = DataManager.getSingletonInstance();
         mCalendar = Calendar.getInstance();
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_lock_screen, container, false);
-
+        //배경 이미지
+        RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.layout);
+        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.main,TabActivity.getMainContext().getTheme()));
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digital_clock);
         Typeface typeface = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(), "LSSM.TTF");
@@ -50,7 +55,7 @@ public class LockScreenFragment extends Fragment {
 
         //datetime
         TextView dt = (TextView)rootView.findViewById(R.id.datetime);
-        String format = new String("MM . dd  EEEE");
+        String format = new String("MM .dd  EEEE");
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
         dt.setText(sdf.format(new Date()));
         Typeface type = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(), "LSSM.TTF");
@@ -81,6 +86,7 @@ public class LockScreenFragment extends Fragment {
 
     //메인 포커스 세팅 (메인포커스 없을 때, 사용자 이름 없을 때의 논의 필요)
     private void setMainText(View rootView){
+
         String userName = mDB.getUserName();
         String mainFocus = mDB.getMainFocus();
         String greetingMessage = "";
