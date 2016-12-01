@@ -1,22 +1,25 @@
 package com.example.teamalmanac.codealmanac;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.example.teamalmanac.codealmanac.R.drawable.bg_1;
+
 public class LockScreenFragment extends Fragment {
     private DataManager mDB = null;
-    private TextView mainFocusText;
+    private Calendar mCalendar;
 
     public LockScreenFragment() {
         // Required empty public constructor
@@ -31,6 +34,7 @@ public class LockScreenFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDB = DataManager.getSingletonInstance();
+        mCalendar = Calendar.getInstance();
     }
 
     @Override
@@ -40,44 +44,80 @@ public class LockScreenFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_lock_screen, container, false);
 
         //Digital Clock FONT asset
-        TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digitalclock);
-        Typeface typeface = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"FRABK.TTF");
+        TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digital_clock);
+        Typeface typeface = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(), "LSSM.TTF");
         digitalClock.setTypeface(typeface);
 
         //datetime
         TextView dt = (TextView)rootView.findViewById(R.id.datetime);
-        String format = new String("MM . dd EEEE");
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.KOREA);
+        String format = new String("MM . dd  EEEE");
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
         dt.setText(sdf.format(new Date()));
-        Typeface type = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"NanumSquareB.ttf");
+        Typeface type = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(), "LSSM.TTF");
         dt.setTypeface(type);
 
-        TextView mainfocus_text= (TextView) rootView.findViewById(R.id.mainfocus_text);
-        Typeface typetext = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"NanumSquareB.ttf");
-        mainfocus_text.setTypeface(typetext);
+        //인사말 밑 mainfocus
+        setMainText(rootView);
 
-        setMainFocus(rootView);
-
-        return rootView;
+        return (rootView);
     }
 
-    //메인 포커스 세팅 (미완성 / 현재 swipe 작업 중)
-    private void setMainFocus(View rootView){
+    //GPS 정보 가져오기
+    private void setGeoLocation(){
+
+    }
+
+
+    //인사말 설정
+    private String setGreetingMessage(){
+        int presentHour = mCalendar.get(Calendar.HOUR_OF_DAY);
+        //아침
+        if(4 <= presentHour && presentHour <= 11) return "Good Morning";
+            //오후(점심)
+        else if(12 <= presentHour && presentHour <= 18) return "Good Afternoon";
+            //저녁
+        else return "Good Evening";
+    }
+
+    //메인 포커스 세팅 (메인포커스 없을 때, 사용자 이름 없을 때의 논의 필요)
+    private void setMainText(View rootView){
         String userName = mDB.getUserName();
         String mainFocus = mDB.getMainFocus();
-        String fullText = "";
-        TextView mainFocusText = (TextView)rootView.findViewById(R.id.mainfocus_text);
+        String greetingMessage = "";
+        String mainfocusMessage = "";
+
+        TextView todayText = (TextView)rootView.findViewById(R.id.text_today);
+        TextView greetingText = (TextView)rootView.findViewById(R.id.text_greeting);
+        TextView mainfocusText = (TextView)rootView.findViewById(R.id.text_mainfocus);
+
+
         if(userName != null){
-            fullText += "Good evening, " + userName + "\n\n";
+            greetingMessage += setGreetingMessage() + ", " + userName;
         } else {
-            fullText += "Name is nothing\n\n";
+            greetingMessage += "Name is noting";
         }
         if(mainFocus != null){
-            fullText += "Today : " + mainFocus;
+            mainfocusMessage += mainFocus;
         } else {
-            fullText += "MainFocus is nothing";
+            mainfocusMessage += "MainFocus is noting";
         }
-        mainFocusText.setText(fullText);
-    }
+        //메인포커스 글꼴
+        Typeface textType = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"FRAMDCN.TTF");
+        greetingText.setTypeface(textType);
+        mainfocusText.setTypeface(textType);
 
+        //Good morning,~ 부분의 글꼴
+        Typeface greetType = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"FRAMDCN.TTF");
+        greetingText.setTypeface(greetType);
+        mainfocusText.setTypeface(greetType);
+
+        greetingText.setText(greetingMessage);
+        mainfocusText.setText(mainfocusMessage);
+
+        //today 부분의 글꼴
+        Typeface todayType = Typeface.createFromAsset(TabActivity.getMainContext().getAssets(),"FRADM.TTF");
+        todayText.setTypeface(todayType );
+        todayText.setTypeface(todayType );
+
+    }
 }
