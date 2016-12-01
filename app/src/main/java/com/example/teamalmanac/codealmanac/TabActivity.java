@@ -1,8 +1,6 @@
 package com.example.teamalmanac.codealmanac;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -100,7 +98,40 @@ public class TabActivity extends AppCompatActivity {
         public void onPageScrollStateChanged(int state) {}
     };
 
-    //메뉴 제거했음.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_tab, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+            case KeyEvent.KEYCODE_HOME:
+            case KeyEvent.KEYCODE_ESCAPE:
+                return false;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -152,6 +183,9 @@ public class TabActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             if(position == 1){
                 return LockScreenFragment.newInstance();
+            }
+            if(position == 0) {
+                return LeftFragment.newInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

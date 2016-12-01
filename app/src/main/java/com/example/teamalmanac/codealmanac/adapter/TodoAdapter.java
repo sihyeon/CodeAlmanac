@@ -1,6 +1,7 @@
 package com.example.teamalmanac.codealmanac.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,8 @@ import java.util.List;
  */
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
-    private List<CheckBox> todos = new ArrayList<>();
-    public TodoAdapter(List<CheckBox> todos) {
+    private List<String> todos = new ArrayList<>();
+    public TodoAdapter(List<String> todos) {
         this.todos = todos;
     }
 
@@ -30,12 +31,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.setCheckBox(todos.get(position));
-    }
-
-    public void setTodos(List<CheckBox> items) {
-        todos.clear();
-        todos.addAll(items);
+        holder.checkBox.setText(todos.get(position));
     }
 
     @Override
@@ -48,14 +44,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             checkBox = (CheckBox) itemView.findViewById(R.id.todo_checkbox);
-        }
-
-        public void setCheckBox(CheckBox checkBox){
-            this.checkBox = checkBox;
-        }
-
-        public CheckBox getCheckBox(){
-            return checkBox;
         }
     }
 
