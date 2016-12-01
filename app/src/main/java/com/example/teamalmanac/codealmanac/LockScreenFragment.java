@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,22 +70,27 @@ public class LockScreenFragment extends Fragment {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_lock_screen, container, false);
 
-        RelativeLayout relativeLayout = (RelativeLayout)mRootView.findViewById(R.id.layout_lock_fragment);
-        relativeLayout.setBackground(mRootView.getResources().getDrawable(R.drawable.test, getContext().getTheme()));
+        //배경 이미지
+        RelativeLayout relativeLayout = (RelativeLayout) mRootView.findViewById(R.id.layout);
+        relativeLayout.setBackground(mRootView.getResources().getDrawable(R.drawable.main,TabActivity.getMainContext().getTheme()));
 
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) mRootView.findViewById(R.id.digital_clock);
-        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FRABK.TTF");
+        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "LSSM.TTF");
         digitalClock.setTypeface(typeface);
 
         //datetime
-        TextView dt = (TextView) mRootView.findViewById(R.id.datetime);
-        String format = "MM . dd EEEE";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.KOREA);
+        TextView dt = (TextView)mRootView.findViewById(R.id.datetime);
+        String format = new String("MM .dd  EEEE");
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
         dt.setText(sdf.format(new Date()));
-        Typeface type = Typeface.createFromAsset(getContext().getAssets(), "NanumSquareB.ttf");
+        Typeface type = Typeface.createFromAsset(getContext().getAssets(), "LSSM.TTF");
         dt.setTypeface(type);
-        //여기있던 메인포커스 타입설정문 setMainText 함수로 옮김
+
+        //화면 이동 메세지 폰트
+        TextView mv = (TextView)mRootView.findViewById(R.id.textView);
+        Typeface mvtype = Typeface.createFromAsset(getContext().getAssets(),"NanumSquareR.ttf");
+        mv.setTypeface(mvtype);
 
         //인사말 밑 mainfocus
         setMainText();
@@ -203,8 +210,11 @@ public class LockScreenFragment extends Fragment {
         String mainFocus = mDB.getMainFocus();
         String greetingMessage = "";
         String mainfocusMessage = "";
+
+        TextView todayText = (TextView)mRootView.findViewById(R.id.text_today);
         TextView greetingText = (TextView)mRootView.findViewById(R.id.text_greeting);
         TextView mainfocusText = (TextView)mRootView.findViewById(R.id.text_mainfocus);
+
         if(userName != null){
             greetingMessage += setGreetingMessage() + ", " + userName;
         } else {
@@ -216,11 +226,22 @@ public class LockScreenFragment extends Fragment {
             mainfocusMessage += "MainFocus is noting";
         }
         //글꼴
-        Typeface textType = Typeface.createFromAsset(getContext().getAssets(),"NanumSquareB.ttf");
+        Typeface textType = Typeface.createFromAsset(getContext().getAssets(),"FRAMDCN.TTF");
         greetingText.setTypeface(textType);
         mainfocusText.setTypeface(textType);
 
+        //Good morning,~ 부분의 글꼴
+        Typeface greetType = Typeface.createFromAsset(getContext().getAssets(),"FRAMDCN.TTF");
+        greetingText.setTypeface(greetType);
+        mainfocusText.setTypeface(greetType);
+
         greetingText.setText(greetingMessage);
         mainfocusText.setText(mainfocusMessage);
+
+        //today 부분의 글꼴
+        Typeface todayType = Typeface.createFromAsset(getContext().getAssets(),"FRADM.TTF");
+        todayText.setTypeface(todayType );
+        todayText.setTypeface(todayType );
+
     }
 }

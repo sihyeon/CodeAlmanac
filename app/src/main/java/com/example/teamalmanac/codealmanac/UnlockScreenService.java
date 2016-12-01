@@ -25,7 +25,6 @@ public class UnlockScreenService extends Service {
         mReceiver = new UnlockScreenReceiver();
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_USER_PRESENT);
         registerReceiver(mReceiver, filter);
 
         KeyguardManager.KeyguardLock key;

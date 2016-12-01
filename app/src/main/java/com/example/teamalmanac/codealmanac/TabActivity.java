@@ -2,12 +2,15 @@ package com.example.teamalmanac.codealmanac;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
+import android.hardware.SensorManager;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -24,9 +27,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class TabActivity extends AppCompatActivity {
     private final int PERMISSIONS_REQUEST = 1;
@@ -38,27 +45,20 @@ public class TabActivity extends AppCompatActivity {
     //Fragment 수
     private static final int FRAGMENT_TOTAL_NUMBER = 2;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //상태바 없앰
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_tab);
         mMainContext = getApplicationContext();
         DataManager.getSingletonInstance(); //액티비티에서 싱글톤 미리생성
+
         /*  FLAG_SHOW_WHEN_LOCKED = 잠금화면 위로 액티비티 실행
             FLAG_DISMISS_KEYGUARD = 키 가드 해제 */
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -131,14 +131,10 @@ public class TabActivity extends AppCompatActivity {
                 mCounterPageScroll = 0;
             }
         }
-
         @Override
-        public void onPageSelected(int position) {
-        }
-
+        public void onPageSelected(int position) {}
         @Override
-        public void onPageScrollStateChanged(int state) {
-        }
+        public void onPageScrollStateChanged(int state) {}
     };
 
     @Override
@@ -149,13 +145,10 @@ public class TabActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_ESCAPE:
                 return false;
         }
+
         return super.onKeyDown(keyCode, event);
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -188,7 +181,7 @@ public class TabActivity extends AppCompatActivity {
                     return "SECTION 1";
                 case 1:
                     return "SECTION 2";
-            }
+           }
             return null;
         }
     }
