@@ -72,7 +72,7 @@ public class LockScreenFragment extends Fragment {
 
         //배경 이미지
         RelativeLayout relativeLayout = (RelativeLayout) mRootView.findViewById(R.id.layout);
-        relativeLayout.setBackground(mRootView.getResources().getDrawable(R.drawable.test,TabActivity.getMainContext().getTheme()));
+        relativeLayout.setBackground(mRootView.getResources().getDrawable(R.drawable.bg_2,TabActivity.getMainContext().getTheme()));
 
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) mRootView.findViewById(R.id.digital_clock);
@@ -94,7 +94,7 @@ public class LockScreenFragment extends Fragment {
 
         //인사말 밑 mainfocus
         setMainText();
-        setGeoLocation();
+        //setGeoLocation();
 
         return mRootView;
     }
@@ -109,20 +109,20 @@ public class LockScreenFragment extends Fragment {
         }
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        lat = lastLocation.getLatitude();
+//        lat = lastLocation.getLatitude();
         lon = lastLocation.getLongitude();
-        getWeather(lat, lon);
-        if(lastLocation != null){
-            //위치정보 -> 지역정보로 변환
-            Geocoder geocoder = new Geocoder(getContext(), Locale.KOREAN);
-            try {
-                List<Address> addr = geocoder.getFromLocation(lat, lon, 2);
-                String location = addr.get(0).getLocality() + " " + addr.get(0).getSubLocality();
-                ((TextView)mRootView.findViewById(R.id.text_location)).setText(location);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+  //      getWeather(lat, lon);
+//       if(lastLocation != null){
+//            //위치정보 -> 지역정보로 변환
+//            Geocoder geocoder = new Geocoder(getContext(), Locale.KOREAN);
+//            try {
+//               List<Address> addr = geocoder.getFromLocation(lat, lon, 2);
+//               String location = addr.get(0).getLocality() + " " + addr.get(0).getSubLocality();
+//                ((TextView)mRootView.findViewById(R.id.text_location)).setText(location);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     private void getWeather(double lat, double lon){

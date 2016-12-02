@@ -1,5 +1,8 @@
 package com.example.teamalmanac.codealmanac;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,10 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teamalmanac.codealmanac.adapter.TodoAdapter;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.List;
@@ -77,10 +83,10 @@ public class LeftFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_left, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_left, container, false);
         //배경 이미지
         RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.activity_left);
-        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.test,TabActivity.getMainContext().getTheme()));
+        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.bg_2,TabActivity.getMainContext().getTheme()));
 
         whatisyourname_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourName_layout);
         whatisyourmainfocusEdit_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourMainfocusEdit_layout);
@@ -93,11 +99,16 @@ public class LeftFragment extends Fragment {
         todo_listview = (RecyclerView) rootView.findViewById(R.id.todo_listview);
         todo_listview.setHasFixedSize(true);
 
-        final EditText name_edit = (EditText) rootView.findViewById(R.id.name_edittext);
+        //WHAT IS YOUR NAME 부분 FONT 설정
+        TextView whatisyourname = (TextView)rootView.findViewById(R.id.whatIsYourName);
+        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
+        whatisyourname.setTypeface(typeface);
+
         name_button = (Button) rootView.findViewById(R.id.name_button);
         name_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EditText name_edit = (EditText) getView().findViewById(R.id.name_edittext);
                 String name = name_edit.getText().toString();
                 if (name.isEmpty()) {
                     Toast.makeText(view.getContext(), "fill the name...", Toast.LENGTH_SHORT).show();
@@ -108,11 +119,11 @@ public class LeftFragment extends Fragment {
             }
         });
 
-        final EditText mainfocus_edit = (EditText) rootView.findViewById(R.id.mainfocus_edittext);
-        mainfocus_button = (Button) rootView.findViewById(R.id.mainfocus_button);
+        mainfocus_button = (Button)rootView.findViewById(R.id.mainfocus_button);
         mainfocus_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EditText mainfocus_edit = (EditText) getView().findViewById(R.id.mainfocus_edittext);
                 String mainfocus = mainfocus_edit.getText().toString();
                 if (mainfocus.isEmpty()) {
                     Toast.makeText(view.getContext(), "fill the mainfocus...", Toast.LENGTH_SHORT).show();
@@ -124,10 +135,10 @@ public class LeftFragment extends Fragment {
         });
 
         todo_button = (Button) rootView.findViewById(R.id.todo_botton);
-        final EditText todo_edit = (EditText) rootView.findViewById(R.id.todo_edittext);
         todo_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EditText todo_edit = (EditText) getView().findViewById(R.id.todo_edittext);
                 String todo = todo_edit.getText().toString();
                 if (todo.isEmpty()) {
                     Toast.makeText(view.getContext(), "fill the todo...", Toast.LENGTH_SHORT).show();
