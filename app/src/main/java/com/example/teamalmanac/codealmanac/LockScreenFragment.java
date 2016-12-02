@@ -72,7 +72,7 @@ public class LockScreenFragment extends Fragment {
 
         //배경 이미지
         RelativeLayout relativeLayout = (RelativeLayout) mRootView.findViewById(R.id.layout);
-        relativeLayout.setBackground(mRootView.getResources().getDrawable(R.drawable.main,TabActivity.getMainContext().getTheme()));
+        relativeLayout.setBackground(mRootView.getResources().getDrawable(R.drawable.test,TabActivity.getMainContext().getTheme()));
 
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) mRootView.findViewById(R.id.digital_clock);

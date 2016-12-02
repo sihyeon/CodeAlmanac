@@ -80,7 +80,7 @@ public class LeftFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_left, container, false);
         //배경 이미지
         RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.activity_left);
-        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.main,TabActivity.getMainContext().getTheme()));
+        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.test,TabActivity.getMainContext().getTheme()));
 
         whatisyourname_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourName_layout);
         whatisyourmainfocusEdit_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourMainfocusEdit_layout);
