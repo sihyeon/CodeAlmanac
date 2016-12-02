@@ -27,10 +27,10 @@ public class UnlockScreenService extends Service {
         filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
 
-        KeyguardManager.KeyguardLock key;
-        KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
-        key = km.newKeyguardLock("IN");
-        key.disableKeyguard();
+//        KeyguardManager.KeyguardLock key;
+//        KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
+//        key = km.newKeyguardLock("IN");
+//        key.disableKeyguard();
     }
 
     @Override

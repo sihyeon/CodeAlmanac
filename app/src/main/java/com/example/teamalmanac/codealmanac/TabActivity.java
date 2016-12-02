@@ -64,7 +64,7 @@ public class TabActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         mTabActivity = this;
-        permissionCheck(); //권한 체크.
+//        permissionCheck(); //권한 체크.
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -85,32 +85,32 @@ public class TabActivity extends AppCompatActivity {
 //        }
     }
 
-    private void permissionCheck() {
-        String[] permissions = new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.INTERNET,
-                Manifest.permission.DISABLE_KEYGUARD };
-        for (String permission : permissions) {
-            int result = PermissionChecker.checkSelfPermission(this, permission);
-            if (result != PermissionChecker.PERMISSION_GRANTED){
-                //권한을 요청
-                ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == PERMISSIONS_REQUEST){
-            for(int result : grantResults){
-                if(result != PackageManager.PERMISSION_GRANTED){
-                    //권한 거부함
-                    TabActivity.this.finish();
-                }
-            }
-        }
-    }
+    //    private void permissionCheck() {
+//        String[] permissions = new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION,
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.INTERNET,
+//                Manifest.permission.DISABLE_KEYGUARD };
+//        for (String permission : permissions) {
+//            int result = PermissionChecker.checkSelfPermission(this, permission);
+//            if (result != PermissionChecker.PERMISSION_GRANTED){
+//                //권한을 요청
+//                ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST);
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if(requestCode == PERMISSIONS_REQUEST){
+//            for(int result : grantResults){
+//                if(result != PackageManager.PERMISSION_GRANTED){
+//                    //권한 거부함
+//                    TabActivity.this.finish();
+//                }
+//            }
+//        }
+//    }
 
     public static Activity getTabActivity() {
         return mTabActivity;

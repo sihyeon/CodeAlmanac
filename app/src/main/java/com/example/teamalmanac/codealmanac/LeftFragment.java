@@ -77,10 +77,7 @@ public class LeftFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_left, container, false);
-        //배경 이미지
-        RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.activity_left);
-        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.main,TabActivity.getMainContext().getTheme()));
+        View rootView = inflater.inflate(R.layout.fragment_left, container, false);
 
         whatisyourname_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourName_layout);
         whatisyourmainfocusEdit_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourMainfocusEdit_layout);
@@ -124,10 +121,10 @@ public class LeftFragment extends Fragment {
         });
 
         todo_button = (Button) rootView.findViewById(R.id.todo_botton);
-        final EditText todo_edit = (EditText) rootView.findViewById(R.id.todo_edittext);
         todo_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EditText todo_edit = (EditText) getView().findViewById(R.id.todo_edittext);
                 String todo = todo_edit.getText().toString();
                 if (todo.isEmpty()) {
                     Toast.makeText(view.getContext(), "fill the todo...", Toast.LENGTH_SHORT).show();
