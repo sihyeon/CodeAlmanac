@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 
@@ -74,7 +75,7 @@ public class LockScreenFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_lock_screen, container, false);
 
         //배경 이미지
-        RelativeLayout relativeLayout = (RelativeLayout) mRootView.findViewById(R.id.layout);
+        RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.layout);
         relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.bg_2,TabActivity.getMainContext().getTheme()));
 
         //Digital Clock FONT asset
