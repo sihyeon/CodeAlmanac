@@ -127,7 +127,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center"
                 android:textColor="#FFF"
                 android:textSize="45sp"
                 android:id="@+id/greet"/>
@@ -135,7 +135,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center"
                 android:textColor="#FFF"
                 android:textSize="45sp"
                 android:id="@+id/text_user_name" />

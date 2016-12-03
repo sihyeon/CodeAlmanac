@@ -41,6 +41,9 @@ public class LeftFragment extends Fragment {
 
     // text
     private TextView greet;
+    /*TODO this is mainfocus's content
+    *PLZ set proper position and findViewById
+    */
     private TextView mainfocus;
     private TextView userNameText;
     private TextView whatisyourname;
@@ -91,7 +94,7 @@ public class LeftFragment extends Fragment {
         todo_layout = (LinearLayout) rootView.findViewById(R.id.todo_layout);
 
         userNameText = (TextView) rootView.findViewById(R.id.text_user_name);
-        //logo_icn = (ImageView)rootView.findViewById(R.id.logo_icn);
+        logo_icn = (ImageView)rootView.findViewById(R.id.logo_icn);
 
         greet = (TextView) rootView.findViewById(R.id.greet);
 
@@ -101,6 +104,8 @@ public class LeftFragment extends Fragment {
         //WHAT IS YOUR NAME 부분 FONT 설정
         whatisyourname = (TextView)rootView.findViewById(R.id.whatIsYourName);
         whatIsYourMainfocus = (TextView)rootView.findViewById(R.id.whatIsYourMainfocus);
+        //TODO relocate it(R.id.text_mainfocus is on the fragment_lock_screen, not fragment_left)
+//        mainfocus = (TextView)rootView.findViewById(R.id.text_mainfocus);
 
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
         whatisyourname.setTypeface(typeface);
@@ -195,18 +200,21 @@ public class LeftFragment extends Fragment {
         userNameText.setText(mDb.getUserName());
         whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
         todo_layout.setVisibility(View.VISIBLE);
+        logo_icn.setVisibility(View.GONE);
     }
 
     private void mainFocusAdded() {
         whatisyourmainfocusEdit_layout.setVisibility(View.GONE);
-        mainfocus.setText(mDb.getMainFocus());
+        //TODO set mainfocus's content
+//        mainfocus.setText(mDb.getMainFocus());
     }
 
     private void initlayout() {
         if (isNameAvailable()) {
             whatisyourname_layout.setVisibility(View.GONE);
-            //logo_icn.setVisibility(View.GONE);
-            greet.setText(setHelloMessage() + ", " + mDb.getUserName());
+            logo_icn.setVisibility(View.GONE);
+            greet.setText(setHelloMessage() + ", ");
+            userNameText.setText(mDb.getUserName());
             whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
             todo_layout.setVisibility(View.VISIBLE);
         } else {
@@ -219,8 +227,9 @@ public class LeftFragment extends Fragment {
         if (isMainFocusAvailable() && !mDb.getMainFocus().isEmpty()) {
             //TODO set time out
             whatisyourmainfocusEdit_layout.setVisibility(View.GONE);
-            mainfocus.setVisibility(View.VISIBLE);
-            mainfocus.setText(mDb.getMainFocus());
+            //TODO set mainfocus's content
+//            mainfocus.setVisibility(View.VISIBLE);
+//            mainfocus.setText(mDb.getMainFocus());
             return;
         } else {
             whatisyourmainfocusEdit_layout.setVisibility(View.VISIBLE);
