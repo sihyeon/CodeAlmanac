@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -104,9 +105,9 @@ public class LockScreenFragment extends Fragment {
         if (isGPSSensor) {
             if (ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
                 mLocationManager.removeUpdates(mMyLocationListener);
             }
-
         }
     }
 
@@ -155,12 +156,13 @@ public class LockScreenFragment extends Fragment {
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         Log.d("LockScreenFragment", mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) + " - GPS");
         if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Log.d("weather", "GPS 활성화되어있음.");
             isGPSSensor = true;
             mMyLocationListener = new locationListener();
-            Log.d("weather", "GPS 활성화되어있음.");
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, mMyLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, mMyLocationListener);
             Location lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (lastLocation != null) {
+                Log.d("weather", "LastLocation is not null");
                 getWeather(lastLocation.getLatitude(), lastLocation.getLongitude());
                 try {
                     Geocoder geocoder = new Geocoder(getActivity(), Locale.KOREAN);
@@ -171,12 +173,12 @@ public class LockScreenFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-        } else{
-        isGPSSensor=false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
-        ((TextView)getView().findViewById(R.id.text_weather_icon)).setText("");
-        ((TextView)getView().findViewById(R.id.text_temp)).setText("");
-        ((TextView)getView().findViewById(R.id.text_location)).setText("");
-        return;
+        } else {
+            isGPSSensor = false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
+            ((TextView) getView().findViewById(R.id.text_weather_icon)).setVisibility(getView().INVISIBLE);
+            ((TextView) getView().findViewById(R.id.text_temp)).setVisibility(getView().INVISIBLE);
+            ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
+            return;
         }
     }
 
@@ -187,21 +189,31 @@ public class LockScreenFragment extends Fragment {
             if (location != null) {
                 Log.d("LockScreenFragment", "lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
                 try {
-                    Geocoder geocoder = new Geocoder(getActivity(), Locale.KOREAN);
+                    Geocoder geocoder = new Geocoder(getContext(), Locale.KOREAN);
                     List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
-                    String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
-                    ((TextView) getView().findViewById(R.id.text_location)).setText(address);
+                    if (addrData != null) {
+                        String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
+                        ((TextView) getView().findViewById(R.id.text_location)).setText(address);
+                    } else {
+                        ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
+                    }
                 } catch (IOException e) {
                     Log.d("LockScreenFragment", "geocoder error: " + e);
                 }
             }
         }
+
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
         @Override
-        public void onProviderEnabled(String provider) {}
+        public void onProviderEnabled(String provider) {
+        }
+
         @Override
-        public void onProviderDisabled(String provider) {}
+        public void onProviderDisabled(String provider) {
+        }
     }
 
     //OpenWeatherMap에서 날씨정보를 받아옴.
@@ -221,7 +233,7 @@ public class LockScreenFragment extends Fragment {
                         try {
                             //날씨 텍스트를 받아와서 아이콘을 지정함
                             Log.d("jsonTest", response.getJSONArray("weather").getJSONObject(0).getString("description"));
-                            setWeatherIcon(response.getJSONArray("weather").getJSONObject(0).getString("description"));
+                            setWeatherIcon(response.getJSONArray("weather").getJSONObject(0).getInt("id"));
                             //온도 텍스트 받아와서 온도지정
                             Log.d("jsonTest", response.getJSONObject("main").getString("temp") + "");
                             setTemperature(response.getJSONObject("main").getString("temp"));
@@ -244,53 +256,52 @@ public class LockScreenFragment extends Fragment {
     }
 
     //날씨 아이콘 선택
-    private void setWeatherIcon(String weather) {
+    private void setWeatherIcon(int weather) {
         int presentHour = mCalendar.get(Calendar.HOUR_OF_DAY);
         String weatherIconStringId = "wi_";
-        switch (weather) {
-            case "clear sky":
-                if (5 <= presentHour && presentHour <= 17) {
-                    //아침 & 낮
-                    weatherIconStringId += "day_sunny";
-                } else {
-                    //저녁
-                    weatherIconStringId += "night_clear";
-                }
-                break;
-            case "few clouds":
-                if (5 <= presentHour && presentHour <= 17) {
-                    //아침 & 낮
-                    weatherIconStringId += "day_cloudy";
-                } else {
-                    //저녁
-                    weatherIconStringId += "night_alt_cloudy";
-                }
-                break;
-            case "scattered clouds":
-                weatherIconStringId += "cloud";
-                break;
-            case "broken clouds":
-                weatherIconStringId += "cloudy";
-                break;
-            case "shower rain":
+        if (weather == 800) { //clear sky
+            if (5 <= presentHour && presentHour <= 17) {
+                //아침 & 낮
+                weatherIconStringId += "day_sunny";
+            } else {
+                //저녁
+                weatherIconStringId += "night_clear";
+            }
+        } else if (801 <= weather && weather <= 804) { //구름
+            switch (weather) {
+                case 801:
+                    if (5 <= presentHour && presentHour <= 17) {
+                        //아침 & 낮
+                        weatherIconStringId += "day_cloudy";
+                    } else {
+                        //저녁
+                        weatherIconStringId += "night_alt_cloudy";
+                    }
+                    break;
+                case 802:
+                    weatherIconStringId += "cloud";
+                    break;
+                default:
+                    weatherIconStringId += "cloudy";
+            }
+        } else if ((500 <= weather && weather <= 531) || (300 <= weather && weather <= 321)) { //비
+            if (weather == 521) {
                 weatherIconStringId += "showers";
-                break;
-            case "rain":
+            } else {
                 weatherIconStringId += "rain";
-                break;
-            case "thunderstorm":
-                weatherIconStringId += "thunderstorm";
-                break;
-            case "snow":
-                weatherIconStringId += "snow";
-                break;
-            case "mist":
-                weatherIconStringId += "fog";
-                break;
+            }
+        } else if (200 <= weather && weather <= 232) {  //폭풍
+            weatherIconStringId += "thunderstorm";
+        } else if (600 <= weather && weather <= 622) {
+            weatherIconStringId += "snow";
+        } else if (701 <= weather && weather <= 781) {  //안개
+            weatherIconStringId += "fog";
+        } else {
+            weatherIconStringId += "na";
         }
         //날씨 아이콘 선택
         int resId = getResources().getIdentifier(weatherIconStringId, "string", getContext().getPackageName());
-
+        Log.d("test", weatherIconStringId);
         TextView weatherIconText = (TextView) getView().findViewById(R.id.text_weather_icon);
         weatherIconText.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "weathericons-regular-webfont.ttf"));
         weatherIconText.setText(getContext().getString(resId));
