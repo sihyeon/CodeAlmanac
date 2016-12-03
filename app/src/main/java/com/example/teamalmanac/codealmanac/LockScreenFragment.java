@@ -46,7 +46,7 @@ public class LockScreenFragment extends Fragment {
     private Calendar mCalendar;
     private final int GEO_PERMISSIONS_REQUEST = 1;
     private LocationManager mLocationManager;
-    private locationListener mMyLocationListener;
+//    private locationListener mMyLocationListener;
     private boolean isGPSSensor = false;
 
     public LockScreenFragment() {
@@ -102,13 +102,13 @@ public class LockScreenFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (isGPSSensor) {
-            if (ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-                mLocationManager.removeUpdates(mMyLocationListener);
-            }
+
+        if (ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+//            mLocationManager.removeUpdates(mMyLocationListener);
         }
+
     }
 
     @Override
@@ -158,8 +158,8 @@ public class LockScreenFragment extends Fragment {
         if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Log.d("weather", "GPS 활성화되어있음.");
             isGPSSensor = true;
-            mMyLocationListener = new locationListener();
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, mMyLocationListener);
+//            mMyLocationListener = new locationListener();
+//            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, mMyLocationListener);
             Location lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (lastLocation != null) {
                 Log.d("weather", "LastLocation is not null");
@@ -182,39 +182,39 @@ public class LockScreenFragment extends Fragment {
         }
     }
 
-    //위치정보 리스너
-    public class locationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location location) {
-            if (location != null) {
-                Log.d("LockScreenFragment", "lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
-                try {
-                    Geocoder geocoder = new Geocoder(getContext(), Locale.KOREAN);
-                    List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
-                    if (addrData != null) {
-                        String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
-                        ((TextView) getView().findViewById(R.id.text_location)).setText(address);
-                    } else {
-                        ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
-                    }
-                } catch (IOException e) {
-                    Log.d("LockScreenFragment", "geocoder error: " + e);
-                }
-            }
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
-    }
+//    //위치정보 리스너
+//    public class locationListener implements LocationListener {
+//        @Override
+//        public void onLocationChanged(Location location) {
+//            if (location != null) {
+//                Log.d("LockScreenFragment", "lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
+//                try {
+//                    Geocoder geocoder = new Geocoder(getActivity(), Locale.KOREAN);
+//                    List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
+//                    if (addrData != null) {
+//                        String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
+//                        ((TextView) getView().findViewById(R.id.text_location)).setText(address);
+//                    } else {
+//                        ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
+//                    }
+//                } catch (IOException e) {
+//                    Log.d("LockScreenFragment", "geocoder error: " + e);
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public void onStatusChanged(String provider, int status, Bundle extras) {
+//        }
+//
+//        @Override
+//        public void onProviderEnabled(String provider) {
+//        }
+//
+//        @Override
+//        public void onProviderDisabled(String provider) {
+//        }
+//    }
 
     //OpenWeatherMap에서 날씨정보를 받아옴.
     private void getWeather(double lat, double lon) {
