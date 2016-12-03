@@ -2,8 +2,6 @@ package com.example.teamalmanac.codealmanac;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Address;
@@ -12,14 +10,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.PermissionChecker;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +43,9 @@ public class LockScreenFragment extends Fragment {
     private DataManager mDB = null;
     private Calendar mCalendar;
     private final int GEO_PERMISSIONS_REQUEST = 1;
-    private Geocoder mGeocoder;
+    private LocationManager mLocationManager;
+    private locationListener mMyLocationListener;
+    private boolean isGPSSensor = false;
 
     public LockScreenFragment() {
         // Required empty public constructor
@@ -65,7 +61,6 @@ public class LockScreenFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mDB = DataManager.getSingletonInstance();
         mCalendar = Calendar.getInstance();
-        mGeocoder = new Geocoder(getActivity(), Locale.KOREAN);
     }
 
     @Override
@@ -76,7 +71,7 @@ public class LockScreenFragment extends Fragment {
 
         //배경 이미지
         RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.layout);
-        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.bg_2,TabActivity.getMainContext().getTheme()));
+        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.bg_2, TabActivity.getMainContext().getTheme()));
 
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digital_clock);
@@ -106,6 +101,17 @@ public class LockScreenFragment extends Fragment {
         setGeoLocation();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (isGPSSensor) {
+            if (ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationManager.removeUpdates(mMyLocationListener);
+            }
+
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -124,55 +130,56 @@ public class LockScreenFragment extends Fragment {
 //                    TabActivity.getTabActivity().finish();
                 }
             }
-            if(perimssionChecking) {
+            if (perimssionChecking) {
                 setGeoLocation();
             }
         }
     }
 
+    /*
+    GPS를 정리해보면
+    setGeoLocation -> 권한체킹 -> (권한 없을시) requestpermission으로 권한 요청 후 함수종료 -> 권한 두개 전부 받으면 다시 setGeoLocation
+                               -> (권한 있을시) locationManager 생성 및 등록 -> GPS 켜져있나 확인 -> 꺼져있으면 다이알로그 -> 확인창 누르면 설정창 띄움
+                                 -> 설정창띄우고 isGPSSensor 통해서 GPS 있을 시 동작
+     */
     //GPS 정보 가져오기
     private void setGeoLocation() {
         String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.INTERNET};
         for (String permission : permissions) {
-            if (PermissionChecker.checkSelfPermission(getActivity(), permission) != PermissionChecker.PERMISSION_GRANTED) {
+            if (PermissionChecker.checkSelfPermission(getContext().getApplicationContext(), permission) != PermissionChecker.PERMISSION_GRANTED) {
                 //권한이 없을 경우 권한을 요청
                 ActivityCompat.requestPermissions(getActivity(), permissions, GEO_PERMISSIONS_REQUEST);
                 return;
             }
         }
 
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        Log.d("LockScreenFragment", locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) + " - GPS");
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            new AlertDialog.Builder(getActivity())
-                    .setMessage("GPS가 비활성화 되어있습니다.\n GPS를 활성화해주세요.")
-                    .setPositiveButton("설정", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                        }
-                    })
-                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }).show();
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, new locationListener());
-
-        Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (lastLocation != null) {
-            getWeather(lastLocation.getLatitude(), lastLocation.getLongitude());
-            try {
-                List<Address> addrData = mGeocoder.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 2);
-                String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
-                ((TextView) getView().findViewById(R.id.text_location)).setText(address);
-            } catch (IOException e) {
-                e.printStackTrace();
+        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        Log.d("LockScreenFragment", mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) + " - GPS");
+        if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            isGPSSensor = true;
+            mMyLocationListener = new locationListener();
+            Log.d("weather", "GPS 활성화되어있음.");
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, mMyLocationListener);
+            Location lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastLocation != null) {
+                getWeather(lastLocation.getLatitude(), lastLocation.getLongitude());
+                try {
+                    Geocoder geocoder = new Geocoder(getActivity(), Locale.KOREAN);
+                    List<Address> addrData = geocoder.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 2);
+                    String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
+                    ((TextView) getView().findViewById(R.id.text_location)).setText(address);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+        } else{
+        isGPSSensor=false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
+        ((TextView)getView().findViewById(R.id.text_weather_icon)).setText("");
+        ((TextView)getView().findViewById(R.id.text_temp)).setText("");
+        ((TextView)getView().findViewById(R.id.text_location)).setText("");
+        return;
         }
     }
 
@@ -180,10 +187,11 @@ public class LockScreenFragment extends Fragment {
     public class locationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
-            if(location != null){
+            if (location != null) {
                 Log.d("LockScreenFragment", "lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
                 try {
-                    List<Address> addrData = mGeocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
+                    Geocoder geocoder = new Geocoder(getActivity(), Locale.KOREAN);
+                    List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
                     String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
                     ((TextView) getView().findViewById(R.id.text_location)).setText(address);
                 } catch (IOException e) {
@@ -233,8 +241,8 @@ public class LockScreenFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
-    private void setTemperature(String temperature){
-        TextView temperatureText = (TextView)getView().findViewById(R.id.text_temp);
+    private void setTemperature(String temperature) {
+        TextView temperatureText = (TextView) getView().findViewById(R.id.text_temp);
         temperatureText.setText(temperature + "º");
     }
 
@@ -309,12 +317,13 @@ public class LockScreenFragment extends Fragment {
         String greetingMessage = "";
         String mainfocusMessage = "";
 
-        TextView todayText = (TextView) getView().findViewById(R.id.text_today);
         TextView greetingText = (TextView) getView().findViewById(R.id.text_greeting);
+        TextView userNameText = (TextView) getView().findViewById(R.id.text_user_name);
+        TextView todayText = (TextView) getView().findViewById(R.id.text_today);
         TextView mainfocusText = (TextView) getView().findViewById(R.id.text_mainfocus);
 
         if (userName != null) {
-            greetingMessage += setGreetingMessage() + ", " + userName;
+            greetingMessage += setGreetingMessage() + ",";
         } else {
             greetingMessage += "Name is noting";
         }
@@ -323,23 +332,17 @@ public class LockScreenFragment extends Fragment {
         } else {
             mainfocusMessage += "MainFocus is noting";
         }
-        //글꼴
-        Typeface textType = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
-        greetingText.setTypeface(textType);
-        mainfocusText.setTypeface(textType);
 
         //Good morning,~ 부분의 글꼴
-        Typeface greetType = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
-        greetingText.setTypeface(greetType);
-        mainfocusText.setTypeface(greetType);
+        Typeface fontType = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
+        greetingText.setTypeface(fontType);     //인사말
+        userNameText.setTypeface(fontType);     //사용자 이름
+        todayText.setTypeface(fontType);        //TODAY부분
+        mainfocusText.setTypeface(fontType);    //mainfocus
+
 
         greetingText.setText(greetingMessage);
+        userNameText.setText(userName);
         mainfocusText.setText(mainfocusMessage);
-
-        //today 부분의 글꼴
-        Typeface todayType = Typeface.createFromAsset(getContext().getAssets(), "FRADM.TTF");
-        todayText.setTypeface(todayType);
-        todayText.setTypeface(todayType);
-
     }
 }
