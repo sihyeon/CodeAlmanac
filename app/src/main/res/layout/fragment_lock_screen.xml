@@ -109,7 +109,7 @@
         android:id="@+id/leftdrawicon"
         android:layout_alignTop="@+id/lockscreenicon"
         android:layout_marginStart="16dp"
-        app:srcCompat="@drawable/btn_main_wtd" />
+        app:srcCompat="@drawable/btn_wtd" />
 
     <TextView
         android:text="화면을 밀어 이동하세요"
@@ -131,6 +131,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
-        app:srcCompat="@drawable/btn_main_unlock" />
+        app:srcCompat="@drawable/btn_unlock" />
 
 </RelativeLayout>
