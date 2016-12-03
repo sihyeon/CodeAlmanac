@@ -172,6 +172,12 @@ public class LockScreenFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                isGPSSensor = false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
+                ((TextView) getView().findViewById(R.id.text_weather_icon)).setVisibility(getView().INVISIBLE);
+                ((TextView) getView().findViewById(R.id.text_temp)).setVisibility(getView().INVISIBLE);
+                ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
+                return;
             }
         } else {
             isGPSSensor = false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
