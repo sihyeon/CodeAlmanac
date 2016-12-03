@@ -15,11 +15,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.PermissionChecker;
 import android.util.Log;
-import android.view.Gravity;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -35,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.TypeVariable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -84,7 +84,7 @@ public class LockScreenFragment extends Fragment {
         dt.setTypeface(type);
 
         //화면 이동 메세지 폰트
-        TextView mv = (TextView) rootView.findViewById(R.id.textView);
+        TextView mv = (TextView) rootView.findViewById(R.id.text_screen_pull);
         Typeface mvtype = Typeface.createFromAsset(getContext().getAssets(), "NanumSquareR.ttf");
         mv.setTypeface(mvtype);
         return rootView;
@@ -196,12 +196,18 @@ public class LockScreenFragment extends Fragment {
                 }
             }
         }
+
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
         @Override
-        public void onProviderEnabled(String provider) {}
+        public void onProviderEnabled(String provider) {
+        }
+
         @Override
-        public void onProviderDisabled(String provider) {}
+        public void onProviderDisabled(String provider) {
+        }
     }
 
     //OpenWeatherMap에서 날씨정보를 받아옴.
@@ -224,7 +230,7 @@ public class LockScreenFragment extends Fragment {
                             setWeatherIcon(response.getJSONArray("weather").getJSONObject(0).getInt("id"));
                             //온도 텍스트 받아와서 온도지정
 //                            Log.d("jsonTest", response.getJSONObject("main").getString("temp") + "");
-                            setTemperature(response.getJSONObject("main").getString("temp"));
+                            setTemperature(response.getJSONObject("main").getDouble("temp"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -238,9 +244,10 @@ public class LockScreenFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
-    private void setTemperature(String temperature) {
+    private void setTemperature(double temperature) {
         TextView temperatureText = (TextView) getView().findViewById(R.id.text_temp);
-        temperatureText.setText(temperature + "º");
+//        temperatureText.setText(String.format("%.0f", temperature) + "º");
+        temperatureText.setText((int)temperature + "º");
     }
 
     //날씨 아이콘 선택
@@ -329,13 +336,28 @@ public class LockScreenFragment extends Fragment {
             //today 부분의 글꼴
             Typeface todayType = Typeface.createFromAsset(getContext().getAssets(), "FRADM.TTF");
             todayText.setTypeface(todayType);
-            todayText.setTypeface(todayType);
-
+            todayText.setVisibility(getView().VISIBLE);
+            // 메인포커스 below text_today, marginTop 15dp TextSize
+            RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
+            relativeParams.addRule(RelativeLayout.BELOW, R.id.text_today);
+            relativeParams.topMargin = Math.round(15f * getContext().getResources().getDisplayMetrics().density); //dp설정
+//            relativeParams.topMargin = translatePxToDp(15f); //dp설정
+            mainfocusText.setLayoutParams(relativeParams);
+//            mainfocusText.setTextSize(30f * getContext().getResources().getDisplayMetrics().density);
+            mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
+//            mainfocusText.setTextSize(translatePxToDp(30f));
             mainfocusMessage += mainFocus;
         } else {
+            todayText.setVisibility(getView().INVISIBLE);
+            //메인포커스 디자인 수정
+            RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
+            relativeParams.addRule(RelativeLayout.BELOW, R.id.text_user_name);
+//            relativeParams.topMargin = Math.round(64f * getContext().getResources().getDisplayMetrics().density); //dp설정
+            relativeParams.topMargin = translatePxToDp(64f); //dp설정
+            mainfocusText.setLayoutParams(relativeParams);
+            mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             mainfocusMessage += "What is your main focus for today?";
         }
-
         //Good morning,~ 부분의 글꼴
         Typeface fontType = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
         greetingText.setTypeface(fontType);     //인사말
@@ -343,11 +365,15 @@ public class LockScreenFragment extends Fragment {
         todayText.setTypeface(fontType);        //TODAY부분
         mainfocusText.setTypeface(fontType);    //mainfocus
 
-
         greetingText.setText(greetingMessage);
         userNameText.setText(userName);
         mainfocusText.setText(mainfocusMessage);
 
-
+        Log.d("layout", getContext().getResources().getDisplayMetrics().density + " - density");
+        Log.d("layout", getContext().getResources().getDisplayMetrics().widthPixels + " - widthPixels");
+        Log.d("layout", getContext().getResources().getDisplayMetrics().heightPixels + " - heightPixels");
+    }
+    private int translatePxToDp(float dp){
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getContext().getResources().getDisplayMetrics());
     }
 }
