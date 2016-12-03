@@ -34,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.TypeVariable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,6 +56,10 @@ public class LockScreenFragment extends Fragment {
         return fragment;
     }
 
+    public static void setData(){
+        
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,15 +75,15 @@ public class LockScreenFragment extends Fragment {
 
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digital_clock);
-        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "LSSM.TTF");
+        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "YiSunShinDotumM-Regular.ttf");
         digitalClock.setTypeface(typeface);
 
         //datetime
-        TextView dt = (TextView) rootView.findViewById(R.id.datetime);
+        TextView dt = (TextView) rootView.findViewById(R.id.text_date);
         String format = new String("MM .dd  EEEE");
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
         dt.setText(sdf.format(new Date()));
-        Typeface type = Typeface.createFromAsset(getContext().getAssets(), "LSSM.TTF");
+        Typeface type = Typeface.createFromAsset(getContext().getAssets(), "YiSunShinDotumM-Regular.ttf");
         dt.setTypeface(type);
 
         //화면 이동 메세지 폰트
@@ -155,7 +158,10 @@ public class LockScreenFragment extends Fragment {
                     Geocoder geocoder = new Geocoder(getActivity(), Locale.KOREAN);
                     List<Address> addrData = geocoder.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 2);
                     String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
-                    ((TextView) getView().findViewById(R.id.text_location)).setText(address);
+                    TextView addrText = (TextView)getView().findViewById(R.id.text_location);
+                    Typeface addrType = Typeface.createFromAsset(getContext().getAssets(), "NanumSquareR.ttf");
+                    addrText.setTypeface(addrType);
+                    addrText.setText(address);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -187,7 +193,10 @@ public class LockScreenFragment extends Fragment {
                     List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
                     if (addrData != null) {
                         String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
-                        ((TextView) getView().findViewById(R.id.text_location)).setText(address);
+                        TextView addrText = (TextView)getView().findViewById(R.id.text_location);
+                        Typeface addrType = Typeface.createFromAsset(getContext().getAssets(), "NanumSquareR.ttf");
+                        addrText.setTypeface(addrType);
+                        addrText.setText(address);
                     } else {
                         ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
                     }
@@ -246,8 +255,10 @@ public class LockScreenFragment extends Fragment {
 
     private void setTemperature(double temperature) {
         TextView temperatureText = (TextView) getView().findViewById(R.id.text_temp);
-//        temperatureText.setText(String.format("%.0f", temperature) + "º");
+        Typeface tempType = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
+        temperatureText.setTypeface(tempType);
         temperatureText.setText((int)temperature + "º");
+//        temperatureText.setText(String.format("%.0f", temperature) + "º");
     }
 
     //날씨 아이콘 선택
@@ -329,25 +340,18 @@ public class LockScreenFragment extends Fragment {
         if (userName != null) {
             greetingMessage += setGreetingMessage() + ",";
         } else {
-            greetingMessage += "Please type your name";
+            greetingMessage += "";
         }
-        if (mainFocus != null) {
-            todayText.setText("TODAY");
-            //today 부분의 글꼴
-            Typeface todayType = Typeface.createFromAsset(getContext().getAssets(), "FRADM.TTF");
-            todayText.setTypeface(todayType);
+        if (mainFocus != null) {    //메인포커스가 있을때 -> today 보임
             todayText.setVisibility(getView().VISIBLE);
             // 메인포커스 below text_today, marginTop 15dp TextSize
             RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
             relativeParams.addRule(RelativeLayout.BELOW, R.id.text_today);
-            relativeParams.topMargin = Math.round(15f * getContext().getResources().getDisplayMetrics().density); //dp설정
-//            relativeParams.topMargin = translatePxToDp(15f); //dp설정
+            relativeParams.topMargin = Math.round(0f * getContext().getResources().getDisplayMetrics().density); //dp설정
             mainfocusText.setLayoutParams(relativeParams);
-//            mainfocusText.setTextSize(30f * getContext().getResources().getDisplayMetrics().density);
             mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
-//            mainfocusText.setTextSize(translatePxToDp(30f));
             mainfocusMessage += mainFocus;
-        } else {
+        } else {        //메인포커스가 없을때 -> today 안보임
             todayText.setVisibility(getView().INVISIBLE);
             //메인포커스 디자인 수정
             RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
@@ -358,11 +362,14 @@ public class LockScreenFragment extends Fragment {
             mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             mainfocusMessage += "What is your main focus for today?";
         }
+        //today 부분의 글꼴
+        Typeface todayType = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-Demi.TTF");
+        todayText.setTypeface(todayType);
+
         //Good morning,~ 부분의 글꼴
-        Typeface fontType = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
+        Typeface fontType = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
         greetingText.setTypeface(fontType);     //인사말
         userNameText.setTypeface(fontType);     //사용자 이름
-        todayText.setTypeface(fontType);        //TODAY부분
         mainfocusText.setTypeface(fontType);    //mainfocus
 
         greetingText.setText(greetingMessage);
@@ -372,6 +379,9 @@ public class LockScreenFragment extends Fragment {
         Log.d("layout", getContext().getResources().getDisplayMetrics().density + " - density");
         Log.d("layout", getContext().getResources().getDisplayMetrics().widthPixels + " - widthPixels");
         Log.d("layout", getContext().getResources().getDisplayMetrics().heightPixels + " - heightPixels");
+
+        Log.d("layout", Math.round(50f * getContext().getResources().getDisplayMetrics().density) + " - 64 Math");
+        Log.d("layout", translatePxToDp(64f) + " - translatePxToDp(64f)");
     }
     private int translatePxToDp(float dp){
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getContext().getResources().getDisplayMetrics());

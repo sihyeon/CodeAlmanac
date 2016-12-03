@@ -57,7 +57,7 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:id="@+id/datetime"
+        android:id="@+id/text_date"
         android:text="11.27 sun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/datetime"
+        android:layout_below="@+id/text_date"
         android:layout_marginTop="67dp"
         android:gravity="center_vertical"
         android:textColor="#FFF"
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:textColor="#FFF"
         android:textSize="52dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="-20dp"
         android:gravity="center_vertical"
         android:layout_below="@+id/text_greeting"
         android:layout_centerHorizontal="true" />
@@ -101,7 +101,7 @@
         android:textSize="20dp"
         android:layout_below="@+id/text_user_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="50dp"
         android:gravity="center_horizontal" />
 
     <TextView
@@ -111,7 +111,7 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:textColor="#FFF"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="0dp"
         android:layout_below="@+id/text_today"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"/>

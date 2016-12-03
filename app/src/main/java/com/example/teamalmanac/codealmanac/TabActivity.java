@@ -73,6 +73,7 @@ public class TabActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(mListener);
+        mViewPager.setCurrentItem(1);   //첫화면을 app1로 설정
     }
 
     @Override
@@ -84,33 +85,6 @@ public class TabActivity extends AppCompatActivity {
 //            finish();
 //        }
     }
-
-    //    private void permissionCheck() {
-//        String[] permissions = new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION,
-//                Manifest.permission.ACCESS_FINE_LOCATION,
-//                Manifest.permission.INTERNET,
-//                Manifest.permission.DISABLE_KEYGUARD };
-//        for (String permission : permissions) {
-//            int result = PermissionChecker.checkSelfPermission(this, permission);
-//            if (result != PermissionChecker.PERMISSION_GRANTED){
-//                //권한을 요청
-//                ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST);
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if(requestCode == PERMISSIONS_REQUEST){
-//            for(int result : grantResults){
-//                if(result != PackageManager.PERMISSION_GRANTED){
-//                    //권한 거부함
-//                    TabActivity.this.finish();
-//                }
-//            }
-//        }
-//    }
 
     public static Activity getTabActivity() {
         return mTabActivity;
@@ -132,7 +106,9 @@ public class TabActivity extends AppCompatActivity {
             }
         }
         @Override
-        public void onPageSelected(int position) {}
+        public void onPageSelected(int position) {
+
+        }
         @Override
         public void onPageScrollStateChanged(int state) {}
     };
@@ -145,44 +121,37 @@ public class TabActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_ESCAPE:
                 return false;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 1) {
                 return LockScreenFragment.newInstance();
-            }
-            if (position == 0) {
+            } else {
                 return LeftFragment.newInstance();
             }
-            return LockScreenFragment.newInstance();
         }
-
         @Override
         public int getCount() {
             // Show 2 total pages.
             return 2;
         }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-           }
-            return null;
-        }
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            switch (position) {
+//                case 0:
+//                    return "SECTION 1";
+//                case 1:
+//                    return "SECTION 2";
+//           }
+//            return null;
+//        }
     }
 }

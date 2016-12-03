@@ -107,7 +107,7 @@ public class LeftFragment extends Fragment {
         //TODO relocate it(R.id.text_mainfocus is on the fragment_lock_screen, not fragment_left)
 //        mainfocus = (TextView)rootView.findViewById(R.id.text_mainfocus);
 
-        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
+        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
         whatisyourname.setTypeface(typeface);
         whatIsYourMainfocus.setTypeface(typeface);
         userNameText.setTypeface(typeface);
