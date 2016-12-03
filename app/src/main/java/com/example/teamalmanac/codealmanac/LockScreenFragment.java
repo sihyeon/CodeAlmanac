@@ -292,12 +292,12 @@ public class LockScreenFragment extends Fragment {
             }
         } else if (200 <= weather && weather <= 232) {  //폭풍
             weatherIconStringId += "thunderstorm";
-        } else if (600 <= weather && weather <= 622) {
+        } else if (600 <= weather && weather <= 622) {  //눈
             weatherIconStringId += "snow";
         } else if (701 <= weather && weather <= 781) {  //안개
             weatherIconStringId += "fog";
         } else {
-            weatherIconStringId += "na";
+            weatherIconStringId += "na";    //모름
         }
         //날씨 아이콘 선택
         int resId = getResources().getIdentifier(weatherIconStringId, "string", getContext().getPackageName());
