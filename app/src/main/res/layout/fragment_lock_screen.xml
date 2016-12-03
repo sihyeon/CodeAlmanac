@@ -4,7 +4,6 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#003"
     tools:context="com.example.teamalmanac.codealmanac.LockScreenFragment">
 
     <TextClock
@@ -29,40 +28,51 @@
         android:gravity="center_vertical"
         android:textSize="23sp" />
 
-    <!--Footer button layout-->
-
-    <ImageView
+    <TextView
+        android:id="@+id/text_greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_mainfocus"
-        app:srcCompat="@drawable/btn_main_wtd"
-        android:id="@+id/leftdrawicon"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="86dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_below="@+id/datetime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="65dp"
+        android:gravity="center_vertical"
+        android:textColor="#FFF"
+        android:text="GreetingMessage"
+        android:textSize="40sp" />
 
     <TextView
-        android:text="화면을 밀어 이동하세요"
-        android:gravity="center"
-        android:textColor="#FFF"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_marginTop="100dp"
-        android:layout_below="@+id/text_mainfocus" />
-
-    <ImageView
+        android:text="USERNAME"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_mainfocus"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="47dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="86dp"
-        app:srcCompat="@drawable/btn_main_unlock"
-        android:id="@+id/lockscreenicon" />
+        android:textColor="#FFF"
+        android:textSize="40sp"
+        android:id="@+id/text_user_name"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/text_greeting"
+        android:layout_toEndOf="@+id/leftdrawicon" />
+
+    <TextView
+        android:id="@+id/text_today"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_user_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        android:textColor="#FFF"
+        android:textSize="20sp"
+        android:text="TODAY" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textColor="#FFF"
+        android:layout_marginTop="15dp"
+        android:id="@+id/text_mainfocus"
+        android:layout_below="@+id/text_today"
+        android:layout_centerHorizontal="true" />
+
+    <!--Footer button layout-->
 
     <TextView
         android:text="temp"
@@ -92,48 +102,34 @@
         android:textColor="#FFF"
         android:layout_alignStart="@+id/text_weather_icon" />
 
-    <TextView
-        android:id="@+id/text_greeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:gravity="center_vertical"
-        android:textColor="#FFF"
-        android:text="Greeting"
-        android:textSize="52sp"
-        android:layout_alignTop="@+id/datetime"
-        android:layout_centerHorizontal="true" />
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/leftdrawicon"
+        android:layout_alignTop="@+id/lockscreenicon"
+        android:layout_marginStart="16dp"
+        app:srcCompat="@drawable/btn_wtd" />
 
     <TextView
-        android:text="USERNAME"
+        android:text="화면을 밀어 이동하세요"
+        android:gravity="center"
+        android:textColor="#FFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFF"
-        android:textSize="52sp"
-        android:id="@+id/text_user_name"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/text_greeting"
-        android:layout_toEndOf="@+id/leftdrawicon" />
-
-    <TextView
-        android:id="@+id/text_today"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FFF"
-        android:textSize="20sp"
-        android:text="TODAY"
-        android:layout_below="@+id/text_user_name"
+        android:id="@+id/textView"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:layout_alignBottom="@+id/leftdrawicon"
         android:layout_centerHorizontal="true" />
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="mainfocus"
-        android:textSize="30sp"
-        android:textColor="#FFF"
-        android:layout_marginTop="24dp"
-        android:id="@+id/text_mainfocus"
-        android:layout_below="@+id/text_today"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/lockscreenicon"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        app:srcCompat="@drawable/btn_unlock" />
 
 </RelativeLayout>
