@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:background="#003"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context="com.example.teamalmanac.codealmanac.LockScreenFragment">
 
     <TextClock
@@ -38,19 +38,17 @@
         android:layout_marginTop="65dp"
         android:gravity="center_vertical"
         android:textColor="#FFF"
-        android:text="GreetingMessage"
-        android:textSize="40sp" />
+        android:textSize="45sp" />
 
     <TextView
-        android:text="USERNAME"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFF"
         android:textSize="40sp"
         android:id="@+id/text_user_name"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="0dp"
         android:layout_below="@+id/text_greeting"
-        android:layout_toEndOf="@+id/leftdrawicon" />
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/text_today"
@@ -58,17 +56,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_user_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="54dp"
         android:textColor="#FFF"
         android:textSize="20sp" />
 
     <TextView
+        android:id="@+id/text_mainfocus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="30sp"
         android:textColor="#FFF"
         android:layout_marginTop="15dp"
-        android:id="@+id/text_mainfocus"
         android:layout_below="@+id/text_today"
         android:layout_centerHorizontal="true" />
 
@@ -131,5 +129,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
         app:srcCompat="@drawable/btn_unlock" />
+
 
 </RelativeLayout>
