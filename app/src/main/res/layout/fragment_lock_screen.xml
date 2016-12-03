@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
+    android:background="#003"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.teamalmanac.codealmanac.LockScreenFragment">
@@ -41,10 +42,21 @@
         android:textSize="40sp" />
 
     <TextView
+        android:text="USERNAME"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:textSize="40sp"
+        android:id="@+id/text_user_name"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/text_greeting"
+        android:layout_toEndOf="@+id/leftdrawicon" />
+
+    <TextView
         android:id="@+id/text_today"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_greeting"
+        android:layout_below="@+id/text_user_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="64dp"
         android:textColor="#FFF"
@@ -68,6 +80,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/text_temp"
         android:layout_alignParentTop="true"
+        android:textColor="#FFF"
         android:layout_alignParentEnd="true" />
 
     <TextView
@@ -76,6 +89,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/text_weather_icon"
         android:layout_alignParentTop="true"
+        android:textSize="14sp"
+        android:textColor="#FFF"
         android:layout_toStartOf="@+id/text_temp" />
 
     <TextView
@@ -84,6 +99,7 @@
         android:id="@+id/text_location"
         android:text="location"
         android:layout_below="@+id/text_weather_icon"
+        android:textColor="#FFF"
         android:layout_alignStart="@+id/text_weather_icon" />
 
     <ImageView
