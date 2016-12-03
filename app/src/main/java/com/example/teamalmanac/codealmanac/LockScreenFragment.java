@@ -307,7 +307,7 @@ public class LockScreenFragment extends Fragment {
         else return "Good Evening";
     }
 
-    //메인 포커스 세팅 (메인포커스 없을 때, 사용자 이름 없을 때의 논의 필요)
+    //메인 포커스 세팅
     private void setMainText() {
         String userName = mDB.getUserName();
         String mainFocus = mDB.getMainFocus();
@@ -318,6 +318,7 @@ public class LockScreenFragment extends Fragment {
         TextView userNameText = (TextView) getView().findViewById(R.id.text_user_name);
         TextView todayText = (TextView) getView().findViewById(R.id.text_today);
         TextView mainfocusText = (TextView) getView().findViewById(R.id.text_mainfocus);
+
 
         if (userName != null) {
             greetingMessage += setGreetingMessage() + ",";

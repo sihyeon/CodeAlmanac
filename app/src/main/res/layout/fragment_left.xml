@@ -10,158 +10,171 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/whatIsYourName_layout"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="270dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="What is your name?"
+                android:gravity="center_vertical"
+                android:textColor="#FFF"
+                android:textSize="35dp"
+                android:id="@+id/whatIsYourName"/>
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="241dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="#FFF"
+                    android:textCursorDrawable="@null"
+                    android:id="@+id/name_edittext"/>
+
+                <Button
+                    android:layout_width="35dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="4dp"
+                    android:background="@drawable/btn_go"
+                    android:id="@+id/name_button" />
+
+            </LinearLayout>
+        </LinearLayout>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         app:srcCompat="@drawable/icn_logo"
         android:id="@+id/logo_icn"
+        android:layout_marginTop="16dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/whatIsYourName_layout"
-        android:gravity="center_vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="270dp">
+    <!--/////////////////////////////////////////////////////////////////////////////////////////-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="What is your name?"
-            android:gravity="center_vertical"
-            android:textColor="#FFF"
-            android:textSize="35dp"
-            android:id="@+id/whatIsYourName"/>
 
         <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="241dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:id="@+id/todo_layout"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
                 android:textColor="#FFF"
-                android:textCursorDrawable="@null"
-                android:id="@+id/name_edittext"/>
+                android:textSize="25sp"
+                android:text="To do"
+                android:id="@+id/todolist_text"/>
 
-            <Button
-                android:layout_width="35dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="4dp"
-                android:background="@drawable/btn_go"
-                android:id="@+id/name_button" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/todo_listview">
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/todo_edittext"
+                    android:layout_width="328dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFF"
+                    android:textSize="18sp"
+                    android:textColorHint="#FFF"
+                    android:hint="New Todo"
+                    android:ems="10" />
+
+                <Button
+                    android:id="@+id/todo_botton"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:background="@drawable/btn_plus_todo"/>
+            </LinearLayout>
 
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:id="@+id/whatIsYourMainfocus_layout"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_below="@+id/logo_icn"
+        android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="#FFF"
+                android:textSize="45sp"
+                android:id="@+id/greet"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="#FFF"
+                android:textSize="45sp"
+                android:id="@+id/text_user_name" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textColor="#FFF"
+                android:text="What is your main focus for today?"
+                android:layout_marginTop="45dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:id="@+id/whatIsYourMainfocus"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="37dp"
+                android:id="@+id/whatIsYourMainfocusEdit_layout">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:id="@+id/mainfocus_edittext"/>
+
+                <Button
+                    android:layout_width="32dp"
+                    android:layout_height="21dp"
+                    android:background="@drawable/btn_go"
+                    android:id="@+id/mainfocus_button" />
+
+            </LinearLayout>
+
     </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/whatIsYourMainfocus_layout"
-                    android:layout_gravity="center|top"
-                    android:layout_alignParentTop="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Good Morning, Tester"
-                        android:layout_gravity="center|top"
-                        android:textSize="20dp"
-                        android:id="@+id/greet"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="What is your main focus for today?"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:id="@+id/whatIsYourMainfocus"/>
-
-                    <LinearLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center"
-                        android:id="@+id/whatIsYourMainfocusEdit_layout">
-
-                        <EditText
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:id="@+id/mainfocus_edittext"/>
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="send"
-                            android:id="@+id/mainfocus_button" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Be your self"
-                        android:textSize="30dp"
-                        android:id="@+id/mainfocus_text"/>
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/todo_layout"
-                    android:orientation="vertical"
-                    android:layout_below="@id/whatIsYourMainfocus_layout"
-                    android:layout_alignParentBottom="true">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Todo List"
-                        android:id="@+id/todolst_text"/>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/todo_listview">
-                    </android.support.v7.widget.RecyclerView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/todo_edittext"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:layout_toLeftOf="@+id/todo_botton"
-                            android:hint="type what to do.."
-                            android:ems="10" />
-
-                        <Button
-                            android:id="@+id/todo_botton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Send" />
-                    </LinearLayout>
-
-                </LinearLayout>
 
 
 </RelativeLayout>

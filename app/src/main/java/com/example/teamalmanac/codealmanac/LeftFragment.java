@@ -1,30 +1,26 @@
 package com.example.teamalmanac.codealmanac;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.teamalmanac.codealmanac.adapter.TodoAdapter;
 
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
 import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +42,10 @@ public class LeftFragment extends Fragment {
     // text
     private TextView greet;
     private TextView mainfocus;
+    private TextView userNameText;
+    private TextView whatisyourname;
+    private TextView whatIsYourMainfocus;
+    private TextView todolist_text;
 
     // listview
     private LinearLayoutManager linearLayoutManager;
@@ -57,7 +57,7 @@ public class LeftFragment extends Fragment {
     private Button name_button;
     private Button mainfocus_button;
     private Button todo_button;
-
+    private ImageView logo_icn;
 
     public LeftFragment() {
         // Required empty public constructor
@@ -90,16 +90,29 @@ public class LeftFragment extends Fragment {
         whatisyourmainfocus_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourMainfocus_layout);
         todo_layout = (LinearLayout) rootView.findViewById(R.id.todo_layout);
 
+        userNameText = (TextView) rootView.findViewById(R.id.text_user_name);
+        //logo_icn = (ImageView)rootView.findViewById(R.id.logo_icn);
+
         greet = (TextView) rootView.findViewById(R.id.greet);
-        mainfocus = (TextView) rootView.findViewById(R.id.mainfocus_text);
 
         todo_listview = (RecyclerView) rootView.findViewById(R.id.todo_listview);
         todo_listview.setHasFixedSize(true);
 
         //WHAT IS YOUR NAME 부분 FONT 설정
-        TextView whatisyourname = (TextView)rootView.findViewById(R.id.whatIsYourName);
+        whatisyourname = (TextView)rootView.findViewById(R.id.whatIsYourName);
+        whatIsYourMainfocus = (TextView)rootView.findViewById(R.id.whatIsYourMainfocus);
+
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
         whatisyourname.setTypeface(typeface);
+        whatIsYourMainfocus.setTypeface(typeface);
+        userNameText.setTypeface(typeface);
+        greet.setTypeface(typeface);
+
+        greet.setGravity(Gravity.CENTER);
+        userNameText.setGravity(Gravity.CENTER);
+        whatIsYourMainfocus.setGravity(Gravity.CENTER);
+        whatisyourmainfocus_layout.setGravity(Gravity.CENTER);
+        whatisyourmainfocusEdit_layout.setGravity(Gravity.CENTER);
 
         name_button = (Button) rootView.findViewById(R.id.name_button);
         name_button.setOnClickListener(new View.OnClickListener() {
@@ -132,10 +145,12 @@ public class LeftFragment extends Fragment {
         });
 
         todo_button = (Button) rootView.findViewById(R.id.todo_botton);
+
         todo_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText todo_edit = (EditText) getView().findViewById(R.id.todo_edittext);
+
                 String todo = todo_edit.getText().toString();
                 if (todo.isEmpty()) {
                     Toast.makeText(view.getContext(), "fill the todo...", Toast.LENGTH_SHORT).show();
@@ -176,7 +191,8 @@ public class LeftFragment extends Fragment {
 
     private void nameAdded() {
         whatisyourname_layout.setVisibility(View.GONE);
-        greet.setText(setHelloMessage() + ", " + mDb.getUserName());
+        greet.setText(setHelloMessage() + ", ");
+        userNameText.setText(mDb.getUserName());
         whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
         todo_layout.setVisibility(View.VISIBLE);
     }
@@ -189,6 +205,7 @@ public class LeftFragment extends Fragment {
     private void initlayout() {
         if (isNameAvailable()) {
             whatisyourname_layout.setVisibility(View.GONE);
+            //logo_icn.setVisibility(View.GONE);
             greet.setText(setHelloMessage() + ", " + mDb.getUserName());
             whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
             todo_layout.setVisibility(View.VISIBLE);

@@ -45,9 +45,8 @@
         android:textColor="#FFF"
         android:textSize="40sp"
         android:id="@+id/text_user_name"
-        android:layout_marginTop="0dp"
         android:layout_below="@+id/text_greeting"
-        android:gravity="center"/>
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/text_today"
@@ -63,7 +62,7 @@
         android:id="@+id/text_mainfocus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textColor="#FFF"
         android:layout_marginTop="15dp"
         android:layout_below="@+id/text_today"
