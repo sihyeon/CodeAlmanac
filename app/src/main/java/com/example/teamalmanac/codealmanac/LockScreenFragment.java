@@ -309,19 +309,25 @@ public class LockScreenFragment extends Fragment {
         String greetingMessage = "";
         String mainfocusMessage = "";
 
-        TextView todayText = (TextView) getView().findViewById(R.id.text_today);
         TextView greetingText = (TextView) getView().findViewById(R.id.text_greeting);
         TextView mainfocusText = (TextView) getView().findViewById(R.id.text_mainfocus);
 
         if (userName != null) {
             greetingMessage += setGreetingMessage() + ", " + userName;
         } else {
-            greetingMessage += "Name is noting";
+            greetingMessage += "Please type your name";
         }
         if (mainFocus != null) {
+            TextView todayText = (TextView) getView().findViewById(R.id.text_today);
+            todayText.setText("TODAY");
+            //today 부분의 글꼴
+            Typeface todayType = Typeface.createFromAsset(getContext().getAssets(), "FRADM.TTF");
+            todayText.setTypeface(todayType);
+            todayText.setTypeface(todayType);
+
             mainfocusMessage += mainFocus;
         } else {
-            mainfocusMessage += "MainFocus is noting";
+            mainfocusMessage += "What is your main focus for today?";
         }
         //글꼴
         Typeface textType = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
@@ -336,10 +342,6 @@ public class LockScreenFragment extends Fragment {
         greetingText.setText(greetingMessage);
         mainfocusText.setText(mainfocusMessage);
 
-        //today 부분의 글꼴
-        Typeface todayType = Typeface.createFromAsset(getContext().getAssets(), "FRADM.TTF");
-        todayText.setTypeface(todayType);
-        todayText.setTypeface(todayType);
 
     }
 }
