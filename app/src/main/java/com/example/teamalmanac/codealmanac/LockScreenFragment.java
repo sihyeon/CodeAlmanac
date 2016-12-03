@@ -70,10 +70,6 @@ public class LockScreenFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_lock_screen, container, false);
 
-        //배경 이미지
-        RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.layout);
-        relativeLayout.setBackground(rootView.getResources().getDrawable(R.drawable.bg_2, TabActivity.getMainContext().getTheme()));
-
         //Digital Clock FONT asset
         TextClock digitalClock = (TextClock) rootView.findViewById(R.id.digital_clock);
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "LSSM.TTF");
