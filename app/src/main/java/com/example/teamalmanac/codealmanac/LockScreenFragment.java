@@ -46,7 +46,6 @@ public class LockScreenFragment extends Fragment {
     private Calendar mCalendar;
     private final int GEO_PERMISSIONS_REQUEST = 1;
     private LocationManager mLocationManager;
-    private locationListener mMyLocationListener;
     private boolean isGPSSensor = false;
 
     public LockScreenFragment() {
@@ -100,18 +99,6 @@ public class LockScreenFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (isGPSSensor) {
-            if (ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-                mLocationManager.removeUpdates(mMyLocationListener);
-            }
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d("LcokScreenFragment", "리퀘스트퍼미션리절트 진입");
@@ -158,8 +145,8 @@ public class LockScreenFragment extends Fragment {
         if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Log.d("weather", "GPS 활성화되어있음.");
             isGPSSensor = true;
-            mMyLocationListener = new locationListener();
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, mMyLocationListener);
+            locationListener mMyLocationListener = new locationListener();
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 10, mMyLocationListener);
             Location lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (lastLocation != null) {
                 Log.d("weather", "LastLocation is not null");
@@ -172,7 +159,14 @@ public class LockScreenFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                isGPSSensor = false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
+                ((TextView) getView().findViewById(R.id.text_weather_icon)).setVisibility(getView().INVISIBLE);
+                ((TextView) getView().findViewById(R.id.text_temp)).setVisibility(getView().INVISIBLE);
+                ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
+                return;
             }
+            mLocationManager.removeUpdates(mMyLocationListener);
         } else {
             isGPSSensor = false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
             ((TextView) getView().findViewById(R.id.text_weather_icon)).setVisibility(getView().INVISIBLE);
@@ -189,7 +183,7 @@ public class LockScreenFragment extends Fragment {
             if (location != null) {
                 Log.d("LockScreenFragment", "lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
                 try {
-                    Geocoder geocoder = new Geocoder(getContext(), Locale.KOREAN);
+                    Geocoder geocoder = new Geocoder(getContext().getApplicationContext(), Locale.KOREAN);
                     List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
                     if (addrData != null) {
                         String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
@@ -202,18 +196,12 @@ public class LockScreenFragment extends Fragment {
                 }
             }
         }
-
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
         @Override
-        public void onProviderEnabled(String provider) {
-        }
-
+        public void onProviderEnabled(String provider) {}
         @Override
-        public void onProviderDisabled(String provider) {
-        }
+        public void onProviderDisabled(String provider) {}
     }
 
     //OpenWeatherMap에서 날씨정보를 받아옴.
@@ -232,10 +220,10 @@ public class LockScreenFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             //날씨 텍스트를 받아와서 아이콘을 지정함
-                            Log.d("jsonTest", response.getJSONArray("weather").getJSONObject(0).getString("description"));
+//                            Log.d("jsonTest", response.getJSONArray("weather").getJSONObject(0).getString("description"));
                             setWeatherIcon(response.getJSONArray("weather").getJSONObject(0).getInt("id"));
                             //온도 텍스트 받아와서 온도지정
-                            Log.d("jsonTest", response.getJSONObject("main").getString("temp") + "");
+//                            Log.d("jsonTest", response.getJSONObject("main").getString("temp") + "");
                             setTemperature(response.getJSONObject("main").getString("temp"));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -301,7 +289,7 @@ public class LockScreenFragment extends Fragment {
         }
         //날씨 아이콘 선택
         int resId = getResources().getIdentifier(weatherIconStringId, "string", getContext().getPackageName());
-        Log.d("test", weatherIconStringId);
+//        Log.d("weather", weatherIconStringId);
         TextView weatherIconText = (TextView) getView().findViewById(R.id.text_weather_icon);
         weatherIconText.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "weathericons-regular-webfont.ttf"));
         weatherIconText.setText(getContext().getString(resId));
