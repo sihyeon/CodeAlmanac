@@ -2,6 +2,7 @@ package com.example.teamalmanac.codealmanac;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ public class TabActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startService(new Intent(this, LocationService.class));
         //상태바 없앰
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -64,6 +66,12 @@ public class TabActivity extends AppCompatActivity {
 //        if(exitActivity){
 //            finish();
 //        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, LocationService.class));
+        super.onDestroy();
     }
 
     public static Activity getTabActivity() {
