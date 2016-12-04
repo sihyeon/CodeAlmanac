@@ -1,18 +1,8 @@
 package com.example.teamalmanac.codealmanac;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.PermissionChecker;
-import android.hardware.SensorManager;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,20 +10,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Calendar;
+import com.example.teamalmanac.codealmanac.database.DataManager;
 
 public class TabActivity extends AppCompatActivity {
     private final int PERMISSIONS_REQUEST = 1;
@@ -73,6 +53,7 @@ public class TabActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(mListener);
+        mViewPager.setCurrentItem(1);   //첫화면을 app1로 설정
     }
 
     @Override
@@ -84,33 +65,6 @@ public class TabActivity extends AppCompatActivity {
 //            finish();
 //        }
     }
-
-    //    private void permissionCheck() {
-//        String[] permissions = new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION,
-//                Manifest.permission.ACCESS_FINE_LOCATION,
-//                Manifest.permission.INTERNET,
-//                Manifest.permission.DISABLE_KEYGUARD };
-//        for (String permission : permissions) {
-//            int result = PermissionChecker.checkSelfPermission(this, permission);
-//            if (result != PermissionChecker.PERMISSION_GRANTED){
-//                //권한을 요청
-//                ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST);
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if(requestCode == PERMISSIONS_REQUEST){
-//            for(int result : grantResults){
-//                if(result != PackageManager.PERMISSION_GRANTED){
-//                    //권한 거부함
-//                    TabActivity.this.finish();
-//                }
-//            }
-//        }
-//    }
 
     public static Activity getTabActivity() {
         return mTabActivity;
@@ -132,7 +86,9 @@ public class TabActivity extends AppCompatActivity {
             }
         }
         @Override
-        public void onPageSelected(int position) {}
+        public void onPageSelected(int position) {
+
+        }
         @Override
         public void onPageScrollStateChanged(int state) {}
     };
@@ -145,44 +101,37 @@ public class TabActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_ESCAPE:
                 return false;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 1) {
                 return LockScreenFragment.newInstance();
-            }
-            if (position == 0) {
+            } else {
                 return LeftFragment.newInstance();
             }
-            return LockScreenFragment.newInstance();
         }
-
         @Override
         public int getCount() {
             // Show 2 total pages.
             return 2;
         }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-           }
-            return null;
-        }
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            switch (position) {
+//                case 0:
+//                    return "SECTION 1";
+//                case 1:
+//                    return "SECTION 2";
+//           }
+//            return null;
+//        }
     }
 }

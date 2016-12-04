@@ -1,4 +1,4 @@
-package com.example.teamalmanac.codealmanac;
+package com.example.teamalmanac.codealmanac.database;
 
 import android.provider.BaseColumns;
 
@@ -22,8 +22,8 @@ public final class SQLContract {
         public static final String TABLE_NAME = "todo_table";
         public static final String COLUMN_NAME_TODO = "todo_text";
         public static final String COLUMN_NAME_DATE = "todo_date";
-
-        public static final String COLUMN_NAME_CHECK = "todo_check";
+        public static final String COLUMN_NAME_BUTTON_VISIBLE = "todo_btvisible";
+        public static final String COLUMN_NAME_SHOW = "todo_show";
     }
 
     public static abstract class MainFocusEntry implements  BaseColumns{
