@@ -1,4 +1,4 @@
-package com.example.teamalmanac.codealmanac;
+package com.example.teamalmanac.codealmanac.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -43,7 +43,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + SQLContract.ToDoEntry.TABLE_NAME + " ( " +
                 SQLContract.ToDoEntry._ID + " INTEGER PRIMARY KEY, " +
                 SQLContract.ToDoEntry.COLUMN_NAME_TODO + " text , " +
-                SQLContract.ToDoEntry.COLUMN_NAME_DATE + " text " + " ) "
+                SQLContract.ToDoEntry.COLUMN_NAME_DATE + " text , " +
+                SQLContract.ToDoEntry.COLUMN_NAME_BUTTON_VISIBLE + " text , " +
+                SQLContract.ToDoEntry.COLUMN_NAME_SHOW + " text " + " ) "
         );
 
         db.execSQL(

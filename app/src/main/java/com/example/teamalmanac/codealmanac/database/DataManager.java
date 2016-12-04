@@ -1,11 +1,13 @@
-package com.example.teamalmanac.codealmanac;
+package com.example.teamalmanac.codealmanac.database;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
-import android.util.Log;
+import android.view.View;
+
+import com.example.teamalmanac.codealmanac.TabActivity;
+import com.example.teamalmanac.codealmanac.TodoDataType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +34,7 @@ public class DataManager {
             helper.onCreate(mDB);
         }
         // 디비를 재생성해야하면 이 코드의 주석을 해제하시오
-//        mSQLiteHelper = new SQLiteHelper(context);
+//        helper = new SQLiteHelper(context);
     }
 
     public void setUserName(String name){
@@ -54,24 +56,49 @@ public class DataManager {
         }
     }
 
+    public void setTodo(String todo, String date, Integer visible) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_TODO, todo);
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, date);
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_BUTTON_VISIBLE, visible.toString());
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_SHOW, "true");
+        mDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
+    }
+
     public void setTodo(String todo, String date) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_TODO, todo);
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, date);
-
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_BUTTON_VISIBLE, String.valueOf(View.INVISIBLE));
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_SHOW, "true");
         mDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
     }
 
-    public ArrayList<String> getTodos() {
+
+    public void deleteTodoUsingDate(String date) {
+        mDB.delete(SQLContract.ToDoEntry.TABLE_NAME, SQLContract.ToDoEntry.COLUMN_NAME_DATE + "=?", new String[] {date});
+    }
+
+    public void updateTodoShowing(String date, Boolean bl) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_SHOW, bl.toString());
+        mDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues,
+                SQLContract.ToDoEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
+    }
+
+    public ArrayList<TodoDataType> getTodos() {
         Cursor cursor = mDB.query(SQLContract.ToDoEntry.TABLE_NAME, null, null, null, null, null, null);
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<TodoDataType> list = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                list.add(cursor.getString(1));
-                Log.i("!------------------", "getTodos: " + cursor.getString(1) +", "+cursor.getString(2) +", ");
+                //check is showing on lockscreen(app2)
+                if(Boolean.valueOf(cursor.getString(4))) {
+                    //todo, date
+                    list.add(new TodoDataType(cursor.getString(1), cursor.getString(2)));
+                }
             } while(cursor.moveToNext());
         }
-            return list;
+        return list;
     }
 
     public void setMainFocus(String name, String date){
