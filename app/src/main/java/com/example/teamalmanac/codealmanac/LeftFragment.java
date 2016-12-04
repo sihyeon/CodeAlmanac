@@ -145,7 +145,9 @@ public class LeftFragment extends Fragment {
     }
 
     private void setFontAndGravity() {
-        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
+//        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FRAMDCN.TTF");
+//=======
+        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
         whatisyourname.setTypeface(typeface);
         whatIsYourMainfocus.setTypeface(typeface);
         userNameText.setTypeface(typeface);

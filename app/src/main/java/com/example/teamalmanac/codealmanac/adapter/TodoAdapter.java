@@ -35,7 +35,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 .inflate(R.layout.layout_todo, parent, false);
         mDb = DataManager.getSingletonInstance();
         CheckBox checkBox = (CheckBox) itemView.findViewById(R.id.todo_checkbox);
-        Typeface typeface = Typeface.createFromAsset(parent.getContext().getAssets(), "FRAMDCN.TTF");
+        Typeface typeface = Typeface.createFromAsset(parent.getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
         checkBox.setTypeface(typeface);
         return new ViewHolder(itemView);
     }
