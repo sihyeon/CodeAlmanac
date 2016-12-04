@@ -91,7 +91,7 @@ public class LeftFragment extends Fragment {
         todo_layout = (LinearLayout) rootView.findViewById(R.id.todo_layout);
 
         userNameText = (TextView) rootView.findViewById(R.id.text_user_name);
-        //logo_icn = (ImageView)rootView.findViewById(R.id.logo_icn);
+        logo_icn = (ImageView)rootView.findViewById(R.id.logo_icn);
 
         greet = (TextView) rootView.findViewById(R.id.greet);
 
@@ -195,6 +195,7 @@ public class LeftFragment extends Fragment {
         userNameText.setText(mDb.getUserName());
         whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
         todo_layout.setVisibility(View.VISIBLE);
+        logo_icn.setVisibility(View.GONE);
     }
 
     private void mainFocusAdded() {
@@ -205,7 +206,7 @@ public class LeftFragment extends Fragment {
     private void initlayout() {
         if (isNameAvailable()) {
             whatisyourname_layout.setVisibility(View.GONE);
-            //logo_icn.setVisibility(View.GONE);
+            logo_icn.setVisibility(View.GONE);
             greet.setText(setHelloMessage() + ", " + mDb.getUserName());
             whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
             todo_layout.setVisibility(View.VISIBLE);
