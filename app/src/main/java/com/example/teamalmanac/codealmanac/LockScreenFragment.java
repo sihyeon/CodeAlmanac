@@ -1,15 +1,19 @@
 package com.example.teamalmanac.codealmanac;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -19,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.util.TypedValue;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -41,15 +46,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class LockScreenFragment extends Fragment {
+public class LockScreenFragment extends Fragment implements LocationInfoManager.InterfaceLocationInfoManager{
     private DataManager mDB = null;
     private Calendar mCalendar;
+    private LocationInfoManager mLocationInfoManager;
     private final int GEO_PERMISSIONS_REQUEST = 1;
-    private LocationManager mLocationManager;
-    private boolean isGPSSensor = false;
+
+    private boolean isPermission;
 
     public LockScreenFragment() {
         // Required empty public constructor
+    }
+
+    //interface
+    @Override
+    public void setLocation(Location location) {
+        if (location != null && isPermission && getNetworkState()) {
+            setAddress(location);
+            setWeather(location);
+            setLocationVisibility(true);
+        } else {
+            setLocationVisibility(false);
+        }
     }
 
     public static LockScreenFragment newInstance() {
@@ -57,15 +75,22 @@ public class LockScreenFragment extends Fragment {
         return fragment;
     }
 
-    public static void setData(){
-        
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
+    //생명주기대로 배치 onCreateView부터 onDestroyView 까지 루프(비스무리한거).
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDB = DataManager.getSingletonInstance();
         mCalendar = Calendar.getInstance();
+        permissionChecking();
+        if(isPermission) {
+            mLocationInfoManager = LocationInfoManager.getInstance();
+            mLocationInfoManager.onStartLocation(getContext(), this);
+        }
     }
 
     @Override
@@ -91,6 +116,7 @@ public class LockScreenFragment extends Fragment {
         TextView mv = (TextView) rootView.findViewById(R.id.text_screen_pull);
         Typeface mvtype = Typeface.createFromAsset(getContext().getAssets(), "NanumSquareR.ttf");
         mv.setTypeface(mvtype);
+
         return rootView;
     }
 
@@ -99,135 +125,112 @@ public class LockScreenFragment extends Fragment {
         super.onStart();
         //onCreateView에서 rootView가 리턴되기전에 getView() 함수를 부를 수 없어서 여기서 호출해야함.
         setMainText();
-        setGeoLocation();
     }
 
+    @Override
+    public void onResume() {
+        Log.d("lockscreen", "onResum 호출");
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {  //이전에 onDestroyView 불림
+        if(isPermission) mLocationInfoManager.onStopLocation();
+        super.onDestroy();
+    }
+
+    private void permissionChecking() {
+        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_NETWORK_STATE};
+        for (String permission : permissions) {
+            if (PermissionChecker.checkSelfPermission(getContext().getApplicationContext(), permission) != PermissionChecker.PERMISSION_GRANTED) {
+                //권한이 없을 경우 권한을 요청
+                ActivityCompat.requestPermissions(getActivity(), permissions, GEO_PERMISSIONS_REQUEST);
+                isPermission = false;
+                return;
+            }
+        }
+        isPermission = true;
+    }
+
+    // 권한 요청의 결과를 받아옴.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d("LcokScreenFragment", "리퀘스트퍼미션리절트 진입");
         if (requestCode == GEO_PERMISSIONS_REQUEST) {
-            boolean perimssionChecking = false;
             for (int result : grantResults) {
-                if (result == PackageManager.PERMISSION_GRANTED) {
-                    //권한 받음
+                if (result == PackageManager.PERMISSION_GRANTED) {  //권한 받음
                     Log.d("LcokScreenFragment", "권한 받음");
-                    perimssionChecking = true;
                 } else { //권한 거부함
                     Log.d("LcokScreenFragment", "권한 거부함");
+                    isPermission = false;
                     return;
-//                    TabActivity.getTabActivity().finish();
                 }
             }
-            if (perimssionChecking) {
-                setGeoLocation();
-            }
+            isPermission = true;
+            mLocationInfoManager = LocationInfoManager.getInstance();
+            mLocationInfoManager.onStartLocation(getContext(), this);
         }
     }
 
-    /*
-    GPS를 정리해보면
-    setGeoLocation -> 권한체킹 -> (권한 없을시) requestpermission으로 권한 요청 후 함수종료 -> 권한 두개 전부 받으면 다시 setGeoLocation
-                               -> (권한 있을시) locationManager 생성 및 등록 -> GPS 켜져있나 확인 -> 꺼져있으면 다이알로그 -> 확인창 누르면 설정창 띄움
-                                 -> 설정창띄우고 isGPSSensor 통해서 GPS 있을 시 동작
-     */
-    //GPS 정보 가져오기
-    private void setGeoLocation() {
-        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.INTERNET};
-        for (String permission : permissions) {
-            if (PermissionChecker.checkSelfPermission(getContext().getApplicationContext(), permission) != PermissionChecker.PERMISSION_GRANTED) {
-                //권한이 없을 경우 권한을 요청
-                ActivityCompat.requestPermissions(getActivity(), permissions, GEO_PERMISSIONS_REQUEST);
-                return;
-            }
+    //지역정보를 불러오는데 하나라도 실패하면 전부 안보이게함.
+    private void setLocationVisibility(boolean visibility) {
+        if (visibility) {
+            getView().findViewById(R.id.text_location).setVisibility(getView().VISIBLE);
+            getView().findViewById(R.id.text_weather_icon).setVisibility(getView().VISIBLE);
+            getView().findViewById(R.id.text_temp).setVisibility(getView().VISIBLE);
+        } else {
+            getView().findViewById(R.id.text_location).setVisibility(getView().INVISIBLE);
+            getView().findViewById(R.id.text_weather_icon).setVisibility(getView().INVISIBLE);
+            getView().findViewById(R.id.text_temp).setVisibility(getView().INVISIBLE);
         }
+    }
 
-        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        Log.d("LockScreenFragment", mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) + " - GPS");
-        if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Log.d("weather", "GPS 활성화되어있음.");
-            isGPSSensor = true;
-            locationListener mMyLocationListener = new locationListener();
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 10, mMyLocationListener);
-            Location lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (lastLocation != null) {
-                Log.d("weather", "LastLocation is not null");
-                getWeather(lastLocation.getLatitude(), lastLocation.getLongitude());
-                try {
-                    Geocoder geocoder = new Geocoder(getActivity(), Locale.KOREAN);
-                    List<Address> addrData = geocoder.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 2);
-                    String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
-                    TextView addrText = (TextView)getView().findViewById(R.id.text_location);
+    //네트워크 상태 체크
+    private boolean getNetworkState(){
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if(activeNetwork != null) return true;
+        else return false;
+    }
+
+    //지역정보를 설정함
+    private void setAddress(Location location) {
+        if(!getNetworkState()) return;
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.KOREAN);
+            List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
+            if (addrData != null) {
+                if (addrData.get(0).getLocality() != null || addrData.get(0).getSubLocality() != null) {
+                    String address = (addrData.get(0).getLocality().equals(null) ? "" : addrData.get(0).getLocality())
+                            + " " +
+                            (addrData.get(0).getSubLocality().equals(null) ? "" : addrData.get(0).getSubLocality());
+                    TextView addrText = (TextView) getView().findViewById(R.id.text_location);
                     Typeface addrType = Typeface.createFromAsset(getContext().getAssets(), "NanumSquareR.ttf");
                     addrText.setTypeface(addrType);
                     addrText.setText(address);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                isGPSSensor = false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
-                ((TextView) getView().findViewById(R.id.text_weather_icon)).setVisibility(getView().INVISIBLE);
-                ((TextView) getView().findViewById(R.id.text_temp)).setVisibility(getView().INVISIBLE);
-                ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
-                return;
-            }
-            mLocationManager.removeUpdates(mMyLocationListener);
-        } else {
-            isGPSSensor = false;    //GPS가 켜져있지 않으면 위치 & 날씨 안뜨게함
-            ((TextView) getView().findViewById(R.id.text_weather_icon)).setVisibility(getView().INVISIBLE);
-            ((TextView) getView().findViewById(R.id.text_temp)).setVisibility(getView().INVISIBLE);
-            ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
-            return;
-        }
-    }
-
-    //위치정보 리스너
-    public class locationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location location) {
-            if (location != null) {
-                Log.d("LockScreenFragment", "lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
-                try {
-                    Geocoder geocoder = new Geocoder(getContext().getApplicationContext(), Locale.KOREAN);
-                    List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
-                    if (addrData != null) {
-                        String address = addrData.get(0).getLocality() + " " + addrData.get(0).getSubLocality();
-                        TextView addrText = (TextView)getView().findViewById(R.id.text_location);
-                        Typeface addrType = Typeface.createFromAsset(getContext().getAssets(), "NanumSquareR.ttf");
-                        addrText.setTypeface(addrType);
-                        addrText.setText(address);
-                    } else {
-                        ((TextView) getView().findViewById(R.id.text_location)).setVisibility(getView().INVISIBLE);
-                    }
-                } catch (IOException e) {
-                    Log.d("LockScreenFragment", "geocoder error: " + e);
+                    setLocationVisibility(true);
+                    return;
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
+        setLocationVisibility(false);
     }
 
     //OpenWeatherMap에서 날씨정보를 받아옴.
-    private void getWeather(double lat, double lon) {
+    private void setWeather(Location location) {
+        if (!getNetworkState()) return;
         String key = "e883ecf0bc01088daed574539d20aa43";
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "http://api.openweathermap.org/data/2.5/weather?" +
                 "APPID=" + key +
-                "&lat=" + lat +
-                "&lon=" + lon +
+                "&lat=" + location.getLatitude() +
+                "&lon=" + location.getLongitude() +
                 "&mode=json&units=metric";
         Log.d("jsonTest", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -237,10 +240,11 @@ public class LockScreenFragment extends Fragment {
                         try {
                             //날씨 텍스트를 받아와서 아이콘을 지정함
 //                            Log.d("jsonTest", response.getJSONArray("weather").getJSONObject(0).getString("description"));
-                            setWeatherIcon(response.getJSONArray("weather").getJSONObject(0).getInt("id"));
-                            //온도 텍스트 받아와서 온도지정
+                            setWeathersIcon(response.getJSONArray("weather").getJSONObject(0).getInt("id"));
+                            //온도 받아와서 온도지정
 //                            Log.d("jsonTest", response.getJSONObject("main").getString("temp") + "");
                             setTemperature(response.getJSONObject("main").getDouble("temp"));
+                            setLocationVisibility(true);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -248,7 +252,8 @@ public class LockScreenFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("error", "not data");
+//                Log.d("error", "not data");   //json으로 데이터를 받는데 실패하면 날씨가 안보이게함.
+                setLocationVisibility(false);
             }
         });
         queue.add(jsonObjectRequest);
@@ -258,12 +263,12 @@ public class LockScreenFragment extends Fragment {
         TextView temperatureText = (TextView) getView().findViewById(R.id.text_temp);
         Typeface tempType = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
         temperatureText.setTypeface(tempType);
-        temperatureText.setText((int)temperature + "º");
+        temperatureText.setText((int) temperature + "º");
 //        temperatureText.setText(String.format("%.0f", temperature) + "º");
     }
 
     //날씨 아이콘 선택
-    private void setWeatherIcon(int weather) {
+    private void setWeathersIcon(int weather) {
         int presentHour = mCalendar.get(Calendar.HOUR_OF_DAY);
         String weatherIconStringId = "wi_";
         if (weather == 800) { //clear sky
@@ -314,17 +319,6 @@ public class LockScreenFragment extends Fragment {
         weatherIconText.setText(getContext().getString(resId));
     }
 
-    //인사말 설정
-    private String setGreetingMessage() {
-        int presentHour = mCalendar.get(Calendar.HOUR_OF_DAY);
-        //아침
-        if (4 <= presentHour && presentHour <= 11) return "Good Morning";
-            //오후(점심)
-        else if (12 <= presentHour && presentHour <= 18) return "Good Afternoon";
-            //저녁
-        else return "Good Evening";
-    }
-
     //메인 포커스 세팅
     private void setMainText() {
         String userName = mDB.getUserName();
@@ -339,7 +333,14 @@ public class LockScreenFragment extends Fragment {
 
 
         if (userName != null) {
-            greetingMessage += setGreetingMessage() + ",";
+            //인사말 설정.
+            int presentHour = mCalendar.get(Calendar.HOUR_OF_DAY);
+            //아침
+            if (4 <= presentHour && presentHour <= 11) greetingMessage += "Good Morning";
+                //오후(점심)
+            else if (12 <= presentHour && presentHour <= 18) greetingMessage += "Good Afternoon";
+                //저녁
+            else greetingMessage += "Good Evening";
         } else {
             greetingMessage += "";
         }
@@ -348,7 +349,7 @@ public class LockScreenFragment extends Fragment {
             // 메인포커스 below text_today, marginTop 15dp TextSize
             RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
             relativeParams.addRule(RelativeLayout.BELOW, R.id.text_today);
-            relativeParams.topMargin = Math.round(0f * getContext().getResources().getDisplayMetrics().density); //dp설정
+            relativeParams.topMargin = Math.round(0f * getContext().getResources().getDisplayMetrics().density); //today와의 topMargin 설정
             mainfocusText.setLayoutParams(relativeParams);
             mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
             mainfocusMessage += mainFocus;
@@ -377,14 +378,16 @@ public class LockScreenFragment extends Fragment {
         userNameText.setText(userName);
         mainfocusText.setText(mainfocusMessage);
 
-        Log.d("layout", getContext().getResources().getDisplayMetrics().density + " - density");
-        Log.d("layout", getContext().getResources().getDisplayMetrics().widthPixels + " - widthPixels");
-        Log.d("layout", getContext().getResources().getDisplayMetrics().heightPixels + " - heightPixels");
-
-        Log.d("layout", Math.round(50f * getContext().getResources().getDisplayMetrics().density) + " - 64 Math");
-        Log.d("layout", translatePxToDp(64f) + " - translatePxToDp(64f)");
+//        Log.d("layout", getContext().getResources().getDisplayMetrics().density + " - density");
+//        Log.d("layout", getContext().getResources().getDisplayMetrics().widthPixels + " - widthPixels");
+//        Log.d("layout", getContext().getResources().getDisplayMetrics().heightPixels + " - heightPixels");
+//
+//        Log.d("layout", Math.round(64f * getContext().getResources().getDisplayMetrics().density) + " - 64 Math");
+//        Log.d("layout", translatePxToDp(64f) + " - translatePxToDp(64f)");
     }
-    private int translatePxToDp(float dp){
+
+    private int translatePxToDp(float dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getContext().getResources().getDisplayMetrics());
     }
+
 }
