@@ -16,7 +16,7 @@ import android.util.Log;
  */
 public class LocationInfoManager implements LocationListener {
     private static final int MIN_DISTANCE_CHANGE_FOR_UPDATE = 100;   //최소 10미터마다 업데이트
-    private static final int MIN_TIME_FOR_UPDATE = 1000 * 60;       //최소 1분마다 업데이트
+    private static final int MIN_TIME_FOR_UPDATE = 3000 /** 60*/;       //최소 3초마다 업데이트
 
     private static LocationInfoManager ourInstance = new LocationInfoManager();
 
