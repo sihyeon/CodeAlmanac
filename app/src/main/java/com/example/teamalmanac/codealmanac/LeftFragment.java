@@ -78,6 +78,7 @@ public class LeftFragment extends Fragment {
 
     public LeftFragment() {
         // Required empty public constructor
+
     }
 
     public static LeftFragment newInstance() {
@@ -311,6 +312,7 @@ public class LeftFragment extends Fragment {
     }
 
     private void initTodoList() {
+        linearLayoutManager = new LinearLayoutManager(this.getContext());
         todo_listview.setLayoutManager(linearLayoutManager);
 
         todos = mDb.getShowingTodos();
