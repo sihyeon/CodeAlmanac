@@ -1,4 +1,4 @@
-package com.example.teamalmanac.codealmanac;
+package com.example.teamalmanac.codealmanac.bean;
 
 import android.view.View;
 
@@ -11,6 +11,13 @@ public class TodoDataType {
     private String date;
     private String button_visibility;
     private boolean isShowing;
+
+    public TodoDataType(String todo, String date, String button_visibility) {
+        this.todo = todo;
+        this.date = date;
+        this.button_visibility = button_visibility;
+        this.isShowing = true;
+    }
 
     public TodoDataType(String todo, String date, boolean isShowing) {
         this.todo = todo;

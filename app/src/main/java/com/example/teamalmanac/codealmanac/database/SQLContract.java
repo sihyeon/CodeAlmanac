@@ -30,7 +30,7 @@ public final class SQLContract {
         public static final String TABLE_NAME = "main_focus_table";
         public static final String COLUMN_NAME_DATE = "main_focus_date";
         public static final String COLUMN_NAME_MAIN_FOCUS = "main_focus_text";
-
-        public static final String COLUMN_NAME_CHECK = "main_focus_check";
+        public static final String COLUMN_NAME_BUTTON_VISIBLE = "main_focus_btvisible";
+        public static final String COLUMN_NAME_SHOW = "main_focus_show";
     }
 }

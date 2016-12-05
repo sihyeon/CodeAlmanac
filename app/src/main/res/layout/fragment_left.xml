@@ -170,10 +170,10 @@
 
             <LinearLayout
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"
+                android:layout_width="255dp"
                 android:orientation="horizontal"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="37dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:id="@+id/whatIsYourMainfocusEdit_layout">
 
                 <EditText
@@ -181,6 +181,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:inputType="text"
+                    android:textColor="#FFF"
                     android:id="@+id/mainfocus_edittext"/>
 
                 <Button
@@ -190,6 +191,55 @@
                     android:id="@+id/mainfocus_button" />
 
             </LinearLayout>
+
+           </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_below="@id/whatIsYourMainfocus_layout"
+        android:id="@+id/mainfocus_layout">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:text="TODAY"
+            android:layout_marginTop="45dp"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:id="@+id/today_text2" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="3dp"
+                android:textColor="#FFF"
+                android:textSize="25dp"
+                android:text="Android developer"
+                android:button="@drawable/todo_checkbox"
+                android:id="@+id/mainfocus_text2" />
+
+            <Button
+                android:id="@+id/mainfocus_deletebutton"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:visibility="invisible"
+                android:background="@drawable/btn_delete"/>
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
