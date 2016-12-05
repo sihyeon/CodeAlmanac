@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 
 import com.example.teamalmanac.codealmanac.TabActivity;
-import com.example.teamalmanac.codealmanac.TodoDataType;
+import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
+import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +80,24 @@ public class DataManager {
         mDB.delete(SQLContract.ToDoEntry.TABLE_NAME, SQLContract.ToDoEntry.COLUMN_NAME_DATE + "=?", new String[] {date});
     }
 
+    public void deleteMainfocus() {
+        mDB.delete(SQLContract.MainFocusEntry.TABLE_NAME, SQLContract.MainFocusEntry.COLUMN_NAME_DATE + "=?",
+                new String[] {getMainFocusInfo().getDate()});
+    }
+    public void updateMainFocusButtonVisibility(String date, String visible) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, visible);
+        mDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues,
+                SQLContract.MainFocusEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
+    }
+
+    public void updateTodoButtonVisibility(String date, String visible) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_BUTTON_VISIBLE, visible);
+        mDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues,
+                SQLContract.ToDoEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
+    }
+
     public void updateTodoShowing(String date, Boolean bl) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_SHOW, bl.toString());
@@ -86,7 +105,7 @@ public class DataManager {
                 SQLContract.ToDoEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
     }
 
-    public ArrayList<TodoDataType> getTodos() {
+    public ArrayList<TodoDataType> getShowingTodos() {
         Cursor cursor = mDB.query(SQLContract.ToDoEntry.TABLE_NAME, null, null, null, null, null, null);
         ArrayList<TodoDataType> list = new ArrayList<>();
         if (cursor.moveToFirst()) {
@@ -94,7 +113,7 @@ public class DataManager {
                 //check is showing on lockscreen(app2)
                 if(Boolean.valueOf(cursor.getString(4))) {
                     //todo, date
-                    list.add(new TodoDataType(cursor.getString(1), cursor.getString(2)));
+                    list.add(new TodoDataType(cursor.getString(1), cursor.getString(2), cursor.getString(3)));
                 }
             } while(cursor.moveToNext());
         }
@@ -105,16 +124,21 @@ public class DataManager {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, name);
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, date);
+        contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, String.valueOf(View.INVISIBLE));
 
         mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
     }
 
-    public String getMainFocus() {
+    public void setMainFocus(String name, String date, String visible) {
+
+    }
+
+    public MainfocusDataType getMainFocusInfo() {
         Cursor cursor = mDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToLast()){
-            return cursor.getString(1);
+            return new MainfocusDataType(cursor.getString(1), cursor.getString(2), cursor.getString(3));
         } else {
-            return null;
+            return new MainfocusDataType();
         }
     }
 

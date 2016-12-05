@@ -322,7 +322,7 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
     //메인 포커스 세팅
     private void setMainText() {
         String userName = mDB.getUserName();
-        String mainFocus = mDB.getMainFocus();
+        String mainFocus = mDB.getMainFocusInfo().getMainfocus();
         String greetingMessage = "";
         String mainfocusMessage = "";
 
