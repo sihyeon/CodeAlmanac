@@ -19,4 +19,4 @@
  
  [ What 2 do ] is so powerful schedular application for dramatic people.
  
- # so, we confidently say, "JUST USE IT, RIGHT NOW. THEN YOU'LL HAVE PERFECT DAYS."
+# so, we confidently say, "JUST USE IT, RIGHT NOW. THEN YOU'LL HAVE PERFECT DAYS."
