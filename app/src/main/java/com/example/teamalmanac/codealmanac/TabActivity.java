@@ -1,7 +1,12 @@
 package com.example.teamalmanac.codealmanac;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.location.Location;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -9,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import android.view.WindowManager;
@@ -29,11 +35,14 @@ public class TabActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //서비스를 바인딩함. -> onDestroy에서 언바인딩.
+
         //상태바 없앰
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_tab);
         mMainContext = getApplicationContext();
@@ -56,16 +65,6 @@ public class TabActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(1);   //첫화면을 app1로 설정
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        Intent intent = getIntent();
-//        boolean exitActivity = intent.getExtras().getBoolean("exit", false);
-//        if(exitActivity){
-//            finish();
-//        }
-    }
-
     public static Activity getTabActivity() {
         return mTabActivity;
     }
@@ -86,9 +85,7 @@ public class TabActivity extends AppCompatActivity {
             }
         }
         @Override
-        public void onPageSelected(int position) {
-
-        }
+        public void onPageSelected(int position) {}
         @Override
         public void onPageScrollStateChanged(int state) {}
     };
@@ -108,6 +105,7 @@ public class TabActivity extends AppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
@@ -118,20 +116,11 @@ public class TabActivity extends AppCompatActivity {
                 return LeftFragment.newInstance();
             }
         }
+
         @Override
         public int getCount() {
             // Show 2 total pages.
             return 2;
         }
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            switch (position) {
-//                case 0:
-//                    return "SECTION 1";
-//                case 1:
-//                    return "SECTION 2";
-//           }
-//            return null;
-//        }
     }
 }
