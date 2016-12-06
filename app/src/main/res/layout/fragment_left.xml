@@ -4,241 +4,259 @@
     android:id="@+id/activity_left"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical"
-    tools:context="com.example.teamalmanac.codealmanac.LeftFragment"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="com.example.teamalmanac.codealmanac.LeftFragment">
 
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/whatIsYourName_layout"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="270dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="What is your name?"
-                android:gravity="center_vertical"
-                android:textColor="#FFF"
-                android:textSize="35dp"
-                android:id="@+id/whatIsYourName"/>
-
-            <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="241dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textColor="#FFF"
-                    android:textCursorDrawable="@null"
-                    android:id="@+id/name_edittext"/>
-
-                <Button
-                    android:layout_width="35dp"
-                    android:layout_height="24dp"
-                    android:layout_marginLeft="4dp"
-                    android:background="@drawable/btn_go"
-                    android:id="@+id/name_button" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-    <ImageView
+        android:id="@+id/whatIsYourName_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        app:srcCompat="@drawable/icn_logo"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="270dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/whatIsYourName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="What is your name?"
+            android:textColor="#FFF"
+            android:textSize="35dp" />
+
+        <LinearLayout
+            android:layout_width="241dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/name_edittext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:textColor="#FFF"
+                android:textCursorDrawable="@null" />
+
+            <Button
+                android:id="@+id/name_button"
+                android:layout_width="35dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/btn_go" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
         android:id="@+id/logo_icn"
-        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="16dp"
+        app:srcCompat="@drawable/icn_logo" />
 
     <!--/////////////////////////////////////////////////////////////////////////////////////////-->
 
 
+    <LinearLayout
+        android:id="@+id/todo_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
         <LinearLayout
+            android:id="@+id/todo_box"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/todo_layout"
+            android:layout_height="171dp"
+            android:background="@drawable/todo_border"
             android:orientation="vertical"
-            android:layout_alignParentBottom="true">
+            android:paddingTop="12dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="171dp"
-                android:paddingTop="12dp"
-                android:background="@drawable/todo_border"
-                android:orientation="vertical"
-                android:id="@+id/todo_box">
+            <TextView
+                android:id="@+id/todo_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:paddingBottom="10dp"
+                android:text="To do"
+                android:textColor="#FFF"
+                android:textSize="25dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#FFF"
-                    android:textSize="25dp"
-                    android:layout_marginStart="13dp"
-                    android:paddingBottom="10dp"
-                    android:text="To do"
-                    android:id="@+id/todo_title"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="13dp"
-                    android:layout_marginEnd="7dp"
-                    android:paddingEnd="7dp"
-                    android:layout_marginBottom="13dp"
-                    android:id="@+id/todo_listview">
-                </android.support.v7.widget.RecyclerView>
-
-            </LinearLayout>
-
-
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/todo_listview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/todo_edittext"
-                    android:layout_width="328dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="#C0C0C0"
-                    android:textSize="18dp"
-                    android:textColorHint="#C0C0C0"
-                    android:hint="New Todo"
-                    android:ems="10" />
-
-                <Button
-                    android:id="@+id/todo_button"
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:background="@drawable/btn_plus_todo"
-                    android:alpha="0.7"/>
-            </LinearLayout>
+                android:layout_marginBottom="13dp"
+                android:layout_marginEnd="7dp"
+                android:paddingEnd="7dp"
+                android:paddingStart="13dp"></android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
-        android:id="@+id/whatIsYourMainfocus_layout"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_below="@+id/logo_icn"
-        android:layout_centerHorizontal="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="#FFF"
-                android:textSize="45sp"
-                android:id="@+id/greet"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="#FFF"
-                android:textSize="45sp"
-                android:id="@+id/text_user_name" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textColor="#FFF"
-                android:text="What is your main focus for today?"
-                android:layout_marginTop="45dp"
-                android:layout_gravity="center_vertical"
-                android:textSize="20sp"
-                android:id="@+id/whatIsYourMainfocus"
-                android:layout_weight="1" />
-
-            <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="255dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:id="@+id/whatIsYourMainfocusEdit_layout">
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textColor="#FFF"
-                    android:id="@+id/mainfocus_edittext"/>
-
-                <Button
-                    android:layout_width="32dp"
-                    android:layout_height="21dp"
-                    android:background="@drawable/btn_go"
-                    android:id="@+id/mainfocus_button" />
-
-            </LinearLayout>
-
-           </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_below="@id/whatIsYourMainfocus_layout"
-        android:id="@+id/mainfocus_layout">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/todo_edittext"
+                android:layout_width="328dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="New Todo"
+                android:textColor="#C0C0C0"
+                android:textColorHint="#C0C0C0"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/todo_button"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:alpha="0.7"
+                android:background="@drawable/btn_plus_todo" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/whatIsYourMainfocus_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_icn"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/top_icons_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/btn_apps" />
+
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/btn_calendar" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/greet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:textColor="#FFF"
-            android:text="TODAY"
+            android:textSize="45sp" />
+
+        <TextView
+            android:id="@+id/text_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#FFF"
+            android:textSize="45sp" />
+
+        <TextView
+            android:id="@+id/whatIsYourMainfocus"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="45dp"
+            android:layout_weight="1"
+            android:text="What is your main focus for today?"
+            android:textColor="#FFF"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/whatIsYourMainfocusEdit_layout"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/mainfocus_edittext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/mainfocus_button"
+                android:layout_width="32dp"
+                android:layout_height="21dp"
+                android:background="@drawable/btn_go" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mainfocus_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/whatIsYourMainfocus_layout"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/today_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="45dp"
             android:gravity="center"
-            android:textSize="20dp"
-            android:id="@+id/today_text2" />
+            android:text="TODAY"
+            android:textColor="#FFF"
+            android:textSize="20dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <CheckBox
+                android:id="@+id/mainfocus_text2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:paddingEnd="3dp"
-                android:textColor="#FFF"
-                android:textSize="25dp"
-                android:text="Android developer"
                 android:button="@drawable/todo_checkbox"
-                android:id="@+id/mainfocus_text2" />
+                android:paddingEnd="3dp"
+                android:paddingStart="5dp"
+                android:text="Android developer"
+                android:textColor="#FFF"
+                android:textSize="25dp" />
 
             <Button
                 android:id="@+id/mainfocus_deletebutton"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:visibility="invisible"
-                android:background="@drawable/btn_delete"/>
+                android:background="@drawable/btn_delete"
+                android:visibility="invisible" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
