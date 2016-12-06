@@ -7,6 +7,7 @@ package com.example.teamalmanac.codealmanac;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class ListViewAdapter extends BaseAdapter {
     private static final int ITEM_VIEW_USER_ID_IMGS = 2;
     private static final int ITEM_VIEW_QUESTION_IMGS = 3;
     private static final int ITEM_VIEW_TYPE_MAX = 4 ;
+    private static int ItemID;
 
     // 아이템 데이터 리스트.
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
@@ -50,6 +52,7 @@ public class ListViewAdapter extends BaseAdapter {
     public int getItemViewType(int position) {
         return listViewItemList.get(position).getType() ;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

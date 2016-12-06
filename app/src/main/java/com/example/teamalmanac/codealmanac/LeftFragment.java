@@ -355,7 +355,7 @@ public class LeftFragment extends Fragment {
         if (isNameAvailable()) {
             whatisyourname_layout.setVisibility(View.GONE);
             logo_icn.setVisibility(View.GONE);
-            greet.setText(setHelloMessage() + ", ");
+            greet.setText(setHelloMessage() + ",");
             userNameText.setText(mDb.getUserName());
             whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
             todo_layout.setVisibility(View.VISIBLE);

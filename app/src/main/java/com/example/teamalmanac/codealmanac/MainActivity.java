@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
@@ -47,11 +48,19 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 parent.getAdapter().getItem(position);
-                if(id==0) {
+                if( id == 0 )
+                {
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
                     startActivityForResult(intent, 1);
+                } else if ( id == 3 )
+                {
+                    Uri uri = Uri.parse("http://sihyun2139.wixsite.com/codealmanac");
+                    Intent web = new Intent(Intent.ACTION_VIEW,uri);
+                    startActivity(web);
+                } else {
+
                 }
             }
         });
