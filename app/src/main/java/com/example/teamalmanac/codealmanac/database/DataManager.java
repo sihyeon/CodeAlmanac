@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 
+import com.example.teamalmanac.codealmanac.LockScreenFragment;
 import com.example.teamalmanac.codealmanac.TabActivity;
 import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
@@ -45,6 +46,7 @@ public class DataManager {
             mDB.update(SQLContract.UserEntry.TABLE_NAME, contentValues, null, null);
         } else {
             mDB.insert(SQLContract.UserEntry.TABLE_NAME, null, contentValues);
+            if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
         }
     }
 
@@ -89,6 +91,7 @@ public class DataManager {
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, visible);
         mDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues,
                 SQLContract.MainFocusEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
+        if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
     }
 
     public void updateTodoButtonVisibility(String date, String visible) {
@@ -127,10 +130,7 @@ public class DataManager {
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, String.valueOf(View.INVISIBLE));
 
         mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
-    }
-
-    public void setMainFocus(String name, String date, String visible) {
-
+        if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
     }
 
     public MainfocusDataType getMainFocusInfo() {
