@@ -1,14 +1,20 @@
 package com.example.teamalmanac.codealmanac;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +55,7 @@ public class LeftFragment extends Fragment {
     private LinearLayout whatisyourmainfocus_layout;
     private LinearLayout mainfocus_layout;
     private LinearLayout todo_layout;
+    private RelativeLayout top_icons_layout;
 
     // text
     private TextView greet;
@@ -75,6 +83,8 @@ public class LeftFragment extends Fragment {
     private Button mainfocus_deletebutton;
     private Button todo_button;
     private ImageView logo_icn;
+    private Button appdesk;
+    private Button calendar;
 
     public LeftFragment() {
         // Required empty public constructor
@@ -110,6 +120,7 @@ public class LeftFragment extends Fragment {
         setNameComponentListener();
         setMainfocusComponentListener();
         setTodoComponentListener();
+        setCalendarListener();
 
         initTodoList();
         initLayout();
@@ -122,6 +133,7 @@ public class LeftFragment extends Fragment {
         whatisyourmainfocusEdit_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourMainfocusEdit_layout);
         whatisyourmainfocus_layout = (LinearLayout) rootView.findViewById(R.id.whatIsYourMainfocus_layout);
         mainfocus_layout = (LinearLayout) rootView.findViewById(R.id.mainfocus_layout);
+        top_icons_layout = (RelativeLayout)rootView.findViewById(R.id.top_icons_layout);
 
         todo_layout = (LinearLayout) rootView.findViewById(R.id.todo_layout);
         todo_title = (TextView) rootView.findViewById(R.id.todo_title);
@@ -149,8 +161,13 @@ public class LeftFragment extends Fragment {
         todo_button = (Button) rootView.findViewById(R.id.todo_button);
         todo_editt = (EditText) rootView.findViewById(R.id.todo_edittext);
 
+        //앱 서랍, 캘린더 버튼
+        appdesk = (Button)rootView.findViewById(R.id.appdesk);
+        calendar = (Button)rootView.findViewById(R.id.calendar);
+
         linearLayoutManager = new LinearLayoutManager(this.getContext());
     }
+
 
     private void setFontAndGravity() {
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
@@ -206,6 +223,39 @@ public class LeftFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    private void setCalendarListener(){
+        calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean installed = appInstalledOrNot("com.google.android.calendar");
+                if(installed) {
+                    //This intent will help you to launch if the package is already installed
+                    Intent LaunchIntent = new Intent();
+                    LaunchIntent.setPackage("com.google.android.calendar");
+                    LaunchIntent.setAction(Intent.ACTION_MAIN);
+                    LaunchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    startActivity(LaunchIntent);
+
+                } else {
+                    Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.calendar");
+                    Intent web = new Intent(Intent.ACTION_VIEW,uri);
+                    startActivity(web);
+                }
+            }
+        });
+    }
+
+    private boolean appInstalledOrNot(String uri) {
+        PackageManager pm = getActivity().getPackageManager();
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
+        return false;
     }
 
     private void setMainfocusComponentListener() {
@@ -352,7 +402,7 @@ public class LeftFragment extends Fragment {
         if (isNameAvailable()) {
             whatisyourname_layout.setVisibility(View.GONE);
             logo_icn.setVisibility(View.GONE);
-            greet.setText(setHelloMessage() + ",");
+            //greet.setText(setHelloMessage() + ",");
             greet.setText(setGreetingMessage() + ", ");
             userNameText.setText(mDb.getUserName());
             whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
