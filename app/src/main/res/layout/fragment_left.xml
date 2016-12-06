@@ -147,12 +147,14 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/appdesk"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
                 android:background="@drawable/btn_apps" />
 
             <Button
+                android:id="@+id/calendar"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
