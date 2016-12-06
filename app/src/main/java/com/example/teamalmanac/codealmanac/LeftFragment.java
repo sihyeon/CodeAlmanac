@@ -95,6 +95,7 @@ public class LeftFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        greet.setText(setGreetingMessage() + ", ");
     }
 
     @Override
@@ -320,20 +321,16 @@ public class LeftFragment extends Fragment {
         todo_listview.setAdapter(todoAdapter);
     }
 
-    private String setHelloMessage() {
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        if (4 <= hour && hour <= 10) {
-            return "Good Morning";
-        } else if (11 <= hour && hour <= 15) {
-            return "Good Afternoon";
-        } else {
-            return "Good Evening";
-        }
+    private String setGreetingMessage() {
+        int presentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if (4 <= presentHour && presentHour <= 11) return "Good Morning";
+        else if (12 <= presentHour && presentHour <= 18) return "Good Afternoon";
+        else return "Good Evening";
     }
 
     private void notifyNameAdded() {
         whatisyourname_layout.setVisibility(View.GONE);
-        greet.setText(setHelloMessage() + ", ");
+        greet.setText(setGreetingMessage() + ", ");
         userNameText.setText(mDb.getUserName());
         whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
         today.setVisibility(View.GONE);
@@ -355,7 +352,7 @@ public class LeftFragment extends Fragment {
         if (isNameAvailable()) {
             whatisyourname_layout.setVisibility(View.GONE);
             logo_icn.setVisibility(View.GONE);
-            greet.setText(setHelloMessage() + ", ");
+            greet.setText(setGreetingMessage() + ", ");
             userNameText.setText(mDb.getUserName());
             whatisyourmainfocus_layout.setVisibility(View.VISIBLE);
             todo_layout.setVisibility(View.VISIBLE);
