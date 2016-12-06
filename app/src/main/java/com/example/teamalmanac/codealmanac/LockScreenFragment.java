@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
@@ -34,6 +35,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.database.DataManager;
 
 import org.json.JSONException;
@@ -49,6 +51,7 @@ import java.util.Locale;
 public class LockScreenFragment extends Fragment implements LocationInfoManager.InterfaceLocationInfoManager{
     private DataManager mDB = null;
     private Calendar mCalendar;
+    private static LockScreenFragment mLockScreenFragment;
     private LocationInfoManager mLocationInfoManager;
     private final int GEO_PERMISSIONS_REQUEST = 1;
 
@@ -58,6 +61,9 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
         // Required empty public constructor
     }
 
+    public static LockScreenFragment getLockScreenFragment(){
+        return mLockScreenFragment;
+    }
     //interface
     @Override
     public void setLocation(Location location) {
@@ -86,6 +92,7 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
         super.onCreate(savedInstanceState);
         mDB = DataManager.getSingletonInstance();
         mCalendar = Calendar.getInstance();
+        mLockScreenFragment = this;
         permissionChecking();
         if(isPermission) {
             mLocationInfoManager = LocationInfoManager.getInstance();
@@ -320,9 +327,10 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
     }
 
     //메인 포커스 세팅
-    private void setMainText() {
+    public void setMainText() {
         String userName = mDB.getUserName();
-        String mainFocus = mDB.getMainFocusInfo().getMainfocus();
+        MainfocusDataType mainFocusBeen = mDB.getMainFocusInfo();
+        String mainFocus = mainFocusBeen.getMainfocus();
         String greetingMessage = "";
         String mainfocusMessage = "";
 
@@ -353,6 +361,9 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
             mainfocusText.setLayoutParams(relativeParams);
             mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
             mainfocusMessage += mainFocus;
+            //취소선 확인
+            if(mainFocusBeen.getButton_visibility().equals(String.valueOf(View.VISIBLE))) mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            else mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
         } else {        //메인포커스가 없을때 -> today 안보임
             todayText.setVisibility(getView().INVISIBLE);
             //메인포커스 디자인 수정

@@ -311,7 +311,7 @@ public class LeftFragment extends Fragment {
         mainfocus_deletebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDb.deleteMainfocus();
+                mDb.deleteMainFocus();
                 mainfocus.setText("");
                 mainfocus.setPaintFlags(mainfocus.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
                 view.setVisibility(View.GONE);

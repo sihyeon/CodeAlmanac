@@ -82,7 +82,7 @@ public class DataManager {
         mDB.delete(SQLContract.ToDoEntry.TABLE_NAME, SQLContract.ToDoEntry.COLUMN_NAME_DATE + "=?", new String[] {date});
     }
 
-    public void deleteMainfocus() {
+    public void deleteMainFocus() {
         mDB.delete(SQLContract.MainFocusEntry.TABLE_NAME, SQLContract.MainFocusEntry.COLUMN_NAME_DATE + "=?",
                 new String[] {getMainFocusInfo().getDate()});
     }
