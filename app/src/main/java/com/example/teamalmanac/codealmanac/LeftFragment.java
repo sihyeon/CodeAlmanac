@@ -27,9 +27,18 @@ import com.example.teamalmanac.codealmanac.adapter.TodoAdapter;
 import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 import com.example.teamalmanac.codealmanac.database.DataManager;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 
 /**
@@ -219,7 +228,9 @@ public class LeftFragment extends Fragment {
                 }
                 String time = Calendar.getInstance().getTime().toString();
                 mDb.setMainFocus(mainfocus, time);
+
                 notifyMainfocusAdded();
+                sendMainfocuseToServer(mainfocus);
                 //keyboard down when typing is finished.
                 InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(getView().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -273,6 +284,29 @@ public class LeftFragment extends Fragment {
                 //TODO
             }
         });
+    }
+//TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private void sendMainfocuseToServer(String content) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("content", content)
+                .build();
+
+        //request
+        Request request = new Request.Builder()
+                .url("http://pi.phople.us:7070/set_main_focus/"+mDb.getFcmUser().getUuid())
+                .post(body)
+                .build();
+
+        try {
+            client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setTodoComponentListener() {
@@ -336,10 +370,15 @@ public class LeftFragment extends Fragment {
         today.setVisibility(View.GONE);
         todo_layout.setVisibility(View.VISIBLE);
         logo_icn.setVisibility(View.GONE);
+
+        //fcm
+        FirebaseMessaging.getInstance().subscribeToTopic("mainfocus");
+        FirebaseInstanceId.getInstance().getToken();
     }
 
     private void notifyMainfocusAdded() {
         mainfocus_editt.setText("");
+        today.setVisibility(View.VISIBLE);
         mainfocus_deletebutton.setVisibility(View.INVISIBLE);
         whatisyourmainfocusEdit_layout.setVisibility(View.GONE);
         whatIsYourMainfocus.setVisibility(View.GONE);

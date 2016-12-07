@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 
 import com.example.teamalmanac.codealmanac.TabActivity;
+import com.example.teamalmanac.codealmanac.bean.FcmUserDataType;
 import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 
@@ -36,6 +37,17 @@ public class DataManager {
         }
         // 디비를 재생성해야하면 이 코드의 주석을 해제하시오
 //        helper = new SQLiteHelper(context);
+    }
+
+    public void setFcmUser(String uuid, String reg_id){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.FcmUserEntry.COLUMN_NAME_UUID, uuid);
+        contentValues.put(SQLContract.FcmUserEntry.COLUMN_NAME_REG, reg_id);
+        if(getFcmUser() != null) {
+            mDB.update(SQLContract.FcmUserEntry.TABLE_NAME, contentValues, null, null);
+        } else {
+            mDB.insert(SQLContract.FcmUserEntry.TABLE_NAME, null, contentValues);
+        }
     }
 
     public void setUserName(String name){
@@ -126,6 +138,7 @@ public class DataManager {
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, date);
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, String.valueOf(View.INVISIBLE));
 
+
         mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
     }
 
@@ -150,5 +163,15 @@ public class DataManager {
             mainAndDate.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, cursor.getString(2));
         }
         return mainAndDate;
+    }
+
+    public FcmUserDataType getFcmUser() {
+        Cursor cursor = mDB.query(SQLContract.FcmUserEntry.TABLE_NAME, null, null, null, null, null, null);
+        if (cursor.moveToLast()){
+            //uuid, reg_id
+            return new FcmUserDataType(cursor.getString(1), cursor.getString(2));
+        } else {
+            return new FcmUserDataType();
+        }
     }
 }
