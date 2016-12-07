@@ -82,7 +82,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         copyright.setGravity(Gravity.CENTER);
 
         Switch switch_btn = (Switch) findViewById(R.id.switch_btn);
-        switch_btn.setChecked(false);
+        switch_btn.setChecked(true);
         switch_btn.setOnCheckedChangeListener(this);
 
     }

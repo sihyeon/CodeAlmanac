@@ -35,9 +35,6 @@ public class AppInfo extends Activity {
     private ImageView imageView;
     private TextView textView;
     ResolveInfo resolveInfo;
-    String app_name;
-    Drawable icon;
-    String path;
 
     public class MyBaseAdapter extends BaseAdapter {
 

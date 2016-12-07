@@ -1,14 +1,20 @@
 package com.example.teamalmanac.codealmanac;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,13 +26,18 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,17 +46,12 @@ import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 import com.example.teamalmanac.codealmanac.database.DataManager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link LeftFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class LeftFragment extends Fragment {
     private DataManager mDb;
 
@@ -56,6 +62,8 @@ public class LeftFragment extends Fragment {
     private LinearLayout mainfocus_layout;
     private LinearLayout todo_layout;
     private RelativeLayout top_icons_layout;
+    private GridView gridView;
+    private RelativeLayout poplayout;
 
     // text
     private TextView greet;
@@ -65,6 +73,7 @@ public class LeftFragment extends Fragment {
     private TextView whatIsYourMainfocus;
     private TextView todo_title;
     private TextView today;
+    private TextView poptitle;
 
     // editText
     private EditText todo_editt;
@@ -83,8 +92,10 @@ public class LeftFragment extends Fragment {
     private Button mainfocus_deletebutton;
     private Button todo_button;
     private ImageView logo_icn;
-    private Button appdesk;
     private Button calendar;
+    private Button appdesk;
+    private Button popplus;
+
 
     public LeftFragment() {
         // Required empty public constructor
@@ -100,6 +111,7 @@ public class LeftFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDb = DataManager.getSingletonInstance();
+
     }
 
     @Override
@@ -112,16 +124,14 @@ public class LeftFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_left, container, false);
-
         findViewByIds(rootView);
 
         setFontAndGravity();
-
         setNameComponentListener();
         setMainfocusComponentListener();
         setTodoComponentListener();
         setCalendarListener();
-
+        Popup();
         initTodoList();
         initLayout();
 
@@ -138,7 +148,6 @@ public class LeftFragment extends Fragment {
         todo_layout = (LinearLayout) rootView.findViewById(R.id.todo_layout);
         todo_title = (TextView) rootView.findViewById(R.id.todo_title);
         todo_editt = (EditText) rootView.findViewById(R.id.todo_edittext);
-
         userNameText = (TextView) rootView.findViewById(R.id.text_user_name);
         logo_icn = (ImageView) rootView.findViewById(R.id.logo_icn);
 
@@ -162,12 +171,29 @@ public class LeftFragment extends Fragment {
         todo_editt = (EditText) rootView.findViewById(R.id.todo_edittext);
 
         //앱 서랍, 캘린더 버튼
+        poplayout = (RelativeLayout)rootView.findViewById(R.id.popup_layout);
+        poptitle = (TextView)rootView.findViewById(R.id.pop_title);
+        popplus = (Button)rootView.findViewById(R.id.pop_btn);
+        gridView = (GridView) rootView.findViewById(R.id.gridview);
         appdesk = (Button)rootView.findViewById(R.id.appdesk);
         calendar = (Button)rootView.findViewById(R.id.calendar);
 
         linearLayoutManager = new LinearLayoutManager(this.getContext());
     }
 
+
+
+    //앱 서랍 아이콘 클릭 시 액티비티 팝업
+    private void Popup(){
+        appdesk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent Pop_intent = new Intent(getActivity(),PopActivity.class);
+                startActivity(Pop_intent);
+            }
+        });
+
+    }
 
     private void setFontAndGravity() {
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
@@ -178,6 +204,7 @@ public class LeftFragment extends Fragment {
         todo_title.setTypeface(typeface);
         todo_editt.setTypeface(typeface);
         mainfocus.setTypeface(typeface);
+
         int color = Color.parseColor("#C0C0C0");
         todo_editt.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_IN);
 
@@ -189,6 +216,8 @@ public class LeftFragment extends Fragment {
         whatIsYourMainfocus.setGravity(Gravity.CENTER);
         whatisyourmainfocus_layout.setGravity(Gravity.CENTER);
         whatisyourmainfocusEdit_layout.setGravity(Gravity.CENTER);
+
+
     }
 
     private void setNameComponentListener() {
@@ -225,7 +254,9 @@ public class LeftFragment extends Fragment {
         });
     }
 
-    private void setCalendarListener(){
+
+    private void setCalendarListener()
+    {
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
