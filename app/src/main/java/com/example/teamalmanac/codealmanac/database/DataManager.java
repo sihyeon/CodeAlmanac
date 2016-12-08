@@ -7,13 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 
 import com.example.teamalmanac.codealmanac.LockScreenFragment;
+import com.example.teamalmanac.codealmanac.MainActivity;
 import com.example.teamalmanac.codealmanac.TabActivity;
 import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Choi Jaeung on 2016-11-09.
@@ -22,18 +21,30 @@ import java.util.Map;
 public class DataManager {
     //싱글톤
     private static DataManager singletonInstance = null;
+    public static DataManager getSingletonInstance(Context context){
+        if(singletonInstance == null) {
+            singletonInstance = new DataManager(context);
+        }
+        return singletonInstance;
+    }
     public static DataManager getSingletonInstance(){
-        if(singletonInstance == null) singletonInstance = new DataManager(TabActivity.getMainContext());
+        if(singletonInstance == null) {
+            if(MainActivity.getContext() != null){
+                singletonInstance = new DataManager(MainActivity.getContext());
+            } else if(TabActivity.getContext() != null) {
+                singletonInstance = new DataManager(TabActivity.getContext());
+            }
+        }
         return singletonInstance;
     }
 
-    private SQLiteDatabase mDB;
+    private SQLiteDatabase sqliteDB;
 
     private DataManager(Context context){
         SQLiteHelper helper = new SQLiteHelper(context);
-        mDB = helper.getWritableDatabase();
-        if(mDB == null) {
-            helper.onCreate(mDB);
+         sqliteDB = helper.getWritableDatabase();
+        if( sqliteDB == null) {
+            helper.onCreate(sqliteDB);
         }
         // 디비를 재생성해야하면 이 코드의 주석을 해제하시오
 //        helper = new SQLiteHelper(context);
@@ -43,15 +54,15 @@ public class DataManager {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.UserEntry.COLUMN_NAME_NAME, name);
         if(getUserName() != null){
-            mDB.update(SQLContract.UserEntry.TABLE_NAME, contentValues, null, null);
+             sqliteDB.update(SQLContract.UserEntry.TABLE_NAME, contentValues, null, null);
         } else {
-            mDB.insert(SQLContract.UserEntry.TABLE_NAME, null, contentValues);
+             sqliteDB.insert(SQLContract.UserEntry.TABLE_NAME, null, contentValues);
             if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
         }
     }
 
     public String getUserName() {
-        Cursor cursor = mDB.query(SQLContract.UserEntry.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor =  sqliteDB.query(SQLContract.UserEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             return cursor.getString(1);
         } else {
@@ -59,13 +70,14 @@ public class DataManager {
         }
     }
 
+    //투두
     public void setTodo(String todo, String date, Integer visible) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_TODO, todo);
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, date);
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_BUTTON_VISIBLE, visible.toString());
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_SHOW, "true");
-        mDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
+         sqliteDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
     }
 
     public void setTodo(String todo, String date) {
@@ -74,42 +86,30 @@ public class DataManager {
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, date);
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_BUTTON_VISIBLE, String.valueOf(View.INVISIBLE));
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_SHOW, "true");
-        mDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
+         sqliteDB.insert(SQLContract.ToDoEntry.TABLE_NAME, null, contentValues);
     }
 
 
     public void deleteTodoUsingDate(String date) {
-        mDB.delete(SQLContract.ToDoEntry.TABLE_NAME, SQLContract.ToDoEntry.COLUMN_NAME_DATE + "=?", new String[] {date});
-    }
-
-    public void deleteMainFocus() {
-        mDB.delete(SQLContract.MainFocusEntry.TABLE_NAME, SQLContract.MainFocusEntry.COLUMN_NAME_DATE + "=?",
-                new String[] {getMainFocusInfo().getDate()});
-    }
-    public void updateMainFocusButtonVisibility(String date, String visible) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, visible);
-        mDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues,
-                SQLContract.MainFocusEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
-        if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
+         sqliteDB.delete(SQLContract.ToDoEntry.TABLE_NAME, SQLContract.ToDoEntry.COLUMN_NAME_DATE + "=?", new String[] {date});
     }
 
     public void updateTodoButtonVisibility(String date, String visible) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_BUTTON_VISIBLE, visible);
-        mDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues,
+         sqliteDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues,
                 SQLContract.ToDoEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
     }
 
     public void updateTodoShowing(String date, Boolean bl) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.ToDoEntry.COLUMN_NAME_SHOW, bl.toString());
-        mDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues,
+         sqliteDB.update(SQLContract.ToDoEntry.TABLE_NAME, contentValues,
                 SQLContract.ToDoEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
     }
 
     public ArrayList<TodoDataType> getShowingTodos() {
-        Cursor cursor = mDB.query(SQLContract.ToDoEntry.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor =  sqliteDB.query(SQLContract.ToDoEntry.TABLE_NAME, null, null, null, null, null, null);
         ArrayList<TodoDataType> list = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
@@ -123,32 +123,90 @@ public class DataManager {
         return list;
     }
 
+    public ArrayList<TodoDataType> getTodoList(){
+        ArrayList<TodoDataType> todoList = new ArrayList<>();
+        Cursor cursor =  sqliteDB.query(SQLContract.ToDoEntry.TABLE_NAME, new String[]{SQLContract.MainFocusEntry._ID,
+                SQLContract.ToDoEntry.COLUMN_NAME_TODO, SQLContract.ToDoEntry.COLUMN_NAME_DATE}, null, null, null, null, null);
+        if(cursor.moveToFirst()){
+            do {
+                //id, mainfocus, date
+                todoList.add(new TodoDataType(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
+            } while(cursor.moveToNext());
+        }
+        return todoList;
+    }
+
+    public ArrayList<TodoDataType> selectionDateTodo(String date){
+        ArrayList<TodoDataType> todoList = new ArrayList<>();
+        Cursor cursor =  sqliteDB.query(SQLContract.ToDoEntry.TABLE_NAME, new String[]{SQLContract.ToDoEntry._ID,
+                        SQLContract.ToDoEntry.COLUMN_NAME_TODO, SQLContract.ToDoEntry.COLUMN_NAME_DATE},
+                SQLContract.ToDoEntry.COLUMN_NAME_DATE+"=?", new String[]{date}, null, null, null);
+        if(cursor.moveToFirst()){
+            do {
+                //id, mainfocus, date
+                todoList.add(new TodoDataType(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
+            } while(cursor.moveToNext());
+        }
+        return todoList;
+    }
+
+    //메인포커스
     public void setMainFocus(String name, String date){
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, name);
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, date);
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, String.valueOf(View.INVISIBLE));
 
-        mDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
+         sqliteDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
         if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
     }
 
     public MainfocusDataType getMainFocusInfo() {
-        Cursor cursor = mDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor =  sqliteDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToLast()){
             return new MainfocusDataType(cursor.getString(1), cursor.getString(2), cursor.getString(3));
         } else {
             return new MainfocusDataType();
         }
     }
+//데이터를 가져올때 맨 마지막 데이터를 가져오기 때문에 필요 없다고 판단했음.
+//    public void deleteMainFocus() {
+//        sqliteDB.delete(SQLContract.MainFocusEntry.TABLE_NAME, SQLContract.MainFocusEntry.COLUMN_NAME_DATE + "=?",
+//                new String[] {getMainFocusInfo().getDate()});
+//    }
 
-    public Map<String, String> getMainFocusAndDate() {
-        Cursor cursor = mDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
-        Map<String, String> mainAndDate = new HashMap<>();
-        if (cursor.moveToLast()){
-            mainAndDate.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, cursor.getString(1));
-            mainAndDate.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, cursor.getString(2));
+    public void updateMainFocusButtonVisibility(String date, String visible) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, visible);
+         sqliteDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues,
+                SQLContract.MainFocusEntry.COLUMN_NAME_DATE+"=?", new String[] {date});
+        if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
+    }
+
+    public ArrayList<MainfocusDataType> getMainFocusList(){
+        ArrayList<MainfocusDataType> mainfocusList = new ArrayList<>();
+        Cursor cursor =  sqliteDB.query(SQLContract.MainFocusEntry.TABLE_NAME, new String[]{SQLContract.MainFocusEntry._ID,
+                SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, SQLContract.MainFocusEntry.COLUMN_NAME_DATE}, null, null, null, null, null);
+        if(cursor.moveToFirst()){
+            do {
+                //id, mainfocus, date
+                mainfocusList.add(new MainfocusDataType(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
+            } while(cursor.moveToNext());
         }
-        return mainAndDate;
+        return mainfocusList;
+    }
+
+    public ArrayList<MainfocusDataType> selectionDateMainfocus(String date){
+        ArrayList<MainfocusDataType> mainfocusList = new ArrayList<>();
+        Cursor cursor =  sqliteDB.query(SQLContract.MainFocusEntry.TABLE_NAME, new String[]{SQLContract.MainFocusEntry._ID,
+                SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, SQLContract.MainFocusEntry.COLUMN_NAME_DATE},
+                SQLContract.MainFocusEntry.COLUMN_NAME_DATE+"=?", new String[]{date}, null, null, null);
+        if(cursor.moveToFirst()){
+            do {
+                //id, mainfocus, date
+                mainfocusList.add(new MainfocusDataType(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
+            } while(cursor.moveToNext());
+        }
+        return mainfocusList;
     }
 }

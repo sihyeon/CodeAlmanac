@@ -1,6 +1,7 @@
 package com.example.teamalmanac.codealmanac;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -48,14 +49,14 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 parent.getAdapter().getItem(position);
-                if( id == 0 )
-                {
+                if( id == 0 ) {
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
                     startActivityForResult(intent, 1);
-                } else if ( id == 3 )
-                {
+                } else if(id == 2){
+                    startActivity(new Intent(MainActivity.this, TodoLogActivity.class));
+                } else if ( id == 3 ) {
                     Uri uri = Uri.parse("http://sihyun2139.wixsite.com/codealmanac");
                     Intent web = new Intent(Intent.ACTION_VIEW,uri);
                     startActivity(web);
@@ -82,9 +83,22 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         copyright.setGravity(Gravity.CENTER);
 
         Switch switch_btn = (Switch) findViewById(R.id.switch_btn);
-        switch_btn.setChecked(true);
+        if(isServiceRunning("com.example.teamalmanac.codealmanac.UnlockScreenService")){
+            switch_btn.setChecked(true);
+        } else {
+            switch_btn.setChecked(false);
+        }
         switch_btn.setOnCheckedChangeListener(this);
+    }
 
+    public Boolean isServiceRunning(String serviceName) {
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceName.equals(runningServiceInfo.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -102,7 +116,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
     }
 
 
-    public Context getContext() {
+    public static Context getContext() {
         return mContext;
     }
 }
