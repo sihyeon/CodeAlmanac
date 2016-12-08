@@ -63,6 +63,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 parent.getAdapter().getItem(position);
                 if( id == 0 ) {
                     createDesktopIcon();
+                    Toast.makeText(MainActivity.this, "홈 화면에 What 2 do를 추가했습니다.", Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(Intent.ACTION_PICK);
 //                    intent.setAction(Intent.ACTION_GET_CONTENT);
 //                    intent.setType("image/*");
