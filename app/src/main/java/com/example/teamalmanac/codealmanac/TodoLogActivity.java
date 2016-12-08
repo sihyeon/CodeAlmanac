@@ -1,12 +1,14 @@
 package com.example.teamalmanac.codealmanac;
 
 import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -29,9 +31,22 @@ public class TodoLogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_log);
-        mDB = DataManager.getSingletonInstance(getApplicationContext());
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mDB = DataManager.getSingletonInstance();
         mLogList = (RecyclerView)findViewById(R.id.recyclerview_log);
         setParentList();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private TreeSet<String> getDateTreeSet(){
@@ -53,7 +68,6 @@ public class TodoLogActivity extends AppCompatActivity {
 
         for(String date : dateTreeSet){
             HashMap <String, Object> tempHash = new HashMap<>();
-            Log.d("todo_log", date);
             tempHash.put("date", date);
             tempHash.put("mainfocus_adapter", getChildMainFocusListItem(date));
             tempHash.put("todo_adapter", getChildTodoListItem(date));
@@ -90,7 +104,6 @@ public class TodoLogActivity extends AppCompatActivity {
 
         for (TodoDataType temp : todoBeenList){
             HashMap <String, Object> tempHash = new HashMap<>();
-            Log.d("todo_log", temp.getTodo() + ": " + temp.getDate());
             tempHash.put(SQLContract.ToDoEntry.COLUMN_NAME_TODO, temp.getTodo());
             tempHash.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, temp.getDate());
             adapterItem.add(tempHash);

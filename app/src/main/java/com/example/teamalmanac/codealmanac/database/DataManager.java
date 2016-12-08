@@ -29,7 +29,11 @@ public class DataManager {
     }
     public static DataManager getSingletonInstance(){
         if(singletonInstance == null) {
-            singletonInstance = new DataManager( (MainActivity.getContext() != null)? MainActivity.getContext() : TabActivity.getContext());
+            if(MainActivity.getContext() != null){
+                singletonInstance = new DataManager(MainActivity.getContext());
+            } else if(TabActivity.getContext() != null) {
+                singletonInstance = new DataManager(TabActivity.getContext());
+            }
         }
         return singletonInstance;
     }

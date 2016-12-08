@@ -41,17 +41,8 @@
             android:taskAffinity="com.example.lockscreen"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
-        <activity android:name=".TodoLogActivity"></activity>
-
-        <activity
-            android:name=".PopActivity"
-            android:theme="@android:style/Theme.Dialog">
-        </activity>
-
-
-        <activity
-            android:name=".AppInfo"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+        <activity android:name=".TodoLogActivity"
+            android:theme="@style/AppTheme.LogActivity">
         </activity>
 
         <activity
