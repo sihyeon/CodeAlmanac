@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,10 +62,11 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                                     long id) {
                 parent.getAdapter().getItem(position);
                 if( id == 0 ) {
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, 1);
+                    createDesktopIcon();
+//                    Intent intent = new Intent(Intent.ACTION_PICK);
+//                    intent.setAction(Intent.ACTION_GET_CONTENT);
+//                    intent.setType("image/*");
+//                    startActivityForResult(intent, 1);
                 } else if(id == 2){
                     startActivity(new Intent(MainActivity.this, TodoLogActivity.class));
                 } else if ( id == 3 ) {
@@ -157,4 +159,31 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
     public static Context getContext() {
         return mContext;
     }
+
+    // 바탕화면에 바로가기 아이콘 생성
+    public void createDesktopIcon() {
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        pref.getString("check", "");
+
+        if(pref.getString("check", "").isEmpty()){
+            Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+            shortcutIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            shortcutIntent.setClassName(this, getClass().getName());
+            shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|
+                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            Intent intent = new Intent();
+            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getResources().getString(R.string.app_name)); //앱 이름
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                    Intent.ShortcutIconResource.fromContext(this, R.drawable.launcher)); //앱 아이콘
+            intent.putExtra("duplicate", false);
+            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            sendBroadcast(intent);
+        }
+
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("check", "exist");
+        editor.commit();
+    }
+
 }
