@@ -33,10 +33,13 @@ import android.content.pm.ResolveInfo;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamalmanac.codealmanac.database.DataManager;
+
 public class AppInfo extends Activity {
     Activity act = this;
     private PackageManager myPackageManager;
     private Context myContext;
+    private DataManager mDB;
     public List<ResolveInfo> MyAppList;
 
     GridView gridView;
@@ -48,7 +51,6 @@ public class AppInfo extends Activity {
 
     private String APP_NAME;
     private String APP_PATH;
-    private String APP_ICON;
 
 
     public class MyBaseAdapter extends BaseAdapter {
@@ -105,6 +107,7 @@ public class AppInfo extends Activity {
             FLAG_DISMISS_KEYGUARD = 키 가드 해제 */
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 //                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        mDB = DataManager.getSingletonInstance(getApplicationContext());
 
         myPackageManager = getPackageManager();
 
@@ -129,16 +132,13 @@ public class AppInfo extends Activity {
 
             APP_NAME = clickedActivityInfo.applicationInfo.loadLabel(getPackageManager()).toString();
             APP_PATH = clickedActivityInfo.applicationInfo.packageName;
-            APP_ICON = clickedActivityInfo.applicationInfo.loadIcon(getPackageManager()).toString();
 
-            Intent intent = new Intent();
-            intent.putExtra("name", APP_NAME);
-            intent.putExtra("path", APP_PATH);
-            intent.putExtra("icon", APP_ICON);
-            setResult(Activity.RESULT_OK, intent);
+            mDB.insertApp(APP_NAME, APP_PATH);
+//            Intent intent = new Intent();
+//            intent.putExtra("name", APP_NAME);
+//            intent.putExtra("path", APP_PATH);
+//            setResult(Activity.RESULT_OK, intent);
             finish();
-
-
         }
     };
 }

@@ -30,7 +30,9 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.teamalmanac.codealmanac.bean.AppFolderDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
+import com.example.teamalmanac.codealmanac.database.DataManager;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -43,25 +45,13 @@ public class PopActivity extends Activity {
     private Button popplus;
     private GridView selected;
 
-    String receivedName;
-    String receivedPath;
-
-    Activity act = this;
-    private TextView name;
-    private ImageView ic;
-    private PackageManager myPackageManager;
-
-    ResolveInfo resolveInfo;
-    ResolveInfo clickedResolveInfo;
-    ActivityInfo clickedActivityInfo;
-    Bitmap bitmap;
-
+    private DataManager mDB;
 
     public class PopAdapter extends BaseAdapter{
         LayoutInflater inflater;
-        ArrayList<Infos> items;
+        ArrayList<AppFolderDataType> items;
 
-        public PopAdapter(ArrayList<Infos> items){
+        public PopAdapter(ArrayList<AppFolderDataType> items){
             this.items = items;
         }
 
@@ -87,14 +77,14 @@ public class PopActivity extends Activity {
                 inflater = (LayoutInflater)PopActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.popup_item, parent, false);
             }
-            Infos infos = items.get(position);
+            AppFolderDataType infos = items.get(position);
 
-            name = (TextView)convertView.findViewById(R.id.appname);
-            ic = (ImageView)convertView.findViewById(R.id.appicon);
+            TextView appName = (TextView)convertView.findViewById(R.id.appname);
+            ImageView appIcon = (ImageView)convertView.findViewById(R.id.appicon);
 
             try {
-                name.setText(infos.getNAME());
-                ic.setImageDrawable(PopActivity.this.getPackageManager().getApplicationIcon(infos.getPATH()));
+                appName.setText(infos.getApp_name());
+                appIcon.setImageDrawable(PopActivity.this.getPackageManager().getApplicationIcon(infos.getApp_path()));
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
@@ -115,19 +105,7 @@ public class PopActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
-        ArrayList<Infos> mItems = new ArrayList<>();
-
-//        StringToBitMap(receivedIcon);
-        receivedName = "메시지";
-        receivedPath = "com.android.mms";
-
-        Infos infos = new Infos(receivedName,receivedPath);
-        mItems.add(infos);
-
-        selected = (GridView)findViewById(R.id.appgrid);
-
-        selected.setAdapter(new PopAdapter(mItems));
-        //selected.setOnItemClickListener(myOnItemClickListener);
+        mDB = DataManager.getSingletonInstance();
 
     // 전체 앱 불러오기
         popplus = (Button)this.findViewById(R.id.pop_btn);
@@ -144,19 +122,25 @@ public class PopActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        ArrayList<AppFolderDataType> mItems = mDB.getAppFolderList();
+
+        selected = (GridView)findViewById(R.id.appgrid);
+        selected.setAdapter(new PopAdapter(mItems));
+
+        //selected.setOnItemClickListener(myOnItemClickListener);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == APPINFO_REQUESTCODE){
-            if(resultCode == Activity.RESULT_OK){
-                //클릭한 앱 정보 변수에 저장
-                receivedName = data.getStringExtra("name");
-                receivedPath = data.getStringExtra("path");
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == APPINFO_REQUESTCODE){
+//            if(resultCode == Activity.RESULT_OK){
+//                //클릭한 앱 정보 변수에 저장
+//                receivedName = data.getStringExtra("name");
+//                receivedPath = data.getStringExtra("path");
+//            }
+//        }
+//    }
 
     // 앱 서랍 아이템 클릭 시 해당 앱 실행 리스너
 //    AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -178,23 +162,6 @@ public class PopActivity extends Activity {
 //            finish();
 //        }
 //    };
-
-   public class Infos {
-        private String NAME;
-        private String PATH;
-
-            public Infos(String _NAME, String _PATH){
-                this.NAME = _NAME;
-                this.PATH = _PATH;
-            }
-
-            public String getNAME(){
-                return NAME;
-            }
-            public String getPATH(){
-                return PATH;
-            }
-    }
 }
 
 

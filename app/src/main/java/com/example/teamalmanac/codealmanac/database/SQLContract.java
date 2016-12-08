@@ -50,4 +50,10 @@ public final class SQLContract {
         public static final String COLUMN_NAME_BUTTON_VISIBLE = "main_focus_btvisible";
         public static final String COLUMN_NAME_SHOW = "main_focus_show";
     }
+
+    public static abstract class AppFolderEntry implements BaseColumns {
+        public static final String TABLE_NAME = "app_folder_table";
+        public static final String COLUMN_NAME_APP_NAME = "app_name";
+        public static final String COLUMN_NAME_APP_PATH = "app_path";
+    }
 }

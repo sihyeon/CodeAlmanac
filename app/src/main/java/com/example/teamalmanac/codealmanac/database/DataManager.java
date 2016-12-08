@@ -9,6 +9,7 @@ import android.view.View;
 import com.example.teamalmanac.codealmanac.LockScreenFragment;
 import com.example.teamalmanac.codealmanac.MainActivity;
 import com.example.teamalmanac.codealmanac.TabActivity;
+import com.example.teamalmanac.codealmanac.bean.AppFolderDataType;
 import com.example.teamalmanac.codealmanac.bean.FcmUserDataType;
 import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
@@ -226,5 +227,26 @@ public class DataManager {
         }
     }
 
+    public void insertApp(String app_name, String app_path){
+        Cursor cursor = sqliteDB.query(SQLContract.AppFolderEntry.TABLE_NAME, new String[]{SQLContract.AppFolderEntry._ID,
+                SQLContract.AppFolderEntry.COLUMN_NAME_APP_NAME}, SQLContract.AppFolderEntry.COLUMN_NAME_APP_NAME+"=?", new String[]{app_name}, null, null, null);
+        if (cursor.moveToFirst()) return;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLContract.AppFolderEntry.COLUMN_NAME_APP_NAME, app_name);
+        contentValues.put(SQLContract.AppFolderEntry.COLUMN_NAME_APP_PATH, app_path);
+        sqliteDB.insert(SQLContract.AppFolderEntry.TABLE_NAME, null, contentValues);
+    }
 
+    public ArrayList<AppFolderDataType> getAppFolderList(){
+        ArrayList<AppFolderDataType> appList = new ArrayList<>();
+        Cursor cursor = sqliteDB.query(SQLContract.AppFolderEntry.TABLE_NAME, new String[]{SQLContract.AppFolderEntry._ID,
+                SQLContract.AppFolderEntry.COLUMN_NAME_APP_NAME, SQLContract.AppFolderEntry.COLUMN_NAME_APP_PATH}, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                //id, mainfocus, date
+                appList.add(new AppFolderDataType(cursor.getLong(0), cursor.getString(1), cursor.getString(2)));
+            } while (cursor.moveToNext());
+        }
+        return appList;
+    }
 }

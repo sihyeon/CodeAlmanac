@@ -36,7 +36,6 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener{
     private static Context mContext;
-    private DataManager mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

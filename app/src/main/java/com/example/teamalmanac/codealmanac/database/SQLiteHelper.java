@@ -62,5 +62,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                         SQLContract.MainFocusEntry.COLUMN_NAME_DATE + " text , " +
                         SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE+ " text " +" ) "
         );
+
+        db.execSQL(
+                "CREATE TABLE " + SQLContract.AppFolderEntry.TABLE_NAME + " ( " +
+                        SQLContract.AppFolderEntry._ID + " INTEGER PRIMARY KEY, " +
+                        SQLContract.AppFolderEntry.COLUMN_NAME_APP_NAME + " text ," +
+                        SQLContract.AppFolderEntry.COLUMN_NAME_APP_PATH + " text " + " ) "
+        );
     }
 }
