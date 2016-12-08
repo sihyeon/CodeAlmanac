@@ -50,6 +50,7 @@ public class AppInfo extends Activity implements Serializable{
     private String APP_PATH;
     private String APP_ICON;
 
+
     public class MyBaseAdapter extends BaseAdapter {
 
         LayoutInflater inflater;
@@ -127,11 +128,16 @@ public class AppInfo extends Activity implements Serializable{
 
 
             //인텐트 전송
-            Intent send_intent = new Intent(AppInfo.this, PopActivity.class);
-            Bundle b = new Bundle();
-            b.putParcelableArrayList("list",(ArrayList<Bitmap>)image);
-            send_intent.putExtra("key",b);
-            startActivity(send_intent);
+//            Intent send_intent = new Intent(AppInfo.this, PopActivity.class);
+//            Bundle b = new Bundle();
+//            b.putParcelableArrayList("list",(ArrayList<Bitmap>)image);
+//            send_intent.putExtra("key",b);
+//            startActivity(send_intent);
+            Intent intent = new Intent();
+            intent.putExtra("name", APP_NAME);
+            intent.putExtra("path", APP_PATH);
+            intent.putExtra("icon", APP_ICON);
+            setResult(Activity.RESULT_OK, intent);
             finish();
 
 //            send_intent.putExtra("APP_NAME",APP_NAME);
