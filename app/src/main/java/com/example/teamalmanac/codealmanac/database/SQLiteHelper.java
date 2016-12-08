@@ -44,8 +44,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE " + SQLContract.FcmUserEntry.TABLE_NAME + " ( " +
                         SQLContract.FcmUserEntry._ID + "INTEGER PRIMARY KEY, " +
-                        SQLContract.FcmUserEntry.COLUMN_NAME_UUID + " text , " +
-                        SQLContract.FcmUserEntry.COLUMN_NAME_REG + " text" + " ) "
+                        SQLContract.FcmUserEntry.COLUMN_NAME_TOKEN + " text )"
         );
 
         db.execSQL("CREATE TABLE " + SQLContract.ToDoEntry.TABLE_NAME + " ( " +

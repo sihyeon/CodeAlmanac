@@ -39,10 +39,9 @@ public class DataManager {
 //        helper = new SQLiteHelper(context);
     }
 
-    public void setFcmUser(String uuid, String reg_id){
+    public void setFcmUser(String token){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLContract.FcmUserEntry.COLUMN_NAME_UUID, uuid);
-        contentValues.put(SQLContract.FcmUserEntry.COLUMN_NAME_REG, reg_id);
+        contentValues.put(SQLContract.FcmUserEntry.COLUMN_NAME_TOKEN, token);
         if(getFcmUser() != null) {
             mDB.update(SQLContract.FcmUserEntry.TABLE_NAME, contentValues, null, null);
         } else {
@@ -169,7 +168,7 @@ public class DataManager {
         Cursor cursor = mDB.query(SQLContract.FcmUserEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToLast()){
             //uuid, reg_id
-            return new FcmUserDataType(cursor.getString(1), cursor.getString(2));
+            return new FcmUserDataType(cursor.getString(1));
         } else {
             return new FcmUserDataType();
         }

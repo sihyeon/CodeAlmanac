@@ -19,14 +19,23 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamalmanac.codealmanac.database.DataManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 
 public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener{
     private static Context mContext;
+    private DataManager mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +88,32 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         switch_btn.setChecked(false);
         switch_btn.setOnCheckedChangeListener(this);
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FirebaseMessaging.getInstance().subscribeToTopic("mainfocus");
+                saveToken(FirebaseInstanceId.getInstance().getToken());
+            }
+        }).start();
+    }
+
+    private void saveToken(String token) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("token", token)
+                .build();
+
+        //request
+        Request request = new Request.Builder()
+                .url(Constants.API_SERVER + "/token")
+                .post(body)
+                .build();
+
+        try {
+            client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

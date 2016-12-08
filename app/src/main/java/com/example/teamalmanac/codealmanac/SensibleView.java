@@ -1,10 +1,7 @@
 package com.example.teamalmanac.codealmanac;
 
-/**
- * Created by junhui on 16. 12. 3.
- */
-
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,6 +13,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.AttributeSet;
 import android.view.View;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SensibleView extends View {
     private SensorManager sm;
@@ -47,7 +46,7 @@ public class SensibleView extends View {
     }
 
     private void initView(Context context) {
-        img = BitmapFactory.decodeResource(getResources(), R.drawable.bg_2);
+        img = retrieveImage(context);
         final int imgWidth = img.getWidth();
         final int imgHeight = img.getHeight();
         final int imgWidthMargin = (int) (imgWidth * 0.1);
@@ -98,5 +97,13 @@ public class SensibleView extends View {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         sm.unregisterListener(accelEventListener);
+    }
+
+    private Bitmap retrieveImage(Context context) {
+        SharedPreferences pref = context.getSharedPreferences("settings", MODE_PRIVATE);
+        String s = "bg_" + pref.getInt("backround_image_index", 1);
+        int id = context.getResources().getIdentifier(s, "drawable", context.getPackageName());
+
+        return BitmapFactory.decodeResource(getResources(), id);
     }
 }

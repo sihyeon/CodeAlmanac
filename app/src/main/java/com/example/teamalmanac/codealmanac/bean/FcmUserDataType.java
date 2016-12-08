@@ -5,32 +5,21 @@ package com.example.teamalmanac.codealmanac.bean;
  */
 
 public class FcmUserDataType {
-    String uuid;
-    String reg_id;
+    String token;
 
-    public FcmUserDataType(String uuid, String reg_id) {
-        this.uuid = uuid;
-        this.reg_id = reg_id;
+    public FcmUserDataType(String token) {
+        this.token = token;
     }
 
     public FcmUserDataType() {
-        uuid = null;
-        reg_id = null;
+        token = null;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getToken() {
+        return token;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getReg_id() {
-        return reg_id;
-    }
-
-    public void setReg_id(String reg_id) {
-        this.reg_id = reg_id;
+    public void setToken(String token) {
+        this.token = token;
     }
 }
