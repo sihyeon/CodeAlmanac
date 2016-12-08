@@ -2,13 +2,18 @@ package com.example.teamalmanac.codealmanac;
 
 
 import android.app.Activity;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,20 +30,30 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class AppInfo extends Activity {
+public class AppInfo extends Activity implements Serializable{
     Activity act = this;
     private PackageManager myPackageManager;
     private Context myContext;
-    private List<ResolveInfo> MyAppList;
+    public List<ResolveInfo> MyAppList;
+    public ArrayList<Bitmap> image;
+
     GridView gridView;
     private ImageView imageView;
     private TextView textView;
     ResolveInfo resolveInfo;
+    ResolveInfo clickedResolveInfo;
+    ActivityInfo clickedActivityInfo;
+
+    private String APP_NAME;
+    private String APP_PATH;
+    private String APP_ICON;
 
     public class MyBaseAdapter extends BaseAdapter {
 
         LayoutInflater inflater;
+
 
         public MyBaseAdapter(){
            inflater = (LayoutInflater)act.getSystemService(myContext.LAYOUT_INFLATER_SERVICE);
@@ -68,12 +83,14 @@ public class AppInfo extends Activity {
             }
 
             resolveInfo = MyAppList.get(position);
+
             imageView = (ImageView) convertView.findViewById(R.id.imageView1);
             textView = (TextView) convertView.findViewById(R.id.textView);
 
             imageView.setImageDrawable(resolveInfo.activityInfo.loadIcon(getPackageManager()));
             textView.setText(resolveInfo.activityInfo.loadLabel(myPackageManager).toString());
             Log.v("[Program]", resolveInfo.activityInfo.packageName + "," + resolveInfo.activityInfo.name+","+ resolveInfo.activityInfo.loadIcon(getPackageManager()));
+
 
             return convertView;
         }
@@ -89,11 +106,11 @@ public class AppInfo extends Activity {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         MyAppList = myPackageManager.queryIntentActivities(intent,0);
 
+
         setContentView(R.layout.gridview);
         gridView = (GridView)findViewById(R.id.gridview);
         gridView.setAdapter(new MyBaseAdapter());
         gridView.setOnItemClickListener(myOnItemClickListener);
-
 
     }
 
@@ -101,24 +118,38 @@ public class AppInfo extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            ResolveInfo cleckedResolveInfo = (ResolveInfo)parent.getItemAtPosition(position);   // info
-            ActivityInfo clickedActivityInfo = cleckedResolveInfo.activityInfo; // 선택된 info -> name, package path
+            clickedResolveInfo = (ResolveInfo)parent.getItemAtPosition(position);   // info
+            clickedActivityInfo = clickedResolveInfo.activityInfo;
 
-            //Intent click_intent = new Intent(getApplicationContext(),PopActivity.class);
-            //Drawable icon = clickedActivityInfo.applicationInfo.loadIcon(myPackageManager);
+            APP_NAME = clickedActivityInfo.applicationInfo.loadLabel(getPackageManager()).toString();
+            APP_PATH = clickedActivityInfo.applicationInfo.packageName;
+            APP_ICON = clickedActivityInfo.applicationInfo.loadIcon(getPackageManager()).toString();
 
-            Intent intent = new Intent();
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-            intent.setClassName(
-                    clickedActivityInfo.applicationInfo.packageName,
-                    clickedActivityInfo.name);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-            startActivity(intent);
-
+            //인텐트 전송
+            Intent send_intent = new Intent(AppInfo.this, PopActivity.class);
+            Bundle b = new Bundle();
+            b.putParcelableArrayList("list",(ArrayList<Bitmap>)image);
+            send_intent.putExtra("key",b);
+            startActivity(send_intent);
             finish();
+
+//            send_intent.putExtra("APP_NAME",APP_NAME);
+//            startActivity(send_intent);
+//            finish();
+
+//            Intent intent = new Intent();
+//            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+//
+//             클릭한 앱 실행
+//            intent.setClassName(
+//                    clickedActivityInfo.applicationInfo.packageName,
+//                    clickedActivityInfo.name);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+//                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+//            startActivity(intent);
+//
+//            finish();
         }
     };
-
 }
