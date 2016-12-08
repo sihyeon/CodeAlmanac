@@ -32,11 +32,12 @@ import android.content.pm.ResolveInfo;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AppInfo extends Activity {
+public class AppInfo extends Activity implements Serializable{
     Activity act = this;
     private PackageManager myPackageManager;
     private Context myContext;
-    private List<ResolveInfo> MyAppList;
+    public List<ResolveInfo> MyAppList;
+    public ArrayList<Bitmap> image;
 
     GridView gridView;
     private ImageView imageView;
@@ -127,9 +128,15 @@ public class AppInfo extends Activity {
 
             //인텐트 전송
             Intent send_intent = new Intent(AppInfo.this, PopActivity.class);
-            send_intent.putExtra("APP_NAME",APP_NAME);
+            Bundle b = new Bundle();
+            b.putParcelableArrayList("list",(ArrayList<Bitmap>)image);
+            send_intent.putExtra("key",b);
             startActivity(send_intent);
             finish();
+
+//            send_intent.putExtra("APP_NAME",APP_NAME);
+//            startActivity(send_intent);
+//            finish();
 
 //            Intent intent = new Intent();
 //            intent.addCategory(Intent.CATEGORY_LAUNCHER);
