@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -100,6 +101,11 @@ public class AppInfo extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+/*  FLAG_SHOW_WHEN_LOCKED = 잠금화면 위로 액티비티 실행
+            FLAG_DISMISS_KEYGUARD = 키 가드 해제 */
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+//                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+
         myPackageManager = getPackageManager();
 
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
@@ -132,18 +138,7 @@ public class AppInfo extends Activity {
             setResult(Activity.RESULT_OK, intent);
             finish();
 
-//            Intent intent = new Intent();
-//            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-//
-//             클릭한 앱 실행
-//            intent.setClassName(
-//                    clickedActivityInfo.applicationInfo.packageName,
-//                    clickedActivityInfo.name);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-//                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-//            startActivity(intent);
-//
-//            finish();
+
         }
     };
 }

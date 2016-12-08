@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
@@ -22,11 +23,14 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -45,34 +49,33 @@ public class PopActivity extends Activity {
     String receivedPath;
 
     Activity act = this;
-    public List<ResolveInfo> MyAppList;
     private TextView name;
     private ImageView ic;
-
     private PackageManager myPackageManager;
+
     ResolveInfo resolveInfo;
     ResolveInfo clickedResolveInfo;
     ActivityInfo clickedActivityInfo;
     Bitmap bitmap;
 
-    public class PopAdapter extends BaseAdapter {
+
+    public class PopAdapter extends BaseAdapter{
 
         LayoutInflater inflater;
+        ArrayList<Infos> items;
 
-
-        public PopAdapter(){
-            inflater = (LayoutInflater)act.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        public PopAdapter(ArrayList<Infos> items){
+            this.items = items;
         }
-
 
         @Override
         public int getCount() {
-            return MyAppList.size();
+            return items.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return MyAppList.get(position);
+            return items.get(position);
         }
 
         @Override
@@ -82,48 +85,66 @@ public class PopActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
+            Log.d("TestDebug", "convertView: " + convertView);
             if (convertView == null) {
+                inflater = (LayoutInflater)PopActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.popup_item, parent, false);
             }
 
-            resolveInfo = MyAppList.get(position);
+            name = (TextView)convertView.findViewById(R.id.appname);
+//            ic = (ImageView)findViewById(R.id.appicon);
+//
+            Infos p = items.get(position);
 
-            name = (TextView)findViewById(R.id.appname);
-            ic = (ImageView)findViewById(R.id.appicon);
-
-            ic.setImageDrawable(clickedActivityInfo.applicationInfo.loadIcon(getPackageManager()));
-            name.setText(clickedActivityInfo.applicationInfo.loadLabel(getPackageManager()).toString());
-            Log.v("[Program]", clickedActivityInfo.applicationInfo.loadIcon(getPackageManager()) + "!!!" +clickedActivityInfo.applicationInfo.loadLabel(getPackageManager()).toString());
+            name.setText(p.getNAME());
+//            ic.setImageBitmap(p.drawICON(p.getICON()));
+//            ic.setImageDrawable(clickedActivityInfo.applicationInfo.loadIcon(getPackageManager()));
+//            name.setText(clickedActivityInfo.applicationInfo.loadLabel(getPackageManager()).toString());
 
             return convertView;
         }
     }
 
-@Override
-    protected void onCreate(Bundle savedInstanceState){
-    super.onCreate(savedInstanceState);
-    getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.popup);
+    @Override
+        protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.popup);
 
-    selected = (GridView)findViewById(R.id.appgrid);
+        /*  FLAG_SHOW_WHEN_LOCKED = 잠금화면 위로 액티비티 실행
+            FLAG_DISMISS_KEYGUARD = 키 가드 해제 */
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
-    //selected.setAdapter(new PopAdapter(getApplicationContext()));
-    selected.setOnItemClickListener(myOnItemClickListener);
+        ArrayList<Infos> mItems = new ArrayList<>();
+
+//        StringToBitMap(receivedIcon);
+
+        Infos infos = new Infos(receivedName,receivedIcon,receivedPath);
+        mItems.add(infos);
+
+        selected = (GridView)findViewById(R.id.appgrid);
+
+        selected.setAdapter(new PopAdapter(mItems));
+        //selected.setOnItemClickListener(myOnItemClickListener);
 
     // 전체 앱 불러오기
-    popplus = (Button)this.findViewById(R.id.pop_btn);
-        popplus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent grid_intent = new Intent(getApplicationContext(),AppInfo.class);
-                startActivityForResult(grid_intent, APPINFO_REQUESTCODE);
-            }
-        });
+        popplus = (Button)this.findViewById(R.id.pop_btn);
+            popplus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent grid_intent = new Intent(getApplicationContext(),AppInfo.class);
+                    startActivityForResult(grid_intent, APPINFO_REQUESTCODE);
+                }
+            });
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -133,45 +154,66 @@ public class PopActivity extends Activity {
                 //클릭한 앱 정보 변수에 저장
                 receivedName = data.getStringExtra("name");
                 receivedIcon = data.getStringExtra("icon");
-                //StringToBitMap(receivedIcon);
-
+                StringToBitMap(receivedIcon);
                 receivedPath = data.getStringExtra("path");
+//                Log.d("TestDebug", "Infos: " + receivedName + ", " + receivedIcon + ", " + receivedPath);
             }
         }
     }
 
     //전달받은 이미지 string을 bitmap으로 변환
-    public Bitmap StringToBitMap(String encodedString){
+    public void StringToBitMap(String encodedString){
         try{
             byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
             bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
         }catch(Exception e){
             e.getMessage();
-            return null;
         }
     }
 
     // 앱 서랍 아이템 클릭 시 해당 앱 실행 리스너
-    AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            clickedResolveInfo = (ResolveInfo)parent.getItemAtPosition(position);   // info
-            clickedActivityInfo = clickedResolveInfo.activityInfo;
+//    AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            clickedResolveInfo = (ResolveInfo)parent.getItemAtPosition(position);   // info
+//            clickedActivityInfo = clickedResolveInfo.activityInfo;
+//
+//            Intent intent = new Intent(Intent.ACTION_MAIN, null);
+//            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+//
+//            intent.setClassName(
+//                    clickedActivityInfo.applicationInfo.packageName,
+//                    clickedActivityInfo.name);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+//                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+//            startActivity(intent);
+//
+//            finish();
+//        }
+//    };
 
-            Intent intent = new Intent();
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+    class Infos {
+        private String NAME;
+        private String ICON;
+        private String PATH;
 
-            intent.setClassName(
-                    clickedActivityInfo.applicationInfo.packageName,
-                    clickedActivityInfo.name);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-            startActivity(intent);
+            public Infos(String _NAME, String _ICON, String _PATH){
+                this.NAME = _NAME;
+                this.ICON = _ICON;
+                this.PATH = _PATH;
+            }
 
-            finish();
-        }
-    };
+            public String getNAME(){
+                return NAME;
+            }
+            public String getICON(){
+                return ICON;
+            }
+
+            public String getPATH(){
+                return PATH;
+            }
+    }
 }
 
 

@@ -2,14 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/test"
-    android:layout_width="280dp"
-    android:layout_height="270dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <ImageView
-        android:layout_width="62dp"
-        android:layout_height="62dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_marginTop="16dp"
         app:srcCompat="@drawable/ic_launcher"
         android:id="@+id/appicon" />
