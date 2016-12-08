@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -44,13 +46,25 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
         Log.d("todo_log_adapter", (String)item.get("date"));
         holder.tv_date.setText((String)item.get("date"));
         holder.lv_mainfocusList.setAdapter((SimpleAdapter)item.get("mainfocus_adapter"));
+        ViewGroup.LayoutParams params = holder.lv_mainfocusList.getLayoutParams();
+        params.height = ((SimpleAdapter) item.get("mainfocus_adapter")).getCount() * translatePxToDp(40f);
+        holder.lv_mainfocusList.setLayoutParams(params);
+
         holder.lv_todoList.setAdapter((SimpleAdapter)item.get("todo_adapter"));
+        params = holder.lv_todoList.getLayoutParams();
+        params.height = ((SimpleAdapter) item.get("todo_adapter")).getCount() * translatePxToDp(40f);
+        holder.lv_todoList.setLayoutParams(params);
     }
 
     @Override
     public int getItemCount() {
         return logList.size();
     }
+
+    private int translatePxToDp(float dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, mContext.getResources().getDisplayMetrics());
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         protected TextView tv_date;
