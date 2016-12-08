@@ -50,13 +50,13 @@
         </activity>
 
         <activity
-            android:name=".PopActivity"
+            android:name=".AppFolderActivity"
             android:theme="@android:style/Theme.Dialog">
         </activity>
 
 
         <activity
-            android:name=".AppInfo"
+            android:name=".AllAppInfoActivity"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
         </activity>
 

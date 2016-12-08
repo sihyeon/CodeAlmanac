@@ -3,27 +3,16 @@ package com.example.teamalmanac.codealmanac;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -31,16 +20,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.teamalmanac.codealmanac.bean.AppFolderDataType;
-import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 import com.example.teamalmanac.codealmanac.database.DataManager;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class PopActivity extends Activity {
+public class AppFolderActivity extends Activity {
     private final int APPINFO_REQUESTCODE = 1;
     private Button popplus;
     private GridView selected;
@@ -74,8 +58,8 @@ public class PopActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             Log.d("TestDebug", "convertView: " + convertView);
             if (convertView == null) {
-                inflater = (LayoutInflater)PopActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.popup_item, parent, false);
+                inflater = (LayoutInflater)AppFolderActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.grid_item_app_folder, parent, false);
             }
             AppFolderDataType infos = items.get(position);
 
@@ -84,7 +68,7 @@ public class PopActivity extends Activity {
 
             try {
                 appName.setText(infos.getApp_name());
-                appIcon.setImageDrawable(PopActivity.this.getPackageManager().getApplicationIcon(infos.getApp_path()));
+                appIcon.setImageDrawable(AppFolderActivity.this.getPackageManager().getApplicationIcon(infos.getApp_path()));
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
@@ -98,7 +82,7 @@ public class PopActivity extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.popup);
+        setContentView(R.layout.activity_app_folder);
 
         /*  FLAG_SHOW_WHEN_LOCKED = 잠금화면 위로 액티비티 실행
             FLAG_DISMISS_KEYGUARD = 키 가드 해제 */
@@ -112,7 +96,7 @@ public class PopActivity extends Activity {
             popplus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent grid_intent = new Intent(getApplicationContext(),AppInfo.class);
+                    Intent grid_intent = new Intent(getApplicationContext(),AllAppInfoActivity.class);
                     startActivityForResult(grid_intent, APPINFO_REQUESTCODE);
                 }
             });

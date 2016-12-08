@@ -1,43 +1,30 @@
 package com.example.teamalmanac.codealmanac;
 
-import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,10 +34,7 @@ import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 import com.example.teamalmanac.codealmanac.database.DataManager;
 import com.example.teamalmanac.codealmanac.database.SQLContract;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -191,7 +175,7 @@ public class LeftFragment extends Fragment {
         appdesk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent Pop_intent = new Intent(getActivity(),PopActivity.class);
+                Intent Pop_intent = new Intent(getActivity(),AppFolderActivity.class);
                 startActivity(Pop_intent);
             }
         });

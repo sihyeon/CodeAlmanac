@@ -3,39 +3,28 @@ package com.example.teamalmanac.codealmanac;
 
 import android.app.Activity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import android.content.ComponentName;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.teamalmanac.codealmanac.database.DataManager;
 
-public class AppInfo extends Activity {
+public class AllAppInfoActivity extends Activity {
     Activity act = this;
     private PackageManager myPackageManager;
     private Context myContext;
@@ -82,7 +71,7 @@ public class AppInfo extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.griditem, parent, false);
+                convertView = inflater.inflate(R.layout.grid_item_all_app_info, parent, false);
             }
 
             resolveInfo = MyAppList.get(position);
@@ -116,7 +105,7 @@ public class AppInfo extends Activity {
         MyAppList = myPackageManager.queryIntentActivities(intent,0);
 
 
-        setContentView(R.layout.gridview);
+        setContentView(R.layout.activity_all_app_info);
         gridView = (GridView)findViewById(R.id.gridview);
         gridView.setAdapter(new MyBaseAdapter());
         gridView.setOnItemClickListener(myOnItemClickListener);
