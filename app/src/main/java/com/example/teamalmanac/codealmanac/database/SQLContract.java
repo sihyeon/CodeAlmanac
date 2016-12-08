@@ -29,6 +29,11 @@ public final class SQLContract {
         public static final String COLUMN_NAME_NAME = "user_name";
     }
 
+    public static abstract class FcmUserEntry implements BaseColumns{
+        public static final String TABLE_NAME = "fcm_table";
+        public static final String COLUMN_NAME_TOKEN = "fcm_token";
+    }
+
     // 할일 테이블
     public static abstract class ToDoEntry implements BaseColumns{
         public static final String TABLE_NAME = "todo_table";

@@ -30,6 +30,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private void init(SQLiteDatabase db){
         //삭제
         db.execSQL("DROP TABLE IF EXISTS " + SQLContract.UserEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SQLContract.FcmUserEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SQLContract.ToDoEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SQLContract.MainFocusEntry.TABLE_NAME);
 
@@ -38,6 +39,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + SQLContract.UserEntry.TABLE_NAME + " ( " +
                         SQLContract.UserEntry._ID + " INTEGER PRIMARY KEY, " +
                         SQLContract.UserEntry.COLUMN_NAME_NAME + " text " + " ) "
+        );
+
+        db.execSQL(
+                "CREATE TABLE " + SQLContract.FcmUserEntry.TABLE_NAME + " ( " +
+                        SQLContract.FcmUserEntry._ID + "INTEGER PRIMARY KEY, " +
+                        SQLContract.FcmUserEntry.COLUMN_NAME_TOKEN + " text )"
         );
 
         db.execSQL("CREATE TABLE " + SQLContract.ToDoEntry.TABLE_NAME + " ( " +

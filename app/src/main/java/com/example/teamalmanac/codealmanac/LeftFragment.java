@@ -302,7 +302,9 @@ public class LeftFragment extends Fragment {
                 String time = SQLContract.convertDateToString(Calendar.getInstance().getTime());
 
                 mDb.setMainFocus(mainfocus, time);
+
                 notifyMainfocusAdded();
+                Backend.saveMainFocus(mainfocus);
                 //keyboard down when typing is finished.
                 InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(getView().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -419,10 +421,12 @@ public class LeftFragment extends Fragment {
         today.setVisibility(View.GONE);
         todo_layout.setVisibility(View.VISIBLE);
         logo_icn.setVisibility(View.GONE);
+
     }
 
     private void notifyMainfocusAdded() {
         mainfocus_editt.setText("");
+        today.setVisibility(View.VISIBLE);
         mainfocus_deletebutton.setVisibility(View.INVISIBLE);
         whatisyourmainfocusEdit_layout.setVisibility(View.GONE);
         whatIsYourMainfocus.setVisibility(View.GONE);

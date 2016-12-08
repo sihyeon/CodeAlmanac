@@ -212,9 +212,9 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
             List<Address> addrData = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 2);
             if (addrData != null) {
                 if (addrData.get(0).getLocality() != null || addrData.get(0).getSubLocality() != null) {
-                    String address = (addrData.get(0).getLocality().equals(null) ? "" : addrData.get(0).getLocality())
+                    String address = (addrData.get(0).getLocality() == null ? "" : addrData.get(0).getLocality())
                             + " " +
-                            (addrData.get(0).getSubLocality().equals(null) ? "" : addrData.get(0).getSubLocality());
+                            (addrData.get(0).getSubLocality() == null ? "" : addrData.get(0).getSubLocality());
                     TextView addrText = (TextView) getView().findViewById(R.id.text_location);
                     Typeface addrType = Typeface.createFromAsset(getContext().getAssets(), "NanumSquareR.ttf");
                     addrText.setTypeface(addrType);
