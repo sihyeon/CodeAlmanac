@@ -2,6 +2,7 @@ package com.example.teamalmanac.codealmanac.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +27,11 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
     private ArrayList<HashMap<String, Object>> logList;
     private Context mContext;
     private DataManager mDB;
+
     public LogAdapter (Context context, ArrayList<HashMap<String, Object>> logList){
         this.mContext = context;
         this.logList = logList;
-        mDB = DataManager.getSingletonInstance(context);
+        mDB = DataManager.getSingletonInstance();
     }
 
     @Override
@@ -41,29 +43,15 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(LogAdapter.ViewHolder holder, int position) {
         HashMap<String, Object> item = logList.get(position);
-
-
+        Log.d("todo_log_adapter", (String)item.get("date"));
+        holder.tv_date.setText((String)item.get("date"));
+        holder.lv_mainfocusList.setAdapter((SimpleAdapter)item.get("mainfocus_adapter"));
+        holder.lv_todoList.setAdapter((SimpleAdapter)item.get("todo_adapter"));
     }
 
     @Override
     public int getItemCount() {
         return logList.size();
-    }
-
-
-    private Adapter getChildMainFocusListItem(String date){
-        ArrayList<HashMap<String, Object>> adapterItem = new ArrayList<>();
-        ArrayList<MainfocusDataType> mainfocusBeenList = mDB.selectionDateMainfocus(date);
-        for (MainfocusDataType temp : mainfocusBeenList){
-            HashMap <String, Object> tempHash = new HashMap<>();
-            tempHash.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, temp.getMainfocus());
-            tempHash.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, temp.getDate());
-            adapterItem.add(tempHash);
-        }
-        SimpleAdapter mainfocusAdapter = new SimpleAdapter(mContext, adapterItem, R.layout.listview_log_child,
-                new String[]{SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, SQLContract.MainFocusEntry.COLUMN_NAME_DATE},
-                new int[]{R.id.child_text_content, R.id.child_text_date});
-        return mainfocusAdapter;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

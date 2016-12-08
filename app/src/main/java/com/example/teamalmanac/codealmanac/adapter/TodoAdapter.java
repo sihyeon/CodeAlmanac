@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
-    private DataManager mDb;
+    private DataManager mDB;
 
     private List<TodoDataType> todos = new ArrayList<>();
     public TodoAdapter(List<TodoDataType> todos) {
@@ -32,7 +32,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_todo, parent, false);
-        mDb = DataManager.getSingletonInstance();
+        mDB = DataManager.getSingletonInstance();
         CheckBox checkBox = (CheckBox) itemView.findViewById(R.id.todo_checkbox);
         Typeface typeface = Typeface.createFromAsset(parent.getContext().getAssets(), "FranklinGothic-MediumCond.TTF");
         checkBox.setTypeface(typeface);
@@ -59,7 +59,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                     todos.get(position).setButton_visibility(String.valueOf(View.VISIBLE));
                     view.getRootView().findViewById(R.id.todo_delete_button).setVisibility(View.VISIBLE);
                     ((CheckBox) view).setPaintFlags(((CheckBox) view).getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    mDb.updateTodoButtonVisibility(todos.get(position).getDate(), String.valueOf(View.VISIBLE));
+                    mDB.updateTodoButtonVisibility(todos.get(position).getDate(), String.valueOf(View.VISIBLE));
                 }
                 //cancel showing X button
                 else {
@@ -67,7 +67,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                     view.getRootView().findViewById(R.id.todo_delete_button).setVisibility(View.INVISIBLE);
                     if((((CheckBox) view).getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0)
                         ((CheckBox) view).setPaintFlags(((CheckBox) view).getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
-                    mDb.updateTodoButtonVisibility(todos.get(position).getDate(), String.valueOf(View.INVISIBLE));
+                    mDB.updateTodoButtonVisibility(todos.get(position).getDate(), String.valueOf(View.INVISIBLE));
                 }
                 notifyDataSetChanged();
             }
@@ -82,7 +82,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 if ((checkBox.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0)
                     checkBox.setPaintFlags(checkBox.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
                 checkBox.setChecked(false);
-                mDb.updateTodoShowing(todos.get(holder.getAdapterPosition()).getDate(), false);
+                mDB.updateTodoShowing(todos.get(holder.getAdapterPosition()).getDate(), false);
                 todos.remove(holder.getAdapterPosition());
                 notifyDataSetChanged();
             }
