@@ -168,6 +168,7 @@ public class DataManager {
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, name);
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, date);
         contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE, String.valueOf(View.INVISIBLE));
+        contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_SHOW, "true");
 
          sqliteDB.insert(SQLContract.MainFocusEntry.TABLE_NAME, null, contentValues);
         if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
@@ -176,7 +177,8 @@ public class DataManager {
     public MainfocusDataType getMainFocusInfo() {
         Cursor cursor = sqliteDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToLast()){
-            return new MainfocusDataType(cursor.getString(1), cursor.getString(2), cursor.getString(3));
+            if(cursor.getString(4).equals("false")) return new MainfocusDataType();
+            else return new MainfocusDataType(cursor.getString(1), cursor.getString(2), cursor.getString(3));
         } else {
             return new MainfocusDataType();
         }
@@ -202,6 +204,18 @@ public class DataManager {
         }
         return mainfocusList;
     }
+    public void deleteMainFocus(){
+        Cursor cursor = sqliteDB.query(SQLContract.MainFocusEntry.TABLE_NAME, null, null, null, null, null, null);
+        if (cursor.moveToLast()) {
+            if (cursor.getString(4).equals("true")) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(SQLContract.MainFocusEntry.COLUMN_NAME_SHOW, "false");
+                sqliteDB.update(SQLContract.MainFocusEntry.TABLE_NAME, contentValues,
+                        SQLContract.MainFocusEntry._ID+"=?", new String[] {cursor.getString(0)});
+            }
+        }
+        if(LockScreenFragment.getLockScreenFragment() != null) LockScreenFragment.getLockScreenFragment().setMainText();
+    }
 
     public ArrayList<MainfocusDataType> selectionDateMainfocus(String date){
         ArrayList<MainfocusDataType> mainfocusList = new ArrayList<>();
@@ -217,6 +231,7 @@ public class DataManager {
         return mainfocusList;
     }
 
+    //FCM
     public FcmUserDataType getFcmUser() {
         Cursor cursor = sqliteDB.query(SQLContract.FcmUserEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToLast()){
@@ -227,6 +242,7 @@ public class DataManager {
         }
     }
 
+    //AppFolder
     public void insertApp(String app_name, String app_path){
         Cursor cursor = sqliteDB.query(SQLContract.AppFolderEntry.TABLE_NAME, new String[]{SQLContract.AppFolderEntry._ID,
                 SQLContract.AppFolderEntry.COLUMN_NAME_APP_NAME}, SQLContract.AppFolderEntry.COLUMN_NAME_APP_NAME+"=?", new String[]{app_name}, null, null, null);

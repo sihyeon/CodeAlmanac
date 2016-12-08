@@ -60,7 +60,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                         SQLContract.MainFocusEntry._ID + " INTEGER PRIMARY KEY, " +
                         SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS + " text ," +
                         SQLContract.MainFocusEntry.COLUMN_NAME_DATE + " text , " +
-                        SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE+ " text " +" ) "
+                        SQLContract.MainFocusEntry.COLUMN_NAME_BUTTON_VISIBLE+ " text, " +
+                        SQLContract.MainFocusEntry.COLUMN_NAME_SHOW + " text " + " ) "
         );
 
         db.execSQL(

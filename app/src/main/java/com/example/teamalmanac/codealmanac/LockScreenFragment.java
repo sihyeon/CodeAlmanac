@@ -376,6 +376,8 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
                 mainfocusText.setLayoutParams(relativeParams);
                 mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                 mainfocusMessage += "What is your main focus for today?";
+                mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
             }
         } else {
             greetingMessage += "";
