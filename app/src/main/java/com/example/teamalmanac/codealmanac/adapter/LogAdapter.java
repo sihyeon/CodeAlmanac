@@ -1,6 +1,7 @@
 package com.example.teamalmanac.codealmanac.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,8 +26,9 @@ import java.util.HashMap;
 
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
     private ArrayList<HashMap<String, Object>> logList;
-
-    public LogAdapter (ArrayList<HashMap<String, Object>> logList){
+    private Context mContext;
+    public LogAdapter (Context context, ArrayList<HashMap<String, Object>> logList){
+        this.mContext = context;
         this.logList = logList;
     }
 
@@ -56,7 +58,12 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
         protected ListView lv_todoList;
         public ViewHolder(View itemView) {
             super(itemView);
+            Typeface typefaceR = Typeface.createFromAsset(mContext.getAssets(), "NanumSquareR.ttf");
+            Typeface typefaceB = Typeface.createFromAsset(mContext.getAssets(), "NanumSquareB.ttf");
             tv_date = (TextView)itemView.findViewById(R.id.parent_text_date);
+            tv_date.setTypeface(typefaceR);
+            ((TextView)itemView.findViewById(R.id.parent_text_mainfocus_title)).setTypeface(typefaceB);
+            ((TextView)itemView.findViewById(R.id.parent_text_todo_title)).setTypeface(typefaceB);
             lv_mainfocusList = (ListView)itemView.findViewById(R.id.parent_listview_mainfocus);
             lv_todoList = (ListView)itemView.findViewById(R.id.parent_listview_todo);
         }

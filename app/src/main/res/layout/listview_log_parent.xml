@@ -1,33 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:text="date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/parent_text_date"/>
+        android:layout_height="24dp"
+        android:id="@+id/parent_text_date"
+        android:gravity="center_vertical"
+        android:textColor="#fff"
+        android:textSize="11dp"
+        android:background="#4Dffffff"
+        android:paddingLeft="16dp"
+        />
 
     <TextView
         android:text="Main Focus"
         android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/parent_text_mainfocus_title"
+        android:gravity="center_vertical"
+        android:textColor="#fff"
+        android:textSize="14dp"
+        android:layout_marginLeft="16dp"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/parent_text_mainfocus_title" />
+        app:srcCompat="@drawable/img_line_bottom"
+        android:id="@+id/imageView"/>
 
     <ListView
         android:layout_width="match_parent"
         android:id="@+id/parent_listview_mainfocus"
-        android:layout_height="150dp" />
+        android:layout_height="150dp"
+        android:paddingLeft="16dp"/>
 
     <TextView
         android:text="Todo"
         android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/parent_text_todo_title"
+        android:gravity="center_vertical"
+        android:textColor="#fff"
+        android:textSize="14dp"
+        android:layout_marginLeft="16dp"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/parent_text_todo_title" />
+        app:srcCompat="@drawable/img_line_bottom"
+        android:id="@+id/imageView2" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:id="@+id/parent_listview_todo"/>
+        android:id="@+id/parent_listview_todo"
+        android:paddingLeft="16dp"/>
+
 </LinearLayout>

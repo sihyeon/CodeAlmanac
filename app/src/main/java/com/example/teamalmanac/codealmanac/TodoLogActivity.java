@@ -1,23 +1,27 @@
 package com.example.teamalmanac.codealmanac;
 
-import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MenuItem;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Adapter;
-import android.widget.ListView;
+import android.widget.Button;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.example.teamalmanac.codealmanac.adapter.LogAdapter;
 import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 import com.example.teamalmanac.codealmanac.database.DataManager;
-import com.example.teamalmanac.codealmanac.database.SQLContract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,22 +35,31 @@ public class TodoLogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_log);
-        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        actionBarInit();
         mDB = DataManager.getSingletonInstance();
         mLogList = (RecyclerView)findViewById(R.id.recyclerview_log);
         setParentList();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    private void actionBarInit(){
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+
+        View customActionBar = LayoutInflater.from(this).inflate(R.layout.actionbar_log, null);
+        AppCompatImageButton backButton = (AppCompatImageButton) customActionBar.findViewById (R.id.bar_btn_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId() == R.id.bar_btn_back){
+                    finish();
+                }
+            }
+        });
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(255,10,14,22)));
+        actionBar.setCustomView(customActionBar);
     }
 
     private TreeSet<String> getDateTreeSet(){
@@ -74,7 +87,7 @@ public class TodoLogActivity extends AppCompatActivity {
             LogListItem.add(tempHash);
         }
 
-        mLogList.setAdapter(new LogAdapter(LogListItem));
+        mLogList.setAdapter(new LogAdapter(getApplicationContext(), LogListItem));
         mLogList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mLogList.setItemAnimator(new DefaultItemAnimator());
         //parent_text_date - String
@@ -87,31 +100,45 @@ public class TodoLogActivity extends AppCompatActivity {
 
         for (MainfocusDataType temp : mainfocusBeenList){
             HashMap <String, Object> tempHash = new HashMap<>();
-            tempHash.put(SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, temp.getMainfocus());
-            tempHash.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, temp.getDate());
+            tempHash.put("content", temp.getMainfocus());
+//            tempHash.put(SQLContract.MainFocusEntry.COLUMN_NAME_DATE, temp.getDate());
             adapterItem.add(tempHash);
         }
 
         SimpleAdapter mainfocusAdapter = new SimpleAdapter(this, adapterItem, R.layout.listview_log_child,
-                new String[]{SQLContract.MainFocusEntry.COLUMN_NAME_MAIN_FOCUS, SQLContract.MainFocusEntry.COLUMN_NAME_DATE},
-                new int[]{R.id.child_text_content, R.id.child_text_date});
+                new String[]{"content"},
+                new int[]{R.id.child_text_content}){
+            @Override
+            public void setViewText(TextView v, String text) {
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "NanumSquareR.ttf");
+                v.setTypeface(typeface);
+                v.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+                v.setText(text);
+            }
+        };
         return mainfocusAdapter;
     }
-
     private Adapter getChildTodoListItem(String date){
         ArrayList<HashMap<String, Object>> adapterItem = new ArrayList<>();
         ArrayList<TodoDataType> todoBeenList = mDB.selectionDateTodo(date);
 
         for (TodoDataType temp : todoBeenList){
             HashMap <String, Object> tempHash = new HashMap<>();
-            tempHash.put(SQLContract.ToDoEntry.COLUMN_NAME_TODO, temp.getTodo());
-            tempHash.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, temp.getDate());
+            tempHash.put("content", temp.getTodo());
+//            tempHash.put(SQLContract.ToDoEntry.COLUMN_NAME_DATE, temp.getDate());
             adapterItem.add(tempHash);
         }
-
         SimpleAdapter todoAdapter = new SimpleAdapter(this, adapterItem, R.layout.listview_log_child,
-                new String[]{SQLContract.ToDoEntry.COLUMN_NAME_TODO, SQLContract.ToDoEntry.COLUMN_NAME_DATE},
-                new int[]{R.id.child_text_content, R.id.child_text_date});
+                new String[]{"content"},
+                new int[]{R.id.child_text_content}){
+            @Override
+            public void setViewText(TextView v, String text) {
+                Typeface typeface = Typeface.createFromAsset(getAssets(), "NanumSquareR.ttf");
+                v.setTypeface(typeface);
+                v.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+                v.setText(text);
+            }
+        };
         return todoAdapter;
     }
 }

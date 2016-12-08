@@ -3,16 +3,19 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <View
+        android:layout_width="8dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="26dp"
+        android:background="#fff"/>
+
     <TextView
         android:text="todo content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/child_text_content"
-        android:paddingRight="20dp"/>
-
-    <TextView
-        android:text="todo date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/child_text_date" />
+        android:gravity="center_vertical"
+        android:layout_marginLeft="6dp"
+        android:textColor="#fff"/>
 </LinearLayout>
