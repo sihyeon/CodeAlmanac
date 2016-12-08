@@ -137,6 +137,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

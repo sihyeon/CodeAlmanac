@@ -217,7 +217,7 @@ public class DataManager {
     }
 
     public FcmUserDataType getFcmUser() {
-        Cursor cursor = mDB.query(SQLContract.FcmUserEntry.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = sqliteDB.query(SQLContract.FcmUserEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToLast()){
             //uuid, reg_id
             return new FcmUserDataType(cursor.getString(1));
