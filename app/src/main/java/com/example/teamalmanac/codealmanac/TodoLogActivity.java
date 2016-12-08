@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-public class TodoLogActivity extends Activity {
+public class TodoLogActivity extends AppCompatActivity {
     private RecyclerView mLogList;
     private DataManager mDB;
 
@@ -60,7 +60,7 @@ public class TodoLogActivity extends Activity {
             LogListItem.add(tempHash);
         }
 
-        mLogList.setAdapter(new LogAdapter(getApplicationContext(), LogListItem));
+        mLogList.setAdapter(new LogAdapter(LogListItem));
         mLogList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mLogList.setItemAnimator(new DefaultItemAnimator());
         //parent_text_date - String

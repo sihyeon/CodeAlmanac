@@ -25,13 +25,9 @@ import java.util.HashMap;
 
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
     private ArrayList<HashMap<String, Object>> logList;
-    private Context mContext;
-    private DataManager mDB;
 
-    public LogAdapter (Context context, ArrayList<HashMap<String, Object>> logList){
-        this.mContext = context;
+    public LogAdapter (ArrayList<HashMap<String, Object>> logList){
         this.logList = logList;
-        mDB = DataManager.getSingletonInstance();
     }
 
     @Override

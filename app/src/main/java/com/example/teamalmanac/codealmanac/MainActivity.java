@@ -1,6 +1,7 @@
 package com.example.teamalmanac.codealmanac;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -82,9 +83,22 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         copyright.setGravity(Gravity.CENTER);
 
         Switch switch_btn = (Switch) findViewById(R.id.switch_btn);
-        switch_btn.setChecked(true);
+        if(isServiceRunning("com.example.teamalmanac.codealmanac.UnlockScreenService")){
+            switch_btn.setChecked(true);
+        } else {
+            switch_btn.setChecked(false);
+        }
         switch_btn.setOnCheckedChangeListener(this);
+    }
 
+    public Boolean isServiceRunning(String serviceName) {
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceName.equals(runningServiceInfo.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
