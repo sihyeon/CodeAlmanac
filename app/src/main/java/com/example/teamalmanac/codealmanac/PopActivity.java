@@ -42,9 +42,7 @@ public class PopActivity extends Activity {
     private final int APPINFO_REQUESTCODE = 1;
     private Button popplus;
     private GridView selected;
-    private Context context;
 
-    String receivedIcon;
     String receivedName;
     String receivedPath;
 
@@ -60,7 +58,6 @@ public class PopActivity extends Activity {
 
 
     public class PopAdapter extends BaseAdapter{
-
         LayoutInflater inflater;
         ArrayList<Infos> items;
 
@@ -90,16 +87,17 @@ public class PopActivity extends Activity {
                 inflater = (LayoutInflater)PopActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.popup_item, parent, false);
             }
+            Infos infos = items.get(position);
 
             name = (TextView)convertView.findViewById(R.id.appname);
-//            ic = (ImageView)findViewById(R.id.appicon);
-//
-            Infos p = items.get(position);
+            ic = (ImageView)convertView.findViewById(R.id.appicon);
 
-            name.setText(p.getNAME());
-//            ic.setImageBitmap(p.drawICON(p.getICON()));
-//            ic.setImageDrawable(clickedActivityInfo.applicationInfo.loadIcon(getPackageManager()));
-//            name.setText(clickedActivityInfo.applicationInfo.loadLabel(getPackageManager()).toString());
+            try {
+                name.setText(infos.getNAME());
+                ic.setImageDrawable(PopActivity.this.getPackageManager().getApplicationIcon(infos.getPATH()));
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
 
             return convertView;
         }
@@ -120,8 +118,10 @@ public class PopActivity extends Activity {
         ArrayList<Infos> mItems = new ArrayList<>();
 
 //        StringToBitMap(receivedIcon);
+        receivedName = "메시지";
+        receivedPath = "com.android.mms";
 
-        Infos infos = new Infos(receivedName,receivedIcon,receivedPath);
+        Infos infos = new Infos(receivedName,receivedPath);
         mItems.add(infos);
 
         selected = (GridView)findViewById(R.id.appgrid);
@@ -153,21 +153,8 @@ public class PopActivity extends Activity {
             if(resultCode == Activity.RESULT_OK){
                 //클릭한 앱 정보 변수에 저장
                 receivedName = data.getStringExtra("name");
-                receivedIcon = data.getStringExtra("icon");
-                StringToBitMap(receivedIcon);
                 receivedPath = data.getStringExtra("path");
-//                Log.d("TestDebug", "Infos: " + receivedName + ", " + receivedIcon + ", " + receivedPath);
             }
-        }
-    }
-
-    //전달받은 이미지 string을 bitmap으로 변환
-    public void StringToBitMap(String encodedString){
-        try{
-            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
-            bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-        }catch(Exception e){
-            e.getMessage();
         }
     }
 
@@ -192,24 +179,18 @@ public class PopActivity extends Activity {
 //        }
 //    };
 
-    class Infos {
+   public class Infos {
         private String NAME;
-        private String ICON;
         private String PATH;
 
-            public Infos(String _NAME, String _ICON, String _PATH){
+            public Infos(String _NAME, String _PATH){
                 this.NAME = _NAME;
-                this.ICON = _ICON;
                 this.PATH = _PATH;
             }
 
             public String getNAME(){
                 return NAME;
             }
-            public String getICON(){
-                return ICON;
-            }
-
             public String getPATH(){
                 return PATH;
             }
