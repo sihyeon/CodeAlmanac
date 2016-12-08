@@ -349,33 +349,40 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
             else if (12 <= presentHour && presentHour <= 18) greetingMessage += "Good Afternoon";
                 //저녁
             else greetingMessage += "Good Evening";
+
+            //이름이 있을때만 메인포커스 보이기
+            if (mainFocus != null) {    //메인포커스가 있을때 -> today 보임
+                todayText.setVisibility(getView().VISIBLE);
+                mainfocusText.setVisibility(getView().VISIBLE);
+                // 메인포커스 below text_today, marginTop 15dp TextSize
+                RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
+                relativeParams.addRule(RelativeLayout.BELOW, R.id.text_today);
+                relativeParams.topMargin = Math.round(0f * getContext().getResources().getDisplayMetrics().density); //today와의 topMargin 설정
+                mainfocusText.setLayoutParams(relativeParams);
+                mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
+                mainfocusMessage += mainFocus;
+                //취소선 확인
+                mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                if(mainFocusBeen.getButton_visibility().equals(String.valueOf(View.VISIBLE))) mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                else mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {        //메인포커스가 없을때 -> today 안보임
+                todayText.setVisibility(getView().INVISIBLE);
+                mainfocusText.setVisibility(getView().VISIBLE);
+                //메인포커스 디자인 수정
+                RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
+                relativeParams.addRule(RelativeLayout.BELOW, R.id.text_user_name);
+//            relativeParams.topMargin = Math.round(64f * getContext().getResources().getDisplayMetrics().density); //dp설정
+                relativeParams.topMargin = translatePxToDp(64f); //dp설정
+                mainfocusText.setLayoutParams(relativeParams);
+                mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                mainfocusMessage += "What is your main focus for today?";
+            }
         } else {
             greetingMessage += "";
-        }
-        if (mainFocus != null) {    //메인포커스가 있을때 -> today 보임
-            todayText.setVisibility(getView().VISIBLE);
-            // 메인포커스 below text_today, marginTop 15dp TextSize
-            RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
-            relativeParams.addRule(RelativeLayout.BELOW, R.id.text_today);
-            relativeParams.topMargin = Math.round(0f * getContext().getResources().getDisplayMetrics().density); //today와의 topMargin 설정
-            mainfocusText.setLayoutParams(relativeParams);
-            mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
-            mainfocusMessage += mainFocus;
-            //취소선 확인
-            mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            if(mainFocusBeen.getButton_visibility().equals(String.valueOf(View.VISIBLE))) mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            else mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
-        } else {        //메인포커스가 없을때 -> today 안보임
             todayText.setVisibility(getView().INVISIBLE);
-            //메인포커스 디자인 수정
-            RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) mainfocusText.getLayoutParams();
-            relativeParams.addRule(RelativeLayout.BELOW, R.id.text_user_name);
-//            relativeParams.topMargin = Math.round(64f * getContext().getResources().getDisplayMetrics().density); //dp설정
-            relativeParams.topMargin = translatePxToDp(64f); //dp설정
-            mainfocusText.setLayoutParams(relativeParams);
-            mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-            mainfocusMessage += "What is your main focus for today?";
+            mainfocusText.setVisibility(getView().INVISIBLE);
         }
+
         //today 부분의 글꼴
         Typeface todayType = Typeface.createFromAsset(getContext().getAssets(), "FranklinGothic-Demi.TTF");
         todayText.setTypeface(todayType);
