@@ -123,10 +123,7 @@ public class AllAppInfoActivity extends Activity {
             APP_PATH = clickedActivityInfo.applicationInfo.packageName;
 
             mDB.insertApp(APP_NAME, APP_PATH);
-//            Intent intent = new Intent();
-//            intent.putExtra("name", APP_NAME);
-//            intent.putExtra("path", APP_PATH);
-//            setResult(Activity.RESULT_OK, intent);
+
             finish();
         }
     };

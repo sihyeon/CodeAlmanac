@@ -13,11 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.teamalmanac.codealmanac.bean.AppFolderDataType;
 import com.example.teamalmanac.codealmanac.database.DataManager;
@@ -100,7 +102,6 @@ public class AppFolderActivity extends Activity {
                     startActivityForResult(grid_intent, APPINFO_REQUESTCODE);
                 }
             });
-
     }
 
     @Override
@@ -111,41 +112,21 @@ public class AppFolderActivity extends Activity {
         selected = (GridView)findViewById(R.id.appgrid);
         selected.setAdapter(new PopAdapter(mItems));
 
-        //selected.setOnItemClickListener(myOnItemClickListener);
+        selected.setOnItemClickListener(myOnItemClickListener);
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == APPINFO_REQUESTCODE){
-//            if(resultCode == Activity.RESULT_OK){
-//                //클릭한 앱 정보 변수에 저장
-//                receivedName = data.getStringExtra("name");
-//                receivedPath = data.getStringExtra("path");
-//            }
-//        }
-//    }
-
-    // 앱 서랍 아이템 클릭 시 해당 앱 실행 리스너
-//    AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
-//        @Override
-//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            clickedResolveInfo = (ResolveInfo)parent.getItemAtPosition(position);   // info
-//            clickedActivityInfo = clickedResolveInfo.activityInfo;
-//
-//            Intent intent = new Intent(Intent.ACTION_MAIN, null);
-//            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-//
-//            intent.setClassName(
-//                    clickedActivityInfo.applicationInfo.packageName,
-//                    clickedActivityInfo.name);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-//                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-//            startActivity(intent);
-//
-//            finish();
-//        }
-//    };
+//     앱 서랍 아이템 클릭 시 해당 앱 실행 리스너
+    AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String appPath = ((AppFolderDataType)parent.getItemAtPosition(position)).getApp_path();
+            Intent intent = getPackageManager().getLaunchIntentForPackage(appPath);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            TabActivity.getTabActivity().finish();
+        }
+    };
 }
 
 
