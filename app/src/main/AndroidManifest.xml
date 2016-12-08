@@ -53,6 +53,17 @@
             android:name=".AppInfo"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
         </activity>
+
+        <activity
+            android:name=".PopActivity"
+            android:theme="@android:style/Theme.Dialog">
+        </activity>
+
+
+        <activity
+            android:name=".AppInfo"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+        </activity>
     </application>
 
 </manifest>

@@ -27,7 +27,6 @@ public class ListViewAdapter extends BaseAdapter {
     private static final int ITEM_VIEW_USER_ID_IMGS = 2;
     private static final int ITEM_VIEW_QUESTION_IMGS = 3;
     private static final int ITEM_VIEW_TYPE_MAX = 4 ;
-    private static int ItemID;
 
     // 아이템 데이터 리스트.
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;

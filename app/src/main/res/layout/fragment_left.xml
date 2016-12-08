@@ -99,7 +99,7 @@
                 android:layout_marginBottom="13dp"
                 android:layout_marginEnd="7dp"
                 android:paddingEnd="7dp"
-                android:paddingStart="13dp"></android.support.v7.widget.RecyclerView>
+                android:paddingStart="13dp"/>
 
         </LinearLayout>
 

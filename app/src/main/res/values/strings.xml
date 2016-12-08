@@ -9,7 +9,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!--Task-->
     <string name="task">LockScreenTask</string>
+    <string name="settings_safetylegal_activity_loading" >"로드 중"</string>
 
+    <string name="menu_download" >다운로드</string>
+    <string name="menu_all" >전체</string>
     <!-- weather iscons-->
     <string name="wi_day_sunny">&#xf00d;</string>
     <string name="wi_day_cloudy">&#xf002;</string>
