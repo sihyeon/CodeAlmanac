@@ -362,6 +362,7 @@ public class LockScreenFragment extends Fragment implements LocationInfoManager.
             mainfocusText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
             mainfocusMessage += mainFocus;
             //취소선 확인
+            mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             if(mainFocusBeen.getButton_visibility().equals(String.valueOf(View.VISIBLE))) mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             else mainfocusText.setPaintFlags(mainfocusText.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
         } else {        //메인포커스가 없을때 -> today 안보임
