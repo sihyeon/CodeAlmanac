@@ -185,5 +185,4 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         editor.putString("check", "exist");
         editor.commit();
     }
-
 }
