@@ -1,12 +1,7 @@
 package com.example.teamalmanac.codealmanac;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.location.Location;
-import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -14,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import android.view.WindowManager;
@@ -26,7 +20,7 @@ public class TabActivity extends AppCompatActivity {
     //마지막 페이지에서 스와이핑하는걸 검출하기 위한 변수
     private int mCounterPageScroll;
     //context를 담기 위한 변수
-    private static Context mMainContext;
+    private static Context mContext;
     private static Activity mTabActivity;
     //Fragment 수
     private static final int FRAGMENT_TOTAL_NUMBER = 2;
@@ -45,8 +39,8 @@ public class TabActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_tab);
-        mMainContext = getApplicationContext();
-        DataManager.getSingletonInstance(); //액티비티에서 싱글톤 미리생성
+        mContext = getApplicationContext();
+        DataManager.getSingletonInstance(getContext()); //액티비티에서 싱글톤 미리생성
 
         /*  FLAG_SHOW_WHEN_LOCKED = 잠금화면 위로 액티비티 실행
             FLAG_DISMISS_KEYGUARD = 키 가드 해제 */
@@ -69,8 +63,8 @@ public class TabActivity extends AppCompatActivity {
         return mTabActivity;
     }
 
-    public static Context getMainContext() {
-        return mMainContext;
+    public static Context getContext() {
+        return mContext;
     }
 
     //뷰가 변경될 때마다 불리는 리스너 >> 마지막 페이지때 종료되게하려고 추가하였음

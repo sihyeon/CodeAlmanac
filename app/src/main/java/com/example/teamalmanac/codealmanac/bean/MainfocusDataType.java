@@ -7,6 +7,7 @@ import android.view.View;
  */
 
 public class MainfocusDataType {
+    private long _id;
     private String mainfocus;
     private String date;
     private String button_visibility;
@@ -23,10 +24,17 @@ public class MainfocusDataType {
         this.button_visibility = button_visibility;
     }
 
+    public MainfocusDataType(long _id, String mainfocus, String date){
+        this._id = _id;
+        this.mainfocus = mainfocus;
+        this.date = date;
+    }
+
     public MainfocusDataType() {
         mainfocus = null;
         date = null;
     }
+
 
     public String getMainfocus() {
         return mainfocus;
@@ -50,5 +58,9 @@ public class MainfocusDataType {
 
     public void setButton_visibility(String button_visibility) {
         this.button_visibility = button_visibility;
+    }
+
+    public long get_id() {
+        return _id;
     }
 }

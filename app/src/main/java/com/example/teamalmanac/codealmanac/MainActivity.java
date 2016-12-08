@@ -48,14 +48,14 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 parent.getAdapter().getItem(position);
-                if( id == 0 )
-                {
+                if( id == 0 ) {
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
                     startActivityForResult(intent, 1);
-                } else if ( id == 3 )
-                {
+                } else if(id == 2){
+                    startActivity(new Intent(MainActivity.this, TodoLogActivity.class));
+                } else if ( id == 3 ) {
                     Uri uri = Uri.parse("http://sihyun2139.wixsite.com/codealmanac");
                     Intent web = new Intent(Intent.ACTION_VIEW,uri);
                     startActivity(web);
@@ -102,7 +102,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
     }
 
 
-    public Context getContext() {
+    public static Context getContext() {
         return mContext;
     }
 }

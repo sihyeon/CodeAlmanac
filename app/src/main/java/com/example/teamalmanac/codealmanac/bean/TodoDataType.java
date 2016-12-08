@@ -7,6 +7,7 @@ import android.view.View;
  */
 
 public class TodoDataType {
+    private long _id;
     private String todo;
     private String date;
     private String button_visibility;
@@ -31,6 +32,12 @@ public class TodoDataType {
         this.date = date;
         this.button_visibility = String.valueOf(View.INVISIBLE);
         this.isShowing = true;
+    }
+
+    public TodoDataType(long _id, String todo, String date){
+        this._id = _id;
+        this.todo = todo;
+        this.date = date;
     }
 
     public void setTodo(String todo) {

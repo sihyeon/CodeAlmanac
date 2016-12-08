@@ -34,8 +34,11 @@ import com.example.teamalmanac.codealmanac.adapter.TodoAdapter;
 import com.example.teamalmanac.codealmanac.bean.MainfocusDataType;
 import com.example.teamalmanac.codealmanac.bean.TodoDataType;
 import com.example.teamalmanac.codealmanac.database.DataManager;
+import com.example.teamalmanac.codealmanac.database.SQLContract;
 
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -99,7 +102,7 @@ public class LeftFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDb = DataManager.getSingletonInstance();
+        mDb = DataManager.getSingletonInstance(getContext());
     }
 
     @Override
@@ -267,7 +270,8 @@ public class LeftFragment extends Fragment {
                     Toast.makeText(view.getContext(), "fill the mainfocus...", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String time = Calendar.getInstance().getTime().toString();
+                String time = SQLContract.convertDateToString(Calendar.getInstance().getTime());
+
                 mDb.setMainFocus(mainfocus, time);
                 notifyMainfocusAdded();
                 //keyboard down when typing is finished.
@@ -311,7 +315,7 @@ public class LeftFragment extends Fragment {
         mainfocus_deletebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDb.deleteMainFocus();
+//                mDb.deleteMainFocus();
                 mainfocus.setText("");
                 mainfocus.setPaintFlags(mainfocus.getPaintFlags() ^ Paint.STRIKE_THRU_TEXT_FLAG);
                 view.setVisibility(View.GONE);
@@ -334,7 +338,7 @@ public class LeftFragment extends Fragment {
                     Toast.makeText(view.getContext(), "fill the todo...", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mDb.setTodo(todo, Calendar.getInstance().getTime().toString());
+                mDb.setTodo(todo, SQLContract.convertDateToString(Calendar.getInstance().getTime()));
                 notifyTodoDataChanged(todo);
                 todo_editt.setText("");
                 todo_editt.clearFocus();
@@ -438,7 +442,7 @@ public class LeftFragment extends Fragment {
     }
 
     public void notifyTodoDataChanged(String todo) {
-        todos.add(new TodoDataType(todo, Calendar.getInstance().getTime().toString()));
+        todos.add(new TodoDataType(todo, SQLContract.convertDateToString(Calendar.getInstance().getTime())));
         todoAdapter.notifyDataSetChanged();
     }
 
