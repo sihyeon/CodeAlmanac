@@ -1,4 +1,4 @@
-package com.example.teamalmanac.codealmanac;
+package com.example.teamalmanac.codealmanac.bean;
 
 /**
  * Created by sihyeon on 2016-12-04.
