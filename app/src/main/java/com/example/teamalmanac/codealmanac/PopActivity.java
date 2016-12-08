@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PopActivity extends Activity implements Serializable{
+    private final int APPINFO_REQUESTCODE = 1;
     private Button popplus;
     private TextView name;
     private ImageView ic;
@@ -51,9 +52,9 @@ public class PopActivity extends Activity implements Serializable{
     ic = (ImageView)findViewById(R.id.appicon);
 
 
-    Bundle b = getIntent().getBundleExtra("key");
-    list = b.getParcelableArrayList("list");
-    selected.setAdapter(new ImageAdapter(getApplicationContext()));
+//    Bundle b = getIntent().getBundleExtra("key");
+//    list = b.getParcelableArrayList("list");
+//    selected.setAdapter(new ImageAdapter(getApplicationContext()));
 
     //     인텐트 받기
 //    Intent get_intent = getIntent();
@@ -73,10 +74,21 @@ public class PopActivity extends Activity implements Serializable{
             @Override
             public void onClick(View v) {
                 Intent grid_intent = new Intent(getApplicationContext(),AppInfo.class);
-                startActivity(grid_intent);
+                startActivityForResult(grid_intent, APPINFO_REQUESTCODE);
             }
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == APPINFO_REQUESTCODE){
+            if(resultCode == Activity.RESULT_OK){
+                Log.d("PopActivity", data.getStringExtra("name"));
+                Log.d("PopActivity", data.getStringExtra("path"));
+                Log.d("PopActivity", data.getStringExtra("icon"));
+            }
+        }
     }
 
     public class ImageAdapter extends BaseAdapter {
