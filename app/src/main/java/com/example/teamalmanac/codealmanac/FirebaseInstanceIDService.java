@@ -11,11 +11,6 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Backend.saveToken(FirebaseInstanceId.getInstance().getToken());
-            }
-        });
+        Backend.saveToken(FirebaseInstanceId.getInstance().getToken());
     }
 }

@@ -104,7 +104,8 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             switch_btn.setChecked(false);
         }
         switch_btn.setOnCheckedChangeListener(this);
-
+        if(FirebaseInstanceId.getInstance().getToken() != null)
+            Backend.saveToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     public Boolean isServiceRunning(String serviceName) {
