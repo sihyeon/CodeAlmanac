@@ -67,6 +67,8 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 //                    intent.setAction(Intent.ACTION_GET_CONTENT);
 //                    intent.setType("image/*");
 //                    startActivityForResult(intent, 1);
+                }else if(id == 1){
+                    startActivity(new Intent(MainActivity.this, UseMainActivity.class));
                 } else if(id == 2){
                     startActivity(new Intent(MainActivity.this, TodoLogActivity.class));
                 } else if ( id == 3 ) {
@@ -81,7 +83,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 
 
         adapter.ArwItem(ContextCompat.getDrawable(this, R.drawable.btn_set_go));
-        adapter.UserItem(ContextCompat.getDrawable(this, R.drawable.img_box_userid));
+        adapter.ArwItem(ContextCompat.getDrawable(this, R.drawable.btn_set_go));
         adapter.ArwItem(ContextCompat.getDrawable(this, R.drawable.btn_set_go));
         adapter.ArwItem(ContextCompat.getDrawable(this,R.drawable.btn_set_go));
 
