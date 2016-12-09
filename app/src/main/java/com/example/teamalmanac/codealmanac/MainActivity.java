@@ -105,13 +105,6 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         }
         switch_btn.setOnCheckedChangeListener(this);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FirebaseMessaging.getInstance().subscribeToTopic("mainfocus");
-                saveToken(FirebaseInstanceId.getInstance().getToken());
-            }
-        }).start();
     }
 
     public Boolean isServiceRunning(String serviceName) {
@@ -122,25 +115,6 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             }
         }
         return false;
-    }
-
-    private void saveToken(String token) {
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("token", token)
-                .build();
-
-        //request
-        Request request = new Request.Builder()
-                .url(Constants.API_SERVER + "/token")
-                .post(body)
-                .build();
-
-        try {
-            client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

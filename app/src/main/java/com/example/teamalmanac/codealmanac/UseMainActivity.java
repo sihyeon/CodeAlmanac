@@ -45,7 +45,7 @@ public class UseMainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(mListener);
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(0);
     }
 
     public static Activity getUseActivity() {
@@ -87,11 +87,11 @@ public class UseMainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 1) {
+            if (position == 0) {
                 return UsepageFragment1.newInstance();
-            } else if (position == 2) {
+            } else if (position == 1) {
                 return UsepageFragment2.newInstance();
-            } else if (position == 3) {
+            } else if (position == 2) {
                 return UsepageFragment3.newInstance();
             } else {
                 return UsepageFragment4.newInstance();
